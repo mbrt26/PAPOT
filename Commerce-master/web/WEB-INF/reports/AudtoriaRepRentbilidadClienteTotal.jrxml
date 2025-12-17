@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="p_idTipoOrdenINI" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenFIN" class="java.lang.Integer"/>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="vrBase" class="java.lang.Double"/>
+	<field name="vrCostoIND" class="java.lang.Double"/>
+	<field name="margenCliente" class="java.lang.Double"/>
+	<field name="vrIva" class="java.lang.Double"/>
+	<field name="vrCostoMV" class="java.lang.Double"/>
+	<field name="idLocal" class="java.lang.Integer"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<textField pattern="#,##0">
+				<reportElement x="249" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrBase}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="434" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoIND}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="308" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrIva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="501" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{margenCliente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="367" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoMV}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="136" y="0" width="79" height="12"/>
+				<textElement>
+					<font size="8" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

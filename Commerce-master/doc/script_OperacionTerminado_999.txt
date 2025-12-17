@@ -1,0 +1,73 @@
+---         
+SELECT [idLocal]
+      ,[idTipoOrden]
+      ,[idOrden]
+      ,[idOperacion]
+      ,SUM(cantidadTerminada) 
+                 AS cantidadTerminada
+      ,SUM(pesoTerminado) 
+                      AS pesoTerminado
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idLocal     =  1
+AND   tblDctosOrdenesProgreso.idTipoOrden = 59
+AND   tblDctosOrdenesProgreso.idOrden     = 41972  
+AND   tblDctosOrdenesProgreso.itemPadre   = 1
+AND   tblDctosOrdenesProgreso.idOperacion = 999
+GROUP BY tblDctosOrdenesProgreso.idLocal,
+         tblDctosOrdenesProgreso.idTipoOrden,
+         tblDctosOrdenesProgreso.idOrden,
+         tblDctosOrdenesProgreso.idOperacion  
+         
+---         
+                 UPDATE tblDctosOrdenesDetalle                                   
+                 SET    tblDctosOrdenesDetalle.pesoTerminado = 0,                 
+                        tblDctosOrdenesDetalle.pesoRetal     = 0,                 
+                  tblDctosOrdenesDetalle.cantidadTerminada   = 0                 
+                                       tmpPRG.cantidadTerminada                
+                 FROM   tblDctosOrdenesDetalle                                 
+                 WHERE NOT EXISTS (SELECT tblDctosOrdenesProgreso.*
+                                   FROM tblDctosOrdenesProgreso                      
+                                   WHERE tblDctosOrdenesProgreso.idOperacion = 999   
+                                                    
+                                                    
+                                   AND   tblDctosOrdenesProgreso.idLocal     = 
+                                                    tblDctosOrdenesDetalle.idLocal
+                                   AND   tblDctosOrdenesProgreso.idTipoOrden = 
+                                                tblDctosOrdenesDetalle.idTipoOrden
+                                   AND   tblDctosOrdenesProgreso.idOrden     = 
+                                                    tblDctosOrdenesDetalle.idOrden
+
+                                   AND   tblDctosOrdenesProgreso.itemPadre   = 
+                                                  tblDctosOrdenesDetalle.item)  
+                                                  
+--- RETIRA NO INICIADO
+UPDATE tblDctosOrdenesDetalle                          
+SET    tblDctosOrdenesDetalle.pesoTerminado = 0,       
+       tblDctosOrdenesDetalle.pesoRetal     = 0,       
+ tblDctosOrdenesDetalle.cantidadTerminada   = 0        
+FROM   tblDctosOrdenesDetalle 
+INNER JOIN 
+  (SELECT tblDctosOrdenesDetalle.idLocal,
+          tblDctosOrdenesDetalle.idTipoOrden,
+          tblDctosOrdenesDetalle.idOrden,              
+          tblDctosOrdenesDetalle.item AS itemPadre                                    
+FROM  tblDctosOrdenesDetalle                         
+WHERE tblDctosOrdenesDetalle.idOrden 
+   NOT IN 
+   (SELECT tblDctosOrdenesProgreso.idOrden
+    FROM tblDctosOrdenesProgreso                      
+    WHERE tblDctosOrdenesProgreso.idOperacion = 999
+    AND tblDctosOrdenesProgreso.idLocal       = 1
+    AND tblDctosOrdenesProgreso.idTipoOrden   = 59)                                       
+AND tblDctosOrdenesDetalle.idLocal               = 1   
+AND tblDctosOrdenesDetalle.idTipoOrden           = 59
+AND tblDctosOrdenesDetalle.idEstadoRefOriginal  != 9 ) 
+                                             AS tmpPRG
+ON  tblDctosOrdenesDetalle.IDLOCAL     = 
+                                       tmpPRG.idLocal  
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =   
+                                   tmpPRG.idTipoOrden  
+AND tblDctosOrdenesDetalle.IDORDEN     = 
+                                       tmpPRG.idOrden  
+AND tblDctosOrdenesDetalle.item        = 
+                                     tmpPRG.itemPadre

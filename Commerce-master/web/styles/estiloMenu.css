@@ -1,0 +1,21 @@
+.estiloTitulo {
+	font-family: Verdana;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: bold;
+	text-transform:uppercase;
+	background-color: #FFFFFF;	
+	color: #0000A0;
+}
+.estiloLink {
+	font-family: Verdana;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: bold;
+	text-transform:uppercase;	
+	color: #0000A0;
+	background-color: #FFFFFF;
+	cursor: crosshair;
+
+}
+

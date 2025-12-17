@@ -1,0 +1,236 @@
+--- plantilla general
+SELECT tblJobEscala.idEscala, 
+       tblJobEscala.nombreEscala
+FROM tblJobEscala
+ORDER BY tblJobEscala.idEscala
+
+
+--- plantilla general + DETALLE
+SELECT tblJobEscalaDetalle.idEscala, 
+       tblJobEscalaDetalle.item, 
+       tblJobEscala.nombreEscala,
+       tblJobEscalaDetalle.nombreItem
+FROM   tblJobEscala
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala
+ORDER BY tblJobEscalaDetalle.idEscala, 
+       tblJobEscalaDetalle.item         
+         
+         
+--- plantilla obligada
+SELECT tblJobEscalaDetalle.idEscala, 
+       tblJobEscalaDetalle.item, 
+       tblJobEscala.nombreEscala,
+       tblJobEscalaDetalle.nombreItem
+FROM   tblJobEscala
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala
+WHERE tblJobEscalaDetalle.idEscala 
+                   IN (501,502)
+ORDER BY tblJobEscalaDetalle.idEscala, 
+       tblJobEscalaDetalle.item         
+                   
+         
+         
+--- plantilla ficha MAGNITUD
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,          
+           tblPlusFicha.textoEscala,
+           'MAGNITUD' AS nombreItem           
+           
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+WHERE tmpESC.idTipoEscala = 1
+ORDER BY tmpESC.idEscala, 
+         tmpESC.item         
+
+--- plantilla ficha PARAMETRO     
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,
+           tblPlusFicha.textoEscala,
+           tmpESC.nombreItem
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+AND tblPlusFicha.vrEscala = tmpESC.item
+WHERE tmpESC.idTipoEscala = 2
+ORDER BY tmpESC.idEscala, 
+       tmpESC.item  
+       
+--- plantilla ficha MAGNITUD + PARAMETRO
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,          
+           tblPlusFicha.textoEscala,
+           'MAGNITUD' AS nombreItem           
+           
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+WHERE tmpESC.idTipoEscala = 1
+UNION
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,
+           tblPlusFicha.textoEscala,
+           tmpESC.nombreItem
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+AND tblPlusFicha.vrEscala = tmpESC.item
+WHERE tmpESC.idTipoEscala = 2 
+
+--- plantilla ficha MAGNITUD + PARAMETRO + OBSERVACION
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,          
+           tblPlusFicha.textoEscala,
+           'MAGNITUD' AS nombreItem           
+           
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+WHERE tmpESC.idTipoEscala = 1
+AND   tblPlusFicha.idCliente = '811017000'
+UNION
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,
+           tblPlusFicha.textoEscala,
+           tmpESC.nombreItem
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+AND tblPlusFicha.vrEscala = tmpESC.item
+WHERE tmpESC.idTipoEscala = 2 
+AND   tblPlusFicha.idCliente = '811017000'
+UNION
+SELECT     tblPlusFicha.idCliente,
+           tblPlusFicha.referenciaCliente,
+           tblPlusFicha.idEstadoOrden,
+           tblPlusFicha.idPlu,
+           tblPlusFicha.nombreReferencia,
+           tmpESC.nombreEscala,
+           tblPlusFicha.idEscala,
+           tblPlusFicha.item,
+           tblPlusFicha.vrEscala,          
+           tblPlusFicha.textoEscala,
+           'OBSERVACION' AS nombreItem           
+           
+FROM         tblPlusFicha
+INNER JOIN 
+(SELECT tblJobEscalaDetalle.idEscala, 
+        tblJobEscalaDetalle.item, 
+        tblJobEscala.nombreEscala,
+        tblJobEscala.idTipoEscala,
+        tblJobEscalaDetalle.nombreItem
+ FROM   tblJobEscala
+ INNER JOIN tblJobEscalaDetalle
+ ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala)
+                             AS tmpESC
+ON tblPlusFicha.idEscala  = tmpESC.idEscala
+WHERE tmpESC.idTipoEscala = 3
+AND   tblPlusFicha.idCliente = '811017000'
+ORDER BY 2, 7 

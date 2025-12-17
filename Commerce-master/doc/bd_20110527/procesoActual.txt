@@ -1,0 +1,173 @@
+===
+RERENCIA INTERNA: 	BPPI40X60+5X2.5
+NIT/CC            	811.017.000-7
+REFERENCIA CLIENTE 	REFERENCIA PRUEBA
+
+=== TABLA_FICHAST
+
+
+=== OPERACION #1
+SELECT [Id]		Numero Ficha Tecnica
+      ,[EPor]		
+      ,[Cliente]	idCliente
+      ,[Referencia]	Referencia interna
+      ,[Rcliente]	Referencia cliente
+      ,[Material]	Material
+      
+=== OPERACION #1
+      ,[MaqE]		Maquina	- operacion #1
+      ,[Calibre]	Calibre 
+      ,[Ancho]		Ancho
+      ,[Fue1]		Fuelle-1
+      ,[Fue2]		Fuelle-2
+      ,[Tipo]		Tipo Material
+      ,[Trat]		Tratamiento
+      ,[Dinas]		Dinas
+      ,[Caras]		Caras
+      ,[Partido]	Partido
+      ,[PesoBob]	Peso
+      ,[CalMin]		Calibre Minimo
+      ,[CalMax]		Calibre Maximo
+      ,[PaProd]		
+      ,[Observa_Ext]Observaciones
+      ,[Alta]
+      ,[Baja]
+      ,[Lineal]
+      ,[PP]
+      ,[Pigmento]
+      ,[KilPig]
+      ,[OtRefe1]
+      ,[KOt1]
+      
+=== OPERACION #2
+      ,[MaqI]
+      ,[Colores]
+      ,[Caras_Imp]
+      ,[Repeticion]
+      ,[Montaje_I]
+      ,[Rodillo]
+      ,[AltImp_C1]
+      ,[AltImp_C2]
+      ,[NumBarra]
+      ,[Cyrel_A]
+      ,[Cyrel_L]
+      ,[Viscocidad]
+      ,[C1Col1]
+      ,[C1Re1]
+      ,[C1Lin1]
+      ,[C1Visco1]
+      ,[C1Col2]
+      ,[C1Re2]
+      ,[C1Lin2]
+      ,[C1Visco2]
+      ,[C1Col3]
+      ,[C1Re3]
+      ,[C1Lin3]
+      ,[C1Visco3]
+      ,[C1Col4]
+      ,[C1Re4]
+      ,[C1Lin4]
+      ,[C1Visco4]
+      ,[C1Col5]
+      ,[C1Re5]
+      ,[C1Lin5]
+      ,[C1Visco5]
+      ,[C1Col6]
+      ,[C1Re6]
+      ,[C1Lin6]
+      ,[C1Visco6]
+      ,[C2Col1]
+      ,[C2Re1]
+      ,[C2Lin1]
+      ,[C2Visco1]
+      ,[C2Col2]
+      ,[C2Re2]
+      ,[C2Lin2]
+      ,[C2Visco2]
+      ,[C2Col3]
+      ,[C2Re3]
+      ,[C2Lin3]
+      ,[C2Visco3]
+      ,[C2Col4]
+      ,[C2Re4]
+      ,[C2Lin4]
+      ,[C2Visco4]
+      ,[C2Col5]
+      ,[C2Re5]
+      ,[C2Lin5]
+      ,[C2Visco5]
+      ,[C2Col6]
+      ,[C2Re6]
+      ,[C2Lin6]
+      ,[C2Visco6]
+      ,[Observa_Imp]
+      
+=== OPERACION #3
+      ,[MaqS]
+      ,[TipoSEllado]
+      ,[Troquel]
+      ,[Alt_Sellado]
+      ,[Golpes]
+      ,[Bpor]
+      ,[Ppor]
+      ,[Observa_Sell]
+      ,[AnchoRefile]
+      ,[AlturaRefile]
+      ,[RadioRefile]
+      ,[TipoEmbo]
+      ,[KilosR]
+      ,[TipoR]
+      ,[Observa_Ref]
+      ,[Maquina_M]
+      ,[DetalleM]
+FROM [BDPlasticos].[dbo].[Tabla_FichasT]
+WHERE [Id] = 2028
+
+=== CATALOGO
+Centro
+Maquina
+Ficha tecnica
+Ficha tecnica / centro
+Ficha tecnica / maquina
+Ficha tecnica / operacion
+Operacion / orden de operaciones
+
+
+=== TABLA_PRODUCCION
+Por cada ORDEN DE PRODUCCION de la misma FICHA TECNICA se crea un registro, con numero de pedido igual para todos, se adiciona la FECHA ENTREGA
+con las CANTIDADES A ENTREGAR
+Esta tabla almacena las especificaciones de la FICHA TECNICA para cada entrega
+
+=== TABLA_INVENTA
+Por cada ORDEN DE PRODUCCION de la misma FICHA TECNICA se lleva un registro FINAL que informa CENTRO (interno/externo) donde esta la mercancia
+El inventario solo se controla por REFERENCIA INTERNA no se controla la MATERIA PRIMA que permitio fabricar la RI
+La orden de produccion debe tener IDSEQ para cada entrega parcial
+
+=== TABLA_MOVIMIENTO_USUARIOS
+Almacena las operaciones realizadas por los usuarios con relacion a la ORDEN DE PRODUCCION
+
+=== TABLA_PEDIDOS
+Almacena el PEDIDO, cantidades y fecha de entrega de la mercancia, las observaciones 
+
+
+=== TABLA_PRODUCTOS
+Especifica productos en REFERENCIA INTERNA con una breve descripcion de las dimensiones y el material
+BPPI40X60+5X2.5
+
+=== TABLA_SELLA
+Almacena el producto terminado : #OP , operario, cantidad unidades, kilos, el retal, fecha/hora ingreso, fecha/hora salida 
+
+=== TABLA_EXTRU
+Almacena el producto terminado : #OP , operario, cantidad unidades, kilos, el retal, #rollos, fecha
+
+=== TABLA_IMPRE
+Almacena el producto terminado : #OP , operario, cantidad unidades, kilos, el retal, #rollos, fecha
+
+
+=== TABLA_TPERDIDOS
+Almacena el operario, tiempo perdido en minutos y fecha/hora, NO ESTA ASOCIADO  #OP
+
+=== TABLA_FACTURA
+Almacena la factura de venta, valores, plazo, pedido, orden de compra, iva, retencion, etc, referencia interna, referencia cliente,
+precio unitario, kilos, etc
+Por cada producto se genera una factura

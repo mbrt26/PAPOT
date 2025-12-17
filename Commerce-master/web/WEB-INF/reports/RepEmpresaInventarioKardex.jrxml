@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="p_idPlu" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\WEB-INF\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicial" class="java.lang.String"/>
+	<parameter name="p_fechaFinal" class="java.lang.String"/>
+	<parameter name="p_idBodega" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT tblLineas.nombreLinea,
+       tblCategorias.idLinea,
+       tblCategorias.IdCategoria,
+       tblCategorias.nombreCategoria,
+       tblMarcas.idMarca,
+       tblMarcas.nombreMarca,
+       tblPlus.idPlu,
+       tblPlus.nombrePlu,
+       $P{p_idLocal} AS idLocal
+FROM   tblCategorias
+INNER JOIN tblLineas
+ON tblCategorias.idLinea      =
+                   tblLineas.idLinea
+INNER JOIN tblPlus
+ON tblCategorias.idLinea      =
+                     tblPlus.idLinea
+AND tblCategorias.IdCategoria =
+                 tblPlus.idCategoria
+INNER JOIN tblMarcas
+ON tblPlus.idMarca =
+                  tblMarcas.idMarca
+WHERE tblPlus.idPlu = $P{p_idPlu}]]>
+	</queryString>
+	<field name="nombreLinea" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idLinea" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IdCategoria" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreCategoria" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idMarca" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreMarca" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idPlu" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombrePlu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idLocal" class="java.lang.Integer"/>
+	<group name="local">
+		<groupExpression><![CDATA[$F{idLocal}]]></groupExpression>
+		<groupHeader>
+			<band height="43">
+				<textField pattern="###0">
+					<reportElement x="76" y="0" width="50" height="20"/>
+					<textElement>
+						<font fontName="Verdana" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$F{idPlu}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="70" height="20"/>
+					<textElement>
+						<font fontName="Verdana" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ARTICULO]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="150" y="0" width="300" height="20"/>
+					<textElement>
+						<font fontName="Verdana" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreCategoria} + " " + $F{nombrePlu} + " MARCA " + $F{nombreMarca}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="23" width="411" height="20"/>
+					<textElement>
+						<font fontName="Verdana" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[" MARCA " + $F{nombreMarca}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61">
+			<textField>
+				<reportElement x="0" y="20" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="40" width="554" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25">
+			<subreport>
+				<reportElement x="1" y="0" width="554" height="25"/>
+				<subreportParameter name="p_fechaFinal">
+					<subreportParameterExpression><![CDATA[$P{p_fechaFinal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="p_idLocal">
+					<subreportParameterExpression><![CDATA[$P{p_idLocal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="p_fechaInicial">
+					<subreportParameterExpression><![CDATA[$P{p_fechaInicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="p_idPlu">
+					<subreportParameterExpression><![CDATA[$P{p_idPlu}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="p_saldoInicial"/>
+				<subreportParameter name="p_idBodega">
+					<subreportParameterExpression><![CDATA[$P{p_idBodega}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "RepEmpresaInventarioKardexDetalle.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

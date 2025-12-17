@@ -1,0 +1,6 @@
+1.	El numero del pedido es el mismo de a hoja.
+2.	Las operaciones descaragn en kilos y unidades
+3.      Costo se adicionan cintas por por metros, tira x metro, gancho unidad, cordon por metro, troqueles por costo tiempo.
+4.      En los colores se debe tener original y mesclado x cada referencia.
+4.	En la impresion se calcula la tinta original,mezclada.
+5.	Proceso adicionar/retirar operaciones a la ficha tecnica.

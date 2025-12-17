@@ -1,0 +1,28 @@
+Plasticos Union 28 de Junio
+
+Richard
+Edgar
+Noé
+
+ok	-	No muestra la bodega --- para cambiar en fichas a O.T. OT 10626
+ok	-	El pedido #10626 quedo el pedido doble de 13000 unidades en TERMINADOS
+ok	-	Las ordenes de compra con materiales 267 / 268 no ingresa al kardex, tampoco el 303
+ok	-	En TERMINADOS debe salir un reporte de Cantidades y Kilos, no es otro kardex es un reporte
+ok	-	Reporte consolidado x OT en inventario x operacion
+ok	-	Error programacion TECNAS ( cliente + proveedor ) en programar produccion  pedido # 10629
+ok	-	La PROGRAMACION de la produccion es automatica cuando se imprime la O.T.
+
+Hacer ejercicios con ALTA DENSIDAD en fichas
+En sellado el RETAL lo sumo a la proxima operacion y no lo paso a loa bodega RETALES
+La SALIDA a terceros quedo en SELLADO, cargo proceso siguiente  OT 10627
+Facturacion descarga de Inventarios
+
+
+
+
+
+
+
+
+
+

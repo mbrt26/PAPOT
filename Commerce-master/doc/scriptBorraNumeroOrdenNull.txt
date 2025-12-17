@@ -1,0 +1,44 @@
+---
+DELETE FROM tblDctosOrdenesDetalle
+WHERE     EXISTS
+                          (SELECT     IDLOCAL, IDTIPOORDEN, IDORDEN, FECHAORDEN, ESTADO, idCliente, IDUSUARIO, IDORIGEN, IDLOG, FECHAENTREGA, TIPODCTO, 
+                                                   DIRECCIONDESPACHO, EMAIL, FAX, CONTACTO, OBSERVACION, CIUDADDESPACHO, FORMAPAGO, ordenCompra, descuentoComercial, 
+                                                   impuestoVenta, idRazon, idEstadoTx, idTipoTx, numeroOrden, idResponsable, diasHistoria, diasInventario, idBodegaOrigen, 
+                                                   idBodegaDestino, idFicha
+                            FROM          tblDctosOrdenes
+                            WHERE      (IDLOCAL = tblDctosOrdenesDetalle.IDLOCAL) AND (IDTIPOORDEN = tblDctosOrdenesDetalle.IDTIPOORDEN) AND 
+                                                   (IDORDEN = tblDctosOrdenesDetalle.IDORDEN) AND (IDTIPOORDEN = 59) AND (numeroOrden = 0))
+---
+DELETE FROM tblDctosOrdenes
+WHERE tblDctosOrdenes.idTipoOrden = 59
+AND   tblDctosOrdenes.numeroOrden = 0 
+
+-- ASIGNA = 0 SI ES NULL
+UPDATE tblDctosOrdenesDetalle
+   SET tblDctosOrdenesDetalle.pesoPedido = 0
+ WHERE pesoPedido IS NULL
+
+--
+UPDATE tblDctosOrdenesDetalle
+   SET tblDctosOrdenesDetalle.pesoTerminado = 0
+ WHERE pesoTerminado IS NULL
+
+--
+UPDATE tblDctosOrdenesDetalle
+   SET tblDctosOrdenesDetalle.pesoRetal = 0
+ WHERE pesoRetal IS NULL
+
+--
+UPDATE tblDctosOrdenesDetalle
+   SET tblDctosOrdenesDetalle.cantidadTerminada = 0
+ WHERE cantidadTerminada IS NULL
+ 
+ --
+ UPDATE tblDctosOrdenesDetalle
+    SET tblDctosOrdenesDetalle.pesoFacturado = 0
+ WHERE pesoFacturado IS NULL
+ 
+--
+UPDATE tblDctosOrdenesDetalle
+   SET tblDctosOrdenesDetalle.cantidadFacturada = 0
+ WHERE cantidadFacturada IS NULL

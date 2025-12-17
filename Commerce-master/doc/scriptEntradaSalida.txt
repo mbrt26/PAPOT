@@ -1,0 +1,37 @@
+--- INCLUIR TBLDCTOSORDENESPROGRESO
+cantidadPendiente	decimal(10, 2)	Checked
+
+
+---
+SELECT tmpPRG.idLocal,
+       tmpPRG.idTipoOrden,
+       tmpPRG.idOrden,
+       tmpPRG.idOperacion,
+       tmpPRG.itempadre,
+      SUM(tmpPRG.cantidadSalida) AS cantidadSalida ,
+      SUM(tmpPRG.cantidadEntrada) AS cantidadEntrada
+FROM 
+(SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.idOperacion
+      ,tblDctosOrdenesProgreso.itempadre
+      , ISNULL(CASE tblDctosOrdenesProgreso.idControlTipo
+         WHEN 2 THEN tblDctosOrdenesProgreso.cantidadTerminada
+         WHEN 1 THEN 0
+        END,0.00) AS cantidadSalida
+      , ISNULL(CASE tblDctosOrdenesProgreso.idControlTipo
+         WHEN 1 THEN tblDctosOrdenesProgreso.cantidadTerminada
+         WHEN 2 THEN 0
+        END,0.00) AS cantidadEntrada
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idLocal     =    1
+AND tblDctosOrdenesProgreso.idTipoOrden   =   59
+AND tblDctosOrdenesProgreso.idOrden       = 2548
+AND tblDctosOrdenesProgreso.idOperacion   = 999) 
+                                         AS tmpPRG
+GROUP BY tmpPRG.idLocal,
+       tmpPRG.idTipoOrden,
+       tmpPRG.idOrden,
+       tmpPRG.idOperacion,
+       tmpPRG.itempadre

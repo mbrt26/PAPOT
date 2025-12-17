@@ -1,0 +1,100 @@
+Greetings.
+
+I'm sure this is an easy one, but I'm pulling my hair out over it.
+
+I'm working with a database in which the invoice date is stored in an INT(4) ... e.g. '20060116' ... 
+I need to write a SELECT statement that computes the days from today ... so, I need to convert the results of 
+getdate() into an INTEGER ... that is, today (January 16, 2006) would result in '20060116' so that I can do the appropriate math ...
+
+for example, if I wanted to select invoices dated earlier 10 or more days earlier than today, how would I do that?
+
+I hope I've described the question properly, and thanks in advance for the help.
+
+Kenn
+
+---
+This will convert a datetime to an integer in the form you described:
+
+select convert(int,convert(varchar(8),getdate(),112))
+
+
+I guess you already see why storing the date in an integer datatype is a bad idea.
+
+---
+SELECT DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE()),
+       dbo_ca_encdocvta.edvfechexpe,
+       getdate()
+FROM [SSF_PSL].[dbo].ca_encdocvta AS dbo_ca_encdocvta
+
+DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())
+DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc)
+
+SELECT DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE()),
+       DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc)
+FROM   [SSF_PSL].[dbo].ca_encdocvta AS dbo_ca_encdocvta     
+
+
+---
+      "SELECT 'Vencida' AS tipoCartera,              " +
+      "       COUNT(*) AS numeroDctos,               " +
+      "       SUM(dbo_ca_encdocvta.edvsalddocunego * " +
+      "           dbo_ca_encdocvta.EDVSIGNODOCU)     " +
+      "                                  AS vrSaldo  " +
+      "FROM [SSF_PSL].[dbo].[ca_encdocvta]           " +
+       "                        AS dbo_ca_encdocvta  " +
+      "WHERE dbo_ca_encdocvta.edvcompania  = '01'    " +
+      "AND (DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())) > " +
+      "       ( DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc))       " +
+      "AND (dbo_ca_encdocvta.edvsalddocunego)<>0     " +
+      "AND dbo_ca_encdocvta.edvestabclien  = '" + getIdClientePSL() + "' " +
+      "UNION                                         " +
+      "SELECT 'Corriente' AS tipoCartera,            " +
+      "       COUNT(*) AS numeroDctos,               " +
+      "       SUM(dbo_ca_encdocvta.edvsalddocunego * " +
+      "           dbo_ca_encdocvta.EDVSIGNODOCU)     " +
+      "                                  AS vrSaldo  " +
+      "FROM [SSF_PSL].[dbo].[ca_encdocvta]           " +
+      "                         AS dbo_ca_encdocvta  " +
+      "WHERE dbo_ca_encdocvta.edvcompania  = '01'    " +
+      "AND (DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())) <= " +
+      "       ( DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc))       " +
+      "AND (dbo_ca_encdocvta.edvsalddocunego)<> 0    " +
+      "AND dbo_ca_encdocvta.edvestabclien  = '" + getIdClientePSL() + "' " ;
+      
+SELECT DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE()),
+       DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc)
+FROM   [SSF_PSL].[dbo].ca_encdocvta AS dbo_ca_encdocvta         
+
+      "AND (DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())) <= " +
+      "       ( DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc))       " +
+      
+      SELECT 'Vencida' AS tipoCartera,              
+             COUNT(*) AS numeroDctos,               
+             SUM(dbo_ca_encdocvta.edvsalddocunego * 
+                 dbo_ca_encdocvta.EDVSIGNODOCU)     
+                                        AS vrSaldo  
+      FROM [SSF_PSL].[dbo].[ca_encdocvta]           
+                               AS dbo_ca_encdocvta  
+      WHERE dbo_ca_encdocvta.edvcompania  = '01'    
+      AND (DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())) >                  
+          ( DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc))   
+      AND (dbo_ca_encdocvta.edvsalddocunego)<>0     
+      AND dbo_ca_encdocvta.edvestabclien  = 'N00758' 
+      UNION                                         
+      SELECT 'Corriente' AS tipoCartera,            
+             COUNT(*) AS numeroDctos,               
+             SUM(dbo_ca_encdocvta.edvsalddocunego * 
+                 dbo_ca_encdocvta.EDVSIGNODOCU)     
+                                        AS vrSaldo  
+      FROM [SSF_PSL].[dbo].[ca_encdocvta]           
+                               AS dbo_ca_encdocvta  
+      WHERE dbo_ca_encdocvta.edvcompania  = '01'    
+      AND (DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())) <=                  
+             ( DATEDIFF(dd,dbo_ca_encdocvta.edvfechexpe,dbo_ca_encdocvta.edvfechvenc)) 
+      AND (dbo_ca_encdocvta.edvsalddocunego)<> 0    
+      AND dbo_ca_encdocvta.edvestabclien  = 'N00758' 
+
+
+      
+
+DATEDIFF(dd, dbo_ca_encdocvta.edvfechexpe , GETDATE())

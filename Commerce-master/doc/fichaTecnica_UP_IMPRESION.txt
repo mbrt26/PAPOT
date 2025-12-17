@@ -1,0 +1,106 @@
+---
+1	NULL
+2	450
+3	CORREA
+4	DARMA
+5	EXTERNO
+6	MANUALES
+7	PLAS MEDELLIN
+8	REFILADO
+9	SELLOPLAS
+10	SERVO 1
+11	SERVO 2
+12	SIGMAPLAS
+13	TUBYPLAST
+14	YUMONDI
+15	ZENNER
+
+---
+SELECT fichaHernando.MaqS
+FROM [fichaHernando]
+GROUP BY [MaqS]
+ORDER BY 1
+
+---
+706	3	01	-
+706	3	02	AMARILLO
+706	3	03	AZUL 
+706	3	04	AZUL 314C
+706	3	05	AZUL CLARO
+706	3	06	BLANCO
+706	3	07	CAFE
+706	3	08	CIAM
+706	3	09	DORADO
+706	3	10	FUCSIA 
+706	3	11	GRIS
+706	3	12	MAGENTA
+706	3	13	MORADO
+706	3	14	NARANJA 
+706	3	15	NEGRO
+706	3	16	PLATA
+706	3	17	POLICRO
+706	3	18	ROJO
+706	3	19	ROSADO
+706	3	20	VERDE
+
+--
+-ok	512	IMPRESION CARAS	2
+-ok	513	# COLORES	1
+-ok	515	OBSERVACION	3
+-ok	610	DESTINO	2
+-ok	700	REPETICION	1
+-ok	701	RODILLO	1
+-ok	702	ALTURA CARA 1	1
+-ok	703	ALTURA CARA 2	1
+-ok	704	CODIGO BARRA	1
+-ok	705	CYRELES CARA 1	1
+-ok	706	COLOR CARA 1	2
+-ok	707	PANTONE CARA 1	1
+-ok	708	COLOR CARA 2	2
+-ok	709	PANTONE CARA 2	1
+-ok	710	MAQUINA IMPRESION	2
+-ok	712	CYRELES CARA 2	1
+
+- 512,....,	IMPRESION CARAS	2      
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,03 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,512 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material
+      

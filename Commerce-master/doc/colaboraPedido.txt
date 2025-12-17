@@ -1,0 +1,30 @@
+--- LISTA PRODUCTOS X CLIENTE IDESTADOORDEN = 1
+SELECT tblPlusFicha.idPlu, 
+       tblPlusFicha.referenciaCliente, 
+       tblPlusFicha.idCliente, 
+       tblPlusFicha.idEstadoOrden, 
+       tblPlusFicha.nombreReferencia, 
+       tblPlusFicha.vrAncho, 
+       tblPlusFicha.vrLargo, 
+       tblPlusFicha.vrCalibre, 
+       tblPlusFicha.vrFuelle_1,
+       tblPlusFicha.vrFuelle_2,
+       tblPlusFicha.vrSolapa, 
+       tblPlusFicha.idTipoSolapa,
+       tblPlusFicha.idTipoMedida,
+       tblPlusFicha.porcentajeExceso,
+       tblPlusFicha.idSellado,
+       tblPlusFicha.estado, 
+       tblCategorias.nombreCategoria,
+       tblPlus.nombrePlu
+FROM   tblPlusFicha
+INNER JOIN tblPlus
+ON tblPlusFicha.idPlu   = 
+                       tblPlus.idPlu
+INNER JOIN tblCategorias
+ON tblPlus.idLinea      = 
+               tblCategorias.idLinea
+AND tblPlus.idCategoria = 
+           tblCategorias.IdCategoria
+WHERE     (tblPlusFicha.idCliente = '890907163')
+AND (tblPlusFicha.idEstadoOrden = 1)

@@ -1,0 +1,6 @@
+1. Se implemento la reimpresion de Remisiones en el menu Reportes / Ventas / Remisiones , para imprimir hacer click sobre el #REMISION
+2. Se corrigio que todas las Remisiones salgan en el informe, la remision #40 no habia sido generada al 15 de mayo.
+3. Se adicionaron decimales en la cantidad del informe de Remisiones para evitar aproximaciones.
+4. Se adiciono FECHA/HORA en la pantalla de PRODUCCION del coordinador de produccion
+5. Se adiciono FECHA PEDIDO en el pedido que elabora la comercial
+

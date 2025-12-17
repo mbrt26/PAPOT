@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+  <tlib-version>1.0</tlib-version>
+  <short-name>localComprobante</short-name>
+  <uri>/WEB-INF/tlds/localComprobante</uri>
+  <tag>
+    <name>localComprobante</name>
+    <tag-class>com.solucionesweb.tags.ListaComprobanteTag</tag-class>
+    <tei-class>com.solucionesweb.tags.ListaComprobanteTagExtraInfo</tei-class>
+    <body-content>JSP</body-content>
+    <description>
+      Lista historia referencias para efectuarles cotizacion
+    </description>
+    <attribute>
+      <name>idLocalTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>fechaDctoTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>idAlcanceTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+ </tag>
+</taglib>

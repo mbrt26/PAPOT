@@ -1,0 +1,1298 @@
+---
+SELECT  tblDctosOrdenesDetalle.idLocalOrigen
+         ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOperacion
+         ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                                    AS pesoTerminado
+         ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                                   AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+/*INNER JOIN
+( SELECT  tblDctosOrdenesDetalle.idLocalOrigen
+         ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOperacion
+         ,SUM(pesoTerminado) AS pesoTerminado
+         ,SUM(cantidadTerminada) AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7707
+AND   tblDctosOrdenesDetalle.idOperacion     = 2
+AND   tblDctosOrdenesDetalle.idPlu = 209
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion ) AS tmpTER
+ON tblDctosOrdenesDetalle.idLocalOrigen = tmpTER.idLocalOrigen
+AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = tmpTER.idTipoOrdenOrigen
+AND tblDctosOrdenesDetalle.idOrdenOrigen = tmpTER.idOrdenOrigen*/
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7707
+AND   tblDctosOrdenesDetalle.idOperacion     = 5
+AND   tblDctosOrdenesDetalle.idPlu = 209
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+
+-- OPERACION ANTERIOR + OPERACION ACTUAL        
+SELECT  tblDctosOrdenesDetalle.idLocalOrigen
+         ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOperacion 
+                              AS idOperacionAnterior
+         ,00 AS idOperacionActual
+         ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                                    AS pesoTerminado
+         ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                                   AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7707
+AND   tblDctosOrdenesDetalle.idOperacion   = 5
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      > 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+UNION 
+SELECT  tblDctosOrdenesDetalle.idLocalOrigen
+         ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+         ,tblDctosOrdenesDetalle.idOrdenOrigen
+         ,00 AS idOperacionAnterior
+         ,tblDctosOrdenesDetalle.idOperacion AS 
+                                      idOperacionActual
+         ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                                    AS pesoTerminado
+         ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                                   AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7707
+AND   tblDctosOrdenesDetalle.idOperacion   = 6
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      > 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion          
+        
+-- OPERACION ANTERIOR + OPERACION ACTUAL + OFICIAL
+SELECT tmpRES.idLocal,
+       tmpRES.idTipoOrden,
+       tmpRES.idOrden,
+       tmpRES.itemPadre,
+       SUM(tmpRES.pesoTerminadoAnterior)
+               AS pesoTerminadoAnterior,
+       SUM(tmpRES.cantidadTerminadaAnterior) 
+               AS cantidadTerminadaAnterior,
+       SUM(tmpRES.pesoTerminadoActual) 
+                     AS pesoTerminadoActual,
+       SUM(tmpRES.cantidadTerminadaActual) 
+                  AS cantidadTerminadaActual
+FROM (
+SELECT tmpPRG.idLocalOrigen 
+                    AS idLocal,
+       tmpPRG.idTipoOrdenOrigen 
+                AS idTipoOrden,
+       tmpPRG.idOrdenOrigen 
+                    AS idOrden
+       ,tmpPRG.itemPAdre
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoAnterior
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaAnterior
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoActual
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaActual
+FROM
+(SELECT  
+    tblDctosOrdenesDetalle.idLocalOrigen
+   ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+   ,tblDctosOrdenesDetalle.idOrdenOrigen
+   ,tblDctosOrdenesDetalle.itemPadre   
+   ,tblDctosOrdenesDetalle.idOperacion 
+                      AS idOperacionAnterior
+   ,00 AS idOperacionActual
+   ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                             AS pesoTerminado
+   ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                            AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7707
+AND   tblDctosOrdenesDetalle.idOperacion   = 5
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      > 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+        ,tblDctosOrdenesDetalle.itemPadre
+UNION 
+SELECT
+       tblDctosOrdenesDetalle.idLocalOrigen
+      ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+      ,tblDctosOrdenesDetalle.idOrdenOrigen
+      ,tblDctosOrdenesDetalle.itemPadre
+      ,00 AS idOperacionAnterior
+      ,tblDctosOrdenesDetalle.idOperacion AS 
+                              idOperacionActual
+     ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                               AS pesoTerminado
+     ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                              AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7707
+AND   tblDctosOrdenesDetalle.idOperacion   = 6
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      > 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion
+        ,tblDctosOrdenesDetalle.itemPadre)
+                                     AS tmpPRG ) 
+                                        AS tmpRES
+GROUP BY tmpRES.idLocal,
+         tmpRES.idTipoOrden,
+         tmpRES.idOrden,
+         tmpRES.itemPadre
+         
+-- OPERACION ANTERIOR + OPERACION ACTUAL + OFICIAL (***)
+SELECT tmpRES.idLocal,
+       tmpRES.idTipoOrden,
+       tmpRES.idOrden,
+       tmpRES.itemPadre,
+       SUM(tmpRES.pesoTerminadoAnterior)
+               AS pesoTerminadoAnterior,
+       SUM(tmpRES.cantidadTerminadaAnterior) 
+               AS cantidadTerminadaAnterior,
+       SUM(tmpRES.pesoTerminadoActual) 
+                     AS pesoTerminadoActual,
+       SUM(tmpRES.cantidadTerminadaActual) 
+                  AS cantidadTerminadaActual,
+       SUM(tmpRES.cantidadTerminadaAnterior) -
+       SUM(tmpRES.cantidadTerminadaActual) 
+                       AS cantidadPendiente,
+       SUM(tmpRES.pesoTerminadoAnterior) -
+       SUM(tmpRES.pesoTerminadoActual) 
+                       AS pesoPendiente
+FROM (
+SELECT tmpPRG.idLocalOrigen 
+                    AS idLocal,
+       tmpPRG.idTipoOrdenOrigen 
+                AS idTipoOrden,
+       tmpPRG.idOrdenOrigen 
+                    AS idOrden
+       ,tmpPRG.itemPAdre
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoAnterior
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaAnterior
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoActual
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaActual
+FROM
+(SELECT  
+    tblDctosOrdenesDetalle.idLocalOrigen
+   ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+   ,tblDctosOrdenesDetalle.idOrdenOrigen
+   ,tblDctosOrdenesDetalle.itemPadre   
+   ,tblDctosOrdenesDetalle.idOperacion 
+                      AS idOperacionAnterior
+   ,00 AS idOperacionActual
+   ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                             AS pesoTerminado
+   ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                            AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7734
+AND   tblDctosOrdenesDetalle.idOperacion   = 6
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+        ,tblDctosOrdenesDetalle.itemPadre
+UNION 
+SELECT
+       tblDctosOrdenesDetalle.idLocalOrigen
+      ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+      ,tblDctosOrdenesDetalle.idOrdenOrigen
+      ,tblDctosOrdenesDetalle.itemPadre
+      ,00 AS idOperacionAnterior
+      ,tblDctosOrdenesDetalle.idOperacion AS 
+                              idOperacionActual
+     ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                               AS pesoTerminado
+     ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                              AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7734
+AND   tblDctosOrdenesDetalle.idOperacion   = 999
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion
+        ,tblDctosOrdenesDetalle.itemPadre)
+                                     AS tmpPRG ) 
+                                        AS tmpRES
+GROUP BY tmpRES.idLocal,
+         tmpRES.idTipoOrden,
+         tmpRES.idOrden,
+         tmpRES.itemPadre
+         
+--- PROGRAMACION CON CANTIDAD PENDIENTE
+SELECT tmpDEF.*
+FROM 
+                  (SELECT tblDctosOrdenesDetalle.idLocal,                     
+                         tblDctosOrdenesDetalle.idTipoOrden,               
+                         tblDctosOrdenesDetalle.idOrden,                   
+                         tmpPRG.itemPadre,                                 
+                         tmpPRG.cantidadPerdida,                           
+                         tmpPRG.pesoPerdido,                               
+                         tmpPRG.pesoTerminado,                             
+                         tblDctosOrdenes.numeroOrden,                      
+                         tblDctosOrdenes.idCliente,                        
+                         tblDctosOrdenesDetalle.fechaEntrega,              
+                         tblDctosOrdenesDetalle.cantidad,                  
+                         tmpPRG.cantidadTerminada,                         
+                         ( tmpPRG.cantidadTerminada /                      
+                           tblDctosOrdenesDetalle.cantidad ) * 100         
+                                      AS porcentajeTerminado,              
+                         tblTerceros.nombreTercero,                        
+                         tblDctosOrdenesDetalle.referenciaCliente,         
+                         tblJobOperacion.nombreOperacion,                  
+                         tmpMAQ.nombreItem,                                
+                         tmpMAQ.referencia                                 
+                  FROM   tblDctosOrdenesDetalle                            
+                  INNER JOIN (                                             
+                  SELECT tblDctosOrdenesProgreso.idLocal                   
+                        ,tblDctosOrdenesProgreso.idTipoOrden               
+                        ,tblDctosOrdenesProgreso.idOrden                   
+                        ,tblDctosOrdenesProgreso.itemPadre                 
+                        ,tblDctosOrdenesProgreso.idOPeracion               
+                        ,SUM([cantidadPerdida])                            
+                              AS cantidadPerdida                           
+                        ,SUM([cantidadTerminada])                          
+                            AS cantidadTerminada                           
+                        ,SUM([pesoPerdido])                                
+                                  AS pesoPerdido                           
+                        ,SUM([pesoTerminado])                              
+                                AS pesoTerminado                           
+                  FROM tblDctosOrdenesProgreso                             
+                  WHERE tblDctosOrdenesProgreso.idOperacion = 2             
+                  GROUP BY  tblDctosOrdenesProgreso.idLocal                
+                           ,tblDctosOrdenesProgreso.idTipoOrden            
+                           ,tblDctosOrdenesProgreso.idOrden                
+                           ,tblDctosOrdenesProgreso.idOPeracion            
+                           ,tblDctosOrdenesProgreso.itemPadre)             
+                                                     AS tmpPRG             
+                  ON    tblDctosOrdenesDetalle.idLocal     =               
+                                                tmpPRG.idLocal             
+                  AND   tblDctosOrdenesDetalle.idTipoOrden =               
+                                            tmpPRG.idTipoOrden             
+                  AND   tblDctosOrdenesDetalle.idorden     =               
+                                                tmpPRG.idorden             
+                  AND   tblDctosOrdenesDetalle.itemPadre   =               
+                                              tmpPRG.itemPadre             
+                  INNER JOIN tblDctosOrdenes                               
+                  ON    tblDctosOrdenesDetalle.idLocal     =               
+                                       tblDctosOrdenes.idLocal             
+                  AND   tblDctosOrdenesDetalle.idTipoOrden =               
+                                  tblDctosOrdenes.idTipoOrden              
+                  AND   tblDctosOrdenesDetalle.idorden     =               
+                                       tblDctosOrdenes.idorden             
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion           =               
+                                             tmpPRG.idOperacion            
+                  INNER JOIN tblTerceros                                   
+                  ON tblTerceros.idCliente                 =               
+                                     tblDctosOrdenes.idCliente             
+                  INNER JOIN                                               
+                  (SELECT tblPlusFicha.idFicha                             
+                        ,tblPlusFicha.idOperacion                          
+                        ,tblJobEscalaDetalle.nombreItem                    
+                        ,tblJobOperacion.nombreOperacion                   
+                        ,tblPlusFicha.referencia                           
+                  FROM tblPlusFicha                                        
+                  INNER JOIN tblJobEscalaDetalle                           
+                  ON tblJobEscalaDetalle.idEscala =                        
+                                tblPlusFicha.idEscala                      
+                  AND tblPlusFicha.vrEscala =                              
+                             tblJobEscalaDetalle.item                      
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion =                         
+                             tblPlusFicha.idOperacion                      
+                  AND tblPlusFicha.idEscala  IN (600,710,910,1000)         
+                  AND tblPlusFicha.vrEscala                       = 7  ) 
+                                                              AS tmpMAQ     
+                  ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha             
+                  WHERE tblTerceros.idTipoTercero                 = 1      
+                  AND tblDctosOrdenesDetalle.idEstadoRefOriginal != 9      
+                  AND   tmpMAQ.idOperacion  =  tmpPRG.idOperacion          
+                  UNION                                                    
+                  SELECT tblDctosOrdenesDetalle.idLocal,                   
+                         tblDctosOrdenesDetalle.idTipoOrden,               
+                         tblDctosOrdenesDetalle.idOrden,                   
+                         tblDctosOrdenesDetalle.itemPadre,                 
+                         tblDctosOrdenesDetalle.cantidad                   
+	        		    AS cantidadPerdida,                       
+                         0.0 AS pesoPerdido,                               
+                         0.0 AS pesoTerminado,                             
+                         tblDctosOrdenes.numeroOrden,                      
+                         tblDctosOrdenes.idCliente,                        
+                         tblDctosOrdenesDetalle.fechaEntrega,              
+                         tblDctosOrdenesDetalle.cantidad,                  
+                         0.0 AS cantidadTerminada,                         
+                         0.0 AS porcentajeTerminado,                       
+                         tblTerceros.nombreTercero,                        
+                         tblDctosOrdenesDetalle.referenciaCliente,         
+                         tblJobOperacion.nombreOperacion,                  
+                         tmpMAQ.nombreItem,                                
+                         tmpMAQ.referencia                                 
+                  FROM   tblDctosOrdenesDetalle                            
+                  INNER JOIN tblDctosOrdenes                               
+                  ON    tblDctosOrdenesDetalle.idLocal     =               
+                                       tblDctosOrdenes.idLocal             
+                  AND   tblDctosOrdenesDetalle.idTipoOrden =               
+                                  tblDctosOrdenes.idTipoOrden              
+                  AND   tblDctosOrdenesDetalle.idorden     =               
+                                       tblDctosOrdenes.idorden             
+                  INNER JOIN tblTerceros                                   
+                  ON tblTerceros.idCliente                 =               
+                                     tblDctosOrdenes.idCliente             
+                  INNER JOIN                                               
+                  (SELECT tblPlusFicha.idFicha                             
+                        ,tblPlusFicha.idOperacion                          
+                        ,tblJobEscalaDetalle.nombreItem                    
+                        ,tblJobOperacion.nombreOperacion                   
+                        ,tblPlusFicha.referencia                           
+                  FROM tblPlusFicha                                        
+                  INNER JOIN tblJobEscalaDetalle                           
+                  ON tblJobEscalaDetalle.idEscala =                        
+                                tblPlusFicha.idEscala                      
+                  AND tblPlusFicha.vrEscala =                              
+                             tblJobEscalaDetalle.item                      
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion =                         
+                             tblPlusFicha.idOperacion                      
+                  AND tblPlusFicha.idEscala  IN (600,710,910,1000)         
+                  AND tblPlusFicha.vrEscala             = 7 ) AS tmpMAQ       
+                  ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha             
+                                                                           
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion           =               
+                                             tmpMAQ.idOperacion            
+                  WHERE tblTerceros.idTipoTercero                 = 1      
+                  AND tblDctosOrdenesDetalle.idEstadoRefOriginal != 9      
+                  AND   tmpMAQ.idOperacion  =  tmpMAQ.idOperacion          
+                  AND   tblDctosOrdenes.numeroOrden              != 0      
+                  AND   NOT EXISTS                                         
+                      ( SELECT tblDctosOrdenesProgreso.*                   
+                        FROM tblDctosOrdenesProgreso                       
+                        WHERE tblDctosOrdenesProgreso.idLocal     =        
+                                        tblDctosOrdenesDetalle.idLocal     
+                        AND   tblDctosOrdenesProgreso.idTipoOrden =        
+                                    tblDctosOrdenesDetalle.idTipoOrden     
+                        AND   tblDctosOrdenesProgreso.idOrden     =        
+                                        tblDctosOrdenesDetalle.idOrden     
+                        AND   tblDctosOrdenesProgreso.itemPadre   =        
+                                    tblDctosOrdenesDetalle.itemPadre ) )
+                                                              AS tmpDEF
+INNER JOIN
+( SELECT tmpRES.idLocal,
+       tmpRES.idTipoOrden,
+       tmpRES.idOrden,
+       tmpRES.itemPadre,
+       SUM(tmpRES.pesoTerminadoAnterior)
+               AS pesoTerminadoAnterior,
+       SUM(tmpRES.cantidadTerminadaAnterior) 
+               AS cantidadTerminadaAnterior,
+       SUM(tmpRES.pesoTerminadoActual) 
+                     AS pesoTerminadoActual,
+       SUM(tmpRES.cantidadTerminadaActual) 
+                  AS cantidadTerminadaActual,
+       SUM(tmpRES.cantidadTerminadaAnterior) -
+       SUM(tmpRES.cantidadTerminadaActual) 
+                       AS cantidadPendiente,
+       SUM(tmpRES.pesoTerminadoAnterior) -
+       SUM(tmpRES.pesoTerminadoActual) 
+                       AS pesoPendiente
+FROM (
+SELECT tmpPRG.idLocalOrigen 
+                    AS idLocal,
+       tmpPRG.idTipoOrdenOrigen 
+                AS idTipoOrden,
+       tmpPRG.idOrdenOrigen 
+                    AS idOrden
+       ,tmpPRG.itemPAdre
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoAnterior
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaAnterior
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoActual
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaActual
+FROM
+(SELECT  
+    tblDctosOrdenesDetalle.idLocalOrigen
+   ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+   ,tblDctosOrdenesDetalle.idOrdenOrigen
+   ,tblDctosOrdenesDetalle.itemPadre   
+   ,tblDctosOrdenesDetalle.idOperacion 
+                      AS idOperacionAnterior
+   ,00 AS idOperacionActual
+   ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                             AS pesoTerminado
+   ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                            AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7734
+AND   tblDctosOrdenesDetalle.idOperacion   = 6
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+        ,tblDctosOrdenesDetalle.itemPadre
+UNION 
+SELECT
+       tblDctosOrdenesDetalle.idLocalOrigen
+      ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+      ,tblDctosOrdenesDetalle.idOrdenOrigen
+      ,tblDctosOrdenesDetalle.itemPadre
+      ,00 AS idOperacionAnterior
+      ,tblDctosOrdenesDetalle.idOperacion AS 
+                              idOperacionActual
+     ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                               AS pesoTerminado
+     ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                              AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOrdenOrigen = 7734
+AND   tblDctosOrdenesDetalle.idOperacion   = 999
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion
+        ,tblDctosOrdenesDetalle.itemPadre)
+                                     AS tmpPRG ) 
+                                        AS tmpRES
+GROUP BY tmpRES.idLocal,
+         tmpRES.idTipoOrden,
+         tmpRES.idOrden,
+         tmpRES.itemPadre ) AS tmpCAN
+ON  tmpCAN.idLocal     = tmpDEF.idLocal          
+AND tmpCAN.idTipoOrden = tmpDEF.idTipoOrden
+AND tmpCAN.idOrden     = tmpDEF.idOrden
+AND tmpCAN.itemPadre   = tmpDEF.itemPadre
+
+--- PROGRAMACION CON CANTIDAD PENDIENTE (***)
+SELECT tmpDEF.*,
+       tmpCAN.cantidadPendiente,
+       tmpCAN.pesoPendiente
+FROM 
+                  (SELECT tblDctosOrdenesDetalle.idLocal,                     
+                         tblDctosOrdenesDetalle.idTipoOrden,               
+                         tblDctosOrdenesDetalle.idOrden,                   
+                         tmpPRG.itemPadre,                                 
+                         tmpPRG.cantidadPerdida,                           
+                         tmpPRG.pesoPerdido,                               
+                         tmpPRG.pesoTerminado,                             
+                         tblDctosOrdenes.numeroOrden,                      
+                         tblDctosOrdenes.idCliente,                        
+                         tblDctosOrdenesDetalle.fechaEntrega,              
+                         tblDctosOrdenesDetalle.cantidad,                  
+                         tmpPRG.cantidadTerminada,                         
+                         ( tmpPRG.cantidadTerminada /                      
+                           tblDctosOrdenesDetalle.cantidad ) * 100         
+                                      AS porcentajeTerminado,              
+                         tblTerceros.nombreTercero,                        
+                         tblDctosOrdenesDetalle.referenciaCliente,         
+                         tblJobOperacion.nombreOperacion,                  
+                         tmpMAQ.nombreItem,                                
+                         tmpMAQ.referencia                                 
+                  FROM   tblDctosOrdenesDetalle                            
+                  INNER JOIN (                                             
+                  SELECT tblDctosOrdenesProgreso.idLocal                   
+                        ,tblDctosOrdenesProgreso.idTipoOrden               
+                        ,tblDctosOrdenesProgreso.idOrden                   
+                        ,tblDctosOrdenesProgreso.itemPadre                 
+                        ,tblDctosOrdenesProgreso.idOPeracion               
+                        ,SUM([cantidadPerdida])                            
+                              AS cantidadPerdida                           
+                        ,SUM([cantidadTerminada])                          
+                            AS cantidadTerminada                           
+                        ,SUM([pesoPerdido])                                
+                                  AS pesoPerdido                           
+                        ,SUM([pesoTerminado])                              
+                                AS pesoTerminado                           
+                  FROM tblDctosOrdenesProgreso                             
+                  WHERE tblDctosOrdenesProgreso.idOperacion = 5             
+                  GROUP BY  tblDctosOrdenesProgreso.idLocal                
+                           ,tblDctosOrdenesProgreso.idTipoOrden            
+                           ,tblDctosOrdenesProgreso.idOrden                
+                           ,tblDctosOrdenesProgreso.idOPeracion            
+                           ,tblDctosOrdenesProgreso.itemPadre)             
+                                                     AS tmpPRG             
+                  ON    tblDctosOrdenesDetalle.idLocal     =               
+                                                tmpPRG.idLocal             
+                  AND   tblDctosOrdenesDetalle.idTipoOrden =               
+                                            tmpPRG.idTipoOrden             
+                  AND   tblDctosOrdenesDetalle.idorden     =               
+                                                tmpPRG.idorden             
+                  AND   tblDctosOrdenesDetalle.itemPadre   =               
+                                              tmpPRG.itemPadre             
+                  INNER JOIN tblDctosOrdenes                               
+                  ON    tblDctosOrdenesDetalle.idLocal     =               
+                                       tblDctosOrdenes.idLocal             
+                  AND   tblDctosOrdenesDetalle.idTipoOrden =               
+                                  tblDctosOrdenes.idTipoOrden              
+                  AND   tblDctosOrdenesDetalle.idorden     =               
+                                       tblDctosOrdenes.idorden             
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion           =               
+                                             tmpPRG.idOperacion            
+                  INNER JOIN tblTerceros                                   
+                  ON tblTerceros.idCliente                 =               
+                                     tblDctosOrdenes.idCliente             
+                  INNER JOIN                                               
+                  (SELECT tblPlusFicha.idFicha                             
+                        ,tblPlusFicha.idOperacion                          
+                        ,tblJobEscalaDetalle.nombreItem                    
+                        ,tblJobOperacion.nombreOperacion                   
+                        ,tblPlusFicha.referencia                           
+                  FROM tblPlusFicha                                        
+                  INNER JOIN tblJobEscalaDetalle                           
+                  ON tblJobEscalaDetalle.idEscala =                        
+                                tblPlusFicha.idEscala                      
+                  AND tblPlusFicha.vrEscala =                              
+                             tblJobEscalaDetalle.item                      
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion =                         
+                             tblPlusFicha.idOperacion                      
+                  AND tblPlusFicha.idEscala  IN (600,710,910,1000)         
+                  AND tblPlusFicha.vrEscala                       = 10  ) 
+                                                              AS tmpMAQ     
+                  ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha             
+                  WHERE tblTerceros.idTipoTercero                 = 1      
+                  AND tblDctosOrdenesDetalle.idEstadoRefOriginal != 9      
+                  AND   tmpMAQ.idOperacion  =  tmpPRG.idOperacion          
+                  UNION                                                    
+                  SELECT tblDctosOrdenesDetalle.idLocal,                   
+                         tblDctosOrdenesDetalle.idTipoOrden,               
+                         tblDctosOrdenesDetalle.idOrden,                   
+                         tblDctosOrdenesDetalle.itemPadre,                 
+                         tblDctosOrdenesDetalle.cantidad                   
+	        		    AS cantidadPerdida,                       
+                         0.0 AS pesoPerdido,                               
+                         0.0 AS pesoTerminado,                             
+                         tblDctosOrdenes.numeroOrden,                      
+                         tblDctosOrdenes.idCliente,                        
+                         tblDctosOrdenesDetalle.fechaEntrega,              
+                         tblDctosOrdenesDetalle.cantidad,                  
+                         0.0 AS cantidadTerminada,                         
+                         0.0 AS porcentajeTerminado,                       
+                         tblTerceros.nombreTercero,                        
+                         tblDctosOrdenesDetalle.referenciaCliente,         
+                         tblJobOperacion.nombreOperacion,                  
+                         tmpMAQ.nombreItem,                                
+                         tmpMAQ.referencia                                 
+                  FROM   tblDctosOrdenesDetalle                            
+                  INNER JOIN tblDctosOrdenes                               
+                  ON    tblDctosOrdenesDetalle.idLocal     =               
+                                       tblDctosOrdenes.idLocal             
+                  AND   tblDctosOrdenesDetalle.idTipoOrden =               
+                                  tblDctosOrdenes.idTipoOrden              
+                  AND   tblDctosOrdenesDetalle.idorden     =               
+                                       tblDctosOrdenes.idorden             
+                  INNER JOIN tblTerceros                                   
+                  ON tblTerceros.idCliente                 =               
+                                     tblDctosOrdenes.idCliente             
+                  INNER JOIN                                               
+                  (SELECT tblPlusFicha.idFicha                             
+                        ,tblPlusFicha.idOperacion                          
+                        ,tblJobEscalaDetalle.nombreItem                    
+                        ,tblJobOperacion.nombreOperacion                   
+                        ,tblPlusFicha.referencia                           
+                  FROM tblPlusFicha                                        
+                  INNER JOIN tblJobEscalaDetalle                           
+                  ON tblJobEscalaDetalle.idEscala =                        
+                                tblPlusFicha.idEscala                      
+                  AND tblPlusFicha.vrEscala =                              
+                             tblJobEscalaDetalle.item                      
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion =                         
+                             tblPlusFicha.idOperacion                      
+                  AND tblPlusFicha.idEscala  IN (600,710,910,1000)         
+                  AND tblPlusFicha.vrEscala             = 7 ) AS tmpMAQ       
+                  ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha             
+                                                                           
+                  INNER JOIN tblJobOperacion                               
+                  ON tblJobOperacion.idOperacion           =               
+                                             tmpMAQ.idOperacion            
+                  WHERE tblTerceros.idTipoTercero                 = 1      
+                  AND tblDctosOrdenesDetalle.idEstadoRefOriginal != 9      
+                  AND   tmpMAQ.idOperacion  =  tmpMAQ.idOperacion          
+                  AND   tblDctosOrdenes.numeroOrden              != 0      
+                  AND   NOT EXISTS                                         
+                      ( SELECT tblDctosOrdenesProgreso.*                   
+                        FROM tblDctosOrdenesProgreso                       
+                        WHERE tblDctosOrdenesProgreso.idLocal     =        
+                                        tblDctosOrdenesDetalle.idLocal     
+                        AND   tblDctosOrdenesProgreso.idTipoOrden =        
+                                    tblDctosOrdenesDetalle.idTipoOrden     
+                        AND   tblDctosOrdenesProgreso.idOrden     =        
+                                        tblDctosOrdenesDetalle.idOrden     
+                        AND   tblDctosOrdenesProgreso.itemPadre   =        
+                                    tblDctosOrdenesDetalle.itemPadre ) )
+                                                              AS tmpDEF
+INNER JOIN
+( SELECT tmpRES.idLocal,
+       tmpRES.idTipoOrden,
+       tmpRES.idOrden,
+       tmpRES.itemPadre,
+       SUM(tmpRES.pesoTerminadoAnterior)
+               AS pesoTerminadoAnterior,
+       SUM(tmpRES.cantidadTerminadaAnterior) 
+               AS cantidadTerminadaAnterior,
+       SUM(tmpRES.pesoTerminadoActual) 
+                     AS pesoTerminadoActual,
+       SUM(tmpRES.cantidadTerminadaActual) 
+                  AS cantidadTerminadaActual,
+       SUM(tmpRES.cantidadTerminadaAnterior) -
+       SUM(tmpRES.cantidadTerminadaActual) 
+                       AS cantidadPendiente,
+       SUM(tmpRES.pesoTerminadoAnterior) -
+       SUM(tmpRES.pesoTerminadoActual) 
+                       AS pesoPendiente
+FROM (
+SELECT tmpPRG.idLocalOrigen 
+                    AS idLocal,
+       tmpPRG.idTipoOrdenOrigen 
+                AS idTipoOrden,
+       tmpPRG.idOrdenOrigen 
+                    AS idOrden
+       ,tmpPRG.itemPAdre
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoAnterior
+,CASE  
+WHEN tmpPRG.idOperacionAnterior > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaAnterior
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.pesoTerminado
+ELSE 0 END
+AS pesoTerminadoActual
+,CASE  
+WHEN tmpPRG.idOperacionActual > 0
+THEN tmpPRG.cantidadTerminada
+ELSE 0 END
+AS cantidadTerminadaActual
+FROM
+(SELECT  
+    tblDctosOrdenesDetalle.idLocalOrigen
+   ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+   ,tblDctosOrdenesDetalle.idOrdenOrigen
+   ,tblDctosOrdenesDetalle.itemPadre   
+   ,tblDctosOrdenesDetalle.idOperacion 
+                      AS idOperacionAnterior
+   ,00 AS idOperacionActual
+   ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                             AS pesoTerminado
+   ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                            AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOperacion   = 2
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+        ,tblDctosOrdenesDetalle.itemPadre
+UNION 
+SELECT
+       tblDctosOrdenesDetalle.idLocalOrigen
+      ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+      ,tblDctosOrdenesDetalle.idOrdenOrigen
+      ,tblDctosOrdenesDetalle.itemPadre
+      ,00 AS idOperacionAnterior
+      ,tblDctosOrdenesDetalle.idOperacion AS 
+                              idOperacionActual
+     ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                               AS pesoTerminado
+     ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                              AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idOperacion   = 5
+AND   tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion
+        ,tblDctosOrdenesDetalle.itemPadre)
+                                     AS tmpPRG ) 
+                                        AS tmpRES
+GROUP BY tmpRES.idLocal,
+         tmpRES.idTipoOrden,
+         tmpRES.idOrden,
+         tmpRES.itemPadre ) AS tmpCAN
+ON  tmpCAN.idLocal     = tmpDEF.idLocal          
+AND tmpCAN.idTipoOrden = tmpDEF.idTipoOrden
+AND tmpCAN.idOrden     = tmpDEF.idOrden
+AND tmpCAN.itemPadre   = tmpDEF.itemPadre
+
+--
+              SELECT tmpDEF.*,                                                 
+                         tmpCAN.cantidadPendiente,                           
+                         tmpCAN.pesoPendiente                                
+                  FROM                                                       
+                   (SELECT tblDctosOrdenesDetalle.idLocal,                   
+                          tblDctosOrdenesDetalle.idTipoOrden,                
+                          tblDctosOrdenesDetalle.idOrden,                    
+                          tmpPRG.itemPadre,                                  
+                          tmpPRG.cantidadPerdida,                            
+                          tmpPRG.pesoPerdido,                                
+                          tmpPRG.pesoTerminado,                              
+                          tblDctosOrdenes.numeroOrden,                       
+                          tblDctosOrdenes.idCliente,                         
+                          tblDctosOrdenesDetalle.fechaEntrega,               
+                          tblDctosOrdenesDetalle.cantidad,                   
+                          tmpPRG.cantidadTerminada,                          
+                          ( tmpPRG.cantidadTerminada /                       
+                            tblDctosOrdenesDetalle.cantidad ) * 100          
+                                       AS porcentajeTerminado,               
+                          tblTerceros.nombreTercero,                         
+                          tblDctosOrdenesDetalle.referenciaCliente,          
+                          tblJobOperacion.nombreOperacion,                   
+                          tmpMAQ.nombreItem,                                 
+                          tmpMAQ.referencia                                  
+                   FROM   tblDctosOrdenesDetalle                             
+                   INNER JOIN (                                              
+                   SELECT tblDctosOrdenesProgreso.idLocal                    
+                         ,tblDctosOrdenesProgreso.idTipoOrden                
+                         ,tblDctosOrdenesProgreso.idOrden                    
+                         ,tblDctosOrdenesProgreso.itemPadre                  
+                         ,tblDctosOrdenesProgreso.idOPeracion                
+                         ,SUM([cantidadPerdida])                             
+                               AS cantidadPerdida                            
+                         ,SUM([cantidadTerminada])                           
+                             AS cantidadTerminada                            
+                         ,SUM([pesoPerdido])                                 
+                                   AS pesoPerdido                            
+                         ,SUM([pesoTerminado])                               
+                                 AS pesoTerminado                            
+                   FROM tblDctosOrdenesProgreso                              
+                   WHERE tblDctosOrdenesProgreso.idOperacion = 5             
+                   GROUP BY  tblDctosOrdenesProgreso.idLocal                 
+                            ,tblDctosOrdenesProgreso.idTipoOrden             
+                            ,tblDctosOrdenesProgreso.idOrden                 
+                            ,tblDctosOrdenesProgreso.idOPeracion             
+                            ,tblDctosOrdenesProgreso.itemPadre)              
+                                                      AS tmpPRG              
+                   ON    tblDctosOrdenesDetalle.idLocal     =                
+                                                 tmpPRG.idLocal              
+                   AND   tblDctosOrdenesDetalle.idTipoOrden =                
+                                             tmpPRG.idTipoOrden              
+                   AND   tblDctosOrdenesDetalle.idorden     =                
+                                                 tmpPRG.idorden              
+                   AND   tblDctosOrdenesDetalle.itemPadre   =                
+                                               tmpPRG.itemPadre              
+                   INNER JOIN tblDctosOrdenes                                
+                   ON    tblDctosOrdenesDetalle.idLocal     =                
+                                        tblDctosOrdenes.idLocal              
+                   AND   tblDctosOrdenesDetalle.idTipoOrden =                
+                                   tblDctosOrdenes.idTipoOrden               
+                   AND   tblDctosOrdenesDetalle.idorden     =                
+                                        tblDctosOrdenes.idorden              
+                   INNER JOIN tblJobOperacion                                
+                   ON tblJobOperacion.idOperacion           =                
+                                              tmpPRG.idOperacion             
+                   INNER JOIN tblTerceros                                    
+                   ON tblTerceros.idCliente                 =                
+                                      tblDctosOrdenes.idCliente              
+                   INNER JOIN                                                
+                   (SELECT tblPlusFicha.idFicha                              
+                         ,tblPlusFicha.idOperacion                           
+                         ,tblJobEscalaDetalle.nombreItem                     
+                         ,tblJobOperacion.nombreOperacion                    
+                         ,tblPlusFicha.referencia                            
+                   FROM tblPlusFicha                                         
+                   INNER JOIN tblJobEscalaDetalle                            
+                   ON tblJobEscalaDetalle.idEscala =                         
+                                 tblPlusFicha.idEscala                       
+                   AND tblPlusFicha.vrEscala =                               
+                              tblJobEscalaDetalle.item                       
+                   INNER JOIN tblJobOperacion                                
+                   ON tblJobOperacion.idOperacion =                          
+                              tblPlusFicha.idOperacion                       
+                   AND tblPlusFicha.idEscala IN (600,710,910,1000)          
+                   AND tblPlusFicha.vrEscala                = 10 ) 
+                                                         AS tmpMAQ                                   
+                   ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha              
+                   WHERE tblTerceros.idTipoTercero          = 1              
+                   AND tblDctosOrdenesDetalle.idEstadoRefOriginal
+                                                              != 9       
+                   AND   tmpMAQ.idOperacion  =  tmpPRG.idOperacion           
+                   UNION                                                     
+                   SELECT tblDctosOrdenesDetalle.idLocal,                    
+                          tblDctosOrdenesDetalle.idTipoOrden,                
+                          tblDctosOrdenesDetalle.idOrden,                    
+                          tblDctosOrdenesDetalle.itemPadre,                  
+                          tblDctosOrdenesDetalle.cantidad                    
+	     		    AS cantidadPerdida,                         
+                          0.0 AS pesoPerdido,                                
+                          0.0 AS pesoTerminado,                              
+                          tblDctosOrdenes.numeroOrden,                       
+                          tblDctosOrdenes.idCliente,                         
+                          tblDctosOrdenesDetalle.fechaEntrega,               
+                          tblDctosOrdenesDetalle.cantidad,                   
+                          0.0 AS cantidadTerminada,                          
+                          0.0 AS porcentajeTerminado,                        
+                          tblTerceros.nombreTercero,                         
+                          tblDctosOrdenesDetalle.referenciaCliente,          
+                          tblJobOperacion.nombreOperacion,                   
+                          tmpMAQ.nombreItem,                                 
+                          tmpMAQ.referencia                                  
+                   FROM   tblDctosOrdenesDetalle                             
+                   INNER JOIN tblDctosOrdenes                                
+                   ON    tblDctosOrdenesDetalle.idLocal     =                
+                                        tblDctosOrdenes.idLocal              
+                   AND   tblDctosOrdenesDetalle.idTipoOrden =                
+                                   tblDctosOrdenes.idTipoOrden               
+                   AND   tblDctosOrdenesDetalle.idorden     =                
+                                        tblDctosOrdenes.idorden              
+                   INNER JOIN tblTerceros                                    
+                   ON tblTerceros.idCliente                 =                
+                                      tblDctosOrdenes.idCliente              
+                   INNER JOIN                                                
+                   (SELECT tblPlusFicha.idFicha                              
+                         ,tblPlusFicha.idOperacion                           
+                         ,tblJobEscalaDetalle.nombreItem                     
+                         ,tblJobOperacion.nombreOperacion                    
+                         ,tblPlusFicha.referencia                            
+                   FROM tblPlusFicha                                         
+                   INNER JOIN tblJobEscalaDetalle                            
+                   ON tblJobEscalaDetalle.idEscala =                         
+                                 tblPlusFicha.idEscala                       
+                   AND tblPlusFicha.vrEscala =                               
+                              tblJobEscalaDetalle.item                       
+                   INNER JOIN tblJobOperacion                                
+                   ON tblJobOperacion.idOperacion =                          
+                              tblPlusFicha.idOperacion                       
+                   AND tblPlusFicha.idEscala  IN (600,710,910,1000)          
+                   AND tblPlusFicha.vrEscala       =  10 ) 
+                                                         AS tmpMAQ                                     
+                   ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha              
+                                                                             
+                   INNER JOIN tblJobOperacion                                
+                   ON tblJobOperacion.idOperacion           =                
+                                              tmpMAQ.idOperacion             
+                   WHERE tblTerceros.idTipoTercero                 = 1       
+                   AND tblDctosOrdenesDetalle.idEstadoRefOriginal != 9       
+                   AND   tmpMAQ.idOperacion  =  tmpMAQ.idOperacion           
+                   AND   tblDctosOrdenes.numeroOrden              != 0       
+                   AND   NOT EXISTS                                          
+                       ( SELECT tblDctosOrdenesProgreso.*                    
+                         FROM tblDctosOrdenesProgreso                        
+                         WHERE tblDctosOrdenesProgreso.idLocal     =         
+                                      tblDctosOrdenesDetalle.idLocal         
+                         AND   tblDctosOrdenesProgreso.idTipoOrden =         
+                                  tblDctosOrdenesDetalle.idTipoOrden         
+                         AND   tblDctosOrdenesProgreso.idOrden     =         
+                                      tblDctosOrdenesDetalle.idOrden         
+                         AND   tblDctosOrdenesProgreso.itemPadre   =         
+                                tblDctosOrdenesDetalle.itemPadre ) )         
+                                                           AS tmpDEF         
+                  INNER JOIN                                                 
+                   ( SELECT tmpRES.idLocal,                                  
+                            tmpRES.idTipoOrden,                              
+                            tmpRES.idOrden,                                  
+                            tmpRES.itemPadre,                                
+                            SUM(tmpRES.pesoTerminadoAnterior)                
+                                        AS pesoTerminadoAnterior,            
+                            SUM(tmpRES.cantidadTerminadaAnterior)            
+                                      AS cantidadTerminadaAnterior,          
+                            SUM(tmpRES.pesoTerminadoActual)                  
+                                            AS pesoTerminadoActual,          
+                            SUM(tmpRES.cantidadTerminadaActual)              
+                                        AS cantidadTerminadaActual,          
+                            SUM(tmpRES.cantidadTerminadaAnterior) -          
+                            SUM(tmpRES.cantidadTerminadaActual)              
+                                              AS cantidadPendiente,          
+                            SUM(tmpRES.pesoTerminadoAnterior) -              
+                            SUM(tmpRES.pesoTerminadoActual)                  
+                                                   AS pesoPendiente          
+                   FROM (                                                    
+                       SELECT tmpPRG.idLocalOrigen                           
+                                          AS idLocal,                        
+                              tmpPRG.idTipoOrdenOrigen                       
+                                       AS idTipoOrden,                       
+                              tmpPRG.idOrdenOrigen                           
+                                           AS idOrden                        
+                             ,tmpPRG.itemPAdre                               
+                             ,CASE                                           
+                              WHEN tmpPRG.idOperacionAnterior > 0            
+                              THEN tmpPRG.pesoTerminado                      
+                              ELSE 0 END                                     
+                                         AS pesoTerminadoAnterior            
+                             ,CASE                                           
+                              WHEN tmpPRG.idOperacionAnterior > 0            
+                              THEN tmpPRG.cantidadTerminada                  
+                              ELSE 0 END                                     
+                              AS cantidadTerminadaAnterior                   
+                              ,CASE                                          
+                              WHEN tmpPRG.idOperacionActual > 0              
+                              THEN tmpPRG.pesoTerminado                      
+                              ELSE 0 END AS pesoTerminadoActual              
+                             ,CASE                                           
+                              WHEN tmpPRG.idOperacionActual > 0              
+                              THEN tmpPRG.cantidadTerminada                  
+                              ELSE 0 END                                     
+                              AS cantidadTerminadaActual                     
+                       FROM                                                  
+                         (SELECT                                             
+                             tblDctosOrdenesDetalle.idLocalOrigen            
+                            ,tblDctosOrdenesDetalle.idTipoOrdenOrigen        
+                            ,tblDctosOrdenesDetalle.idOrdenOrigen            
+                            ,tblDctosOrdenesDetalle.itemPadre                
+                            ,tblDctosOrdenesDetalle.idOperacion              
+                                               AS idOperacionAnterior        
+                            ,00 AS idOperacionActual                         
+                            ,SUM(tblDctosOrdenesDetalle.pesoTerminado)       
+                                                     AS pesoTerminado        
+                        ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)       
+                                                  AS cantidadTerminada       
+                          FROM tblDctosOrdenesDetalle    
+                          INNER JOIN tblDctosOrdenes
+			  ON tblDctosOrdenesDetalle.idLocalOrigen      = 
+			                           tblDctosOrdenes.idLocal
+			  AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 
+			                       tblDctosOrdenes.idTipoOrden
+			  AND tblDctosOrdenesDetalle.idOrdenOrigen     = 
+			                           tblDctosOrdenes.idOrden
+			  INNER JOIN (SELECT tblPlusFicha.idFicha,
+                                            MAX(tblPlusFicha.idOperacion) 
+                                                    AS idOperacionAnterior
+  		                      FROM tblPlusFicha
+                                      WHERE tblPlusFicha.idEscala  =  610 
+                                      AND tblPlusFicha.vrEscala    =    5
+				 	  GROUP BY tblPlusFicha.idFicha )
+                                                                 AS tmpOPA
+			  ON tmpOPA.idFicha = tblDctosOrdenes.idFicha					  
+			  AND tmpOPA.idOperacionAnterior = 
+                                        tblDctosOrdenesDetalle.idOperacion					  
+                          WHERE tblDctosOrdenesDetalle.idPlu         = 209   
+                          AND   tblDctosOrdenesDetalle.cantidad      < 0     
+                          GROUP BY tblDctosOrdenesDetalle.idLocalOrigen      
+                                  ,tblDctosOrdenesDetalle.idTipoOrdenOrigen  
+                                  ,tblDctosOrdenesDetalle.idOrdenOrigen      
+                                  ,tblDctosOrdenesDetalle.idOperacion        
+                                  ,tblDctosOrdenesDetalle.itemPadre          
+                          UNION                                              
+                          SELECT                                             
+                             tblDctosOrdenesDetalle.idLocalOrigen            
+                            ,tblDctosOrdenesDetalle.idTipoOrdenOrigen        
+                            ,tblDctosOrdenesDetalle.idOrdenOrigen            
+                            ,tblDctosOrdenesDetalle.itemPadre                
+                            ,00 AS idOperacionAnterior                       
+                            ,tblDctosOrdenesDetalle.idOperacion AS           
+                                                    idOperacionActual        
+                            ,SUM(tblDctosOrdenesDetalle.pesoTerminado)       
+                                                      AS pesoTerminado       
+                            ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)   
+                                                      AS cantidadTerminada   
+                          FROM tblDctosOrdenesDetalle                        
+                          WHERE tblDctosOrdenesDetalle.idOperacion   = 5       
+                          AND   tblDctosOrdenesDetalle.idPlu         = 209   
+                          AND   tblDctosOrdenesDetalle.cantidad      < 0     
+                          GROUP BY tblDctosOrdenesDetalle.idLocalOrigen      
+                                  ,tblDctosOrdenesDetalle.idTipoOrdenOrigen  
+                                  ,tblDctosOrdenesDetalle.idOrdenOrigen      
+                                  ,tblDctosOrdenesDetalle.idOperacion        
+                                  ,tblDctosOrdenesDetalle.itemPadre)         
+                                                               AS tmpPRG )   
+                                                               AS tmpRES     
+                          GROUP BY tmpRES.idLocal,                           
+                                   tmpRES.idTipoOrden,                       
+                                   tmpRES.idOrden,                           
+                                   tmpRES.itemPadre ) AS tmpCAN              
+                   ON  tmpCAN.idLocal     = tmpDEF.idLocal                   
+                   AND tmpCAN.idTipoOrden = tmpDEF.idTipoOrden               
+                   AND tmpCAN.idOrden     = tmpDEF.idOrden                   
+                   AND tmpCAN.itemPadre   = tmpDEF.itemPadre                 
+                   ORDER BY tmpDEF.fechaEntrega,                             
+                            tmpDEF.numeroOrden                               ;
+
+
+--- FICHAS COEXTRUSORA TODAS
+SELECT tblPlusFicha.idFicha, 
+       MAX(tblPlusFicha.referencia)         
+                     AS referencia, 
+       MAX(tblJobOperacion.nombreOperacion) 
+                        AS nombreOperacion, 
+       MAX(tblPlusFicha.referenciaCliente) 
+                      AS referenciaCliente, 
+       MAX(tblPlusFicha.nombreReferencia) 
+                       AS nombreReferencia, 
+       tblJobEscalaDetalle.nombreItem
+FROM   tblPlusFicha
+INNER JOIN tblJobOperacion
+ON tblPlusFicha.idOperacion = tblJobOperacion.idOperacion
+INNER JOIN tblJobEscalaDetalle
+ON tblPlusFicha.idEscala = tblJobEscalaDetalle.idEscala
+AND tblPlusFicha.vrEscala = tblJobEscalaDetalle.item
+WHERE     (tblPlusFicha.idOperacion = 2)
+AND tblPlusFicha.idEscala IN (600, 710, 910, 1000)
+AND tblPlusFicha.vrEscala = 7
+GROUP BY tblPlusFicha.idFicha, 
+         tblJobEscalaDetalle.nombreItem
+         
+--- TODAS ORDENES PRODUCCION + INCLUYENDO ITEM
+SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden,
+       tblDctosOrdenes.idOrden,
+       tblDctosOrdenesDetalle.itemPadre,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenes.idFicha,
+       tmpFIC.referencia,
+       tmpFIC.nombreOperacion,
+       tmpFIC.referenciaCliente,
+       tmpFIC.nombreReferencia,
+       tmpFIC.nombreItem    
+FROM   tblDctosOrdenes
+INNER JOIN (
+SELECT tblPlusFicha.idFicha, 
+       MAX(tblPlusFicha.referencia)         
+                     AS referencia, 
+       MAX(tblJobOperacion.nombreOperacion) 
+                        AS nombreOperacion, 
+       MAX(tblPlusFicha.referenciaCliente) 
+                      AS referenciaCliente, 
+       MAX(tblPlusFicha.nombreReferencia) 
+                       AS nombreReferencia, 
+       tblJobEscalaDetalle.nombreItem
+FROM   tblPlusFicha
+INNER JOIN tblJobOperacion
+ON tblPlusFicha.idOperacion      = 
+              tblJobOperacion.idOperacion
+INNER JOIN tblJobEscalaDetalle
+ON tblPlusFicha.idEscala         = 
+             tblJobEscalaDetalle.idEscala
+AND tblPlusFicha.vrEscala        = 
+                 tblJobEscalaDetalle.item
+WHERE  (tblPlusFicha.idOperacion = 2)
+AND tblPlusFicha.idEscala 
+                 IN (600, 710, 910, 1000)
+AND tblPlusFicha.vrEscala        = 7
+GROUP BY tblPlusFicha.idFicha, 
+         tblJobEscalaDetalle.nombreItem)
+                               AS tmpFIC
+ON tblDctosOrdenes.idFicha  = 
+                          tmpFIC.idFicha
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenesDetalle.idLocal     = 
+                       tblDctosOrdenes.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden = 
+                   tblDctosOrdenes.idTipoOrden
+AND   tblDctosOrdenesDetalle.idOrden     = 
+                     tblDctosOrdenes.idOrden
+WHERE tblDctosOrdenes.idLocal              = 1
+AND   tblDctosOrdenes.idTipoOrden          = 59
+AND   tblDctosOrdenes.numeroOrden          > 0
+
+
+------------------- INCLUYE FECHA
+SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden,
+       tblDctosOrdenes.idOrden,
+       tblDctosOrdenesDetalle.itemPadre,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenes.idFicha,
+       tblDctosOrdenesDetalle.fechaEntrega
+FROM   tblDctosOrdenes
+INNER JOIN (
+SELECT tblPlusFicha.idFicha, 
+       MAX(tblPlusFicha.referencia)         
+                     AS referencia, 
+       MAX(tblJobOperacion.nombreOperacion) 
+                        AS nombreOperacion, 
+       MAX(tblPlusFicha.referenciaCliente) 
+                      AS referenciaCliente, 
+       MAX(tblPlusFicha.nombreReferencia) 
+                       AS nombreReferencia, 
+       tblJobEscalaDetalle.nombreItem
+FROM   tblPlusFicha
+INNER JOIN tblJobOperacion
+ON tblPlusFicha.idOperacion      = 
+              tblJobOperacion.idOperacion
+INNER JOIN tblJobEscalaDetalle
+ON tblPlusFicha.idEscala         = 
+             tblJobEscalaDetalle.idEscala
+AND tblPlusFicha.vrEscala        = 
+                 tblJobEscalaDetalle.item
+WHERE  (tblPlusFicha.idOperacion = 2)
+AND tblPlusFicha.idEscala 
+                 IN (600, 710, 910, 1000)
+AND tblPlusFicha.vrEscala        = 7
+GROUP BY tblPlusFicha.idFicha, 
+         tblJobEscalaDetalle.nombreItem)
+                               AS tmpFIC
+ON tblDctosOrdenes.idFicha  = 
+                          tmpFIC.idFicha
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenesDetalle.idLocal     = 
+                       tblDctosOrdenes.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden = 
+                   tblDctosOrdenes.idTipoOrden
+AND   tblDctosOrdenesDetalle.idOrden     = 
+                     tblDctosOrdenes.idOrden
+WHERE tblDctosOrdenes.idLocal            = 1
+AND   tblDctosOrdenes.idTipoOrden        = 59
+AND   tblDctosOrdenes.numeroOrden        > 0
+
+--- ORDENENADO + CAMPOS
+SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden,
+       tblDctosOrdenes.idOrden,
+       tblDctosOrdenesDetalle.itemPadre,
+       tblDctosOrdenesDetalle.fechaEntrega,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenes.idFicha,
+       tmpFIC.referencia,
+       tmpFIC.nombreOperacion,
+       tmpFIC.referenciaCliente,
+       tmpFIC.nombreReferencia,
+       tmpFIC.nombreItem    
+FROM   tblDctosOrdenes
+INNER JOIN (
+SELECT tblPlusFicha.idFicha, 
+       MAX(tblPlusFicha.referencia)         
+                     AS referencia, 
+       MAX(tblJobOperacion.nombreOperacion) 
+                        AS nombreOperacion, 
+       MAX(tblPlusFicha.referenciaCliente) 
+                      AS referenciaCliente, 
+       MAX(tblPlusFicha.nombreReferencia) 
+                       AS nombreReferencia, 
+       tblJobEscalaDetalle.nombreItem
+FROM   tblPlusFicha
+INNER JOIN tblJobOperacion
+ON tblPlusFicha.idOperacion      = 
+              tblJobOperacion.idOperacion
+INNER JOIN tblJobEscalaDetalle
+ON tblPlusFicha.idEscala         = 
+             tblJobEscalaDetalle.idEscala
+AND tblPlusFicha.vrEscala        = 
+                 tblJobEscalaDetalle.item
+WHERE  (tblPlusFicha.idOperacion = 2)
+AND tblPlusFicha.idEscala 
+                 IN (600, 710, 910, 1000)
+AND tblPlusFicha.vrEscala        = 7
+GROUP BY tblPlusFicha.idFicha, 
+         tblJobEscalaDetalle.nombreItem)
+                               AS tmpFIC
+ON tblDctosOrdenes.idFicha  = 
+                          tmpFIC.idFicha
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenesDetalle.idLocal     = 
+                       tblDctosOrdenes.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden = 
+                   tblDctosOrdenes.idTipoOrden
+AND   tblDctosOrdenesDetalle.idOrden     = 
+                     tblDctosOrdenes.idOrden
+WHERE tblDctosOrdenes.idLocal              = 1
+AND   tblDctosOrdenes.idTipoOrden          = 59
+AND   tblDctosOrdenes.numeroOrden          > 0
+
+--- ACUMULADO PRODUCCION
+SELECT  
+    tblDctosOrdenesDetalle.idLocalOrigen
+   ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+   ,tblDctosOrdenesDetalle.idOrdenOrigen
+   ,tblDctosOrdenesDetalle.itemPadre  
+   ,tblDctosOrdenesDetalle.idOperacion 
+   ,SUM(tblDctosOrdenesDetalle.pesoTerminado)
+                             AS pesoTerminado
+   ,SUM(tblDctosOrdenesDetalle.cantidadTerminada)
+                            AS cantidadTerminada
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idPlu         = 209
+AND   tblDctosOrdenesDetalle.cantidad      < 0
+AND   tblDctosOrdenesDetalle.idOperacion   > 0
+AND   tblDctosOrdenesDetalle.idTipoOrden   = 11
+GROUP BY tblDctosOrdenesDetalle.idLocalOrigen
+        ,tblDctosOrdenesDetalle.idTipoOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOrdenOrigen
+        ,tblDctosOrdenesDetalle.idOperacion 
+        ,tblDctosOrdenesDetalle.itemPadre
+        
+--- ACTUALIZA ITEM
+UPDATE tblDctosOrdenesDetalle
+SET    tblDctosOrdenesDetalle.itemOrden = 
+         tblDctosOrdenesDetalle.itemPadre,
+       tblDctosOrdenesDetalle.itemPadre = 
+         tblDctosOrdenesDetalle.itemPadre
+FROM    tblDctosOrdenesDetalle
+AS tblDctosOrdenesDetalle_1
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenesDetalle_1.IDORDEN      = 
+         tblDctosOrdenesDetalle.idOrdenOrigen
+AND tblDctosOrdenesDetalle_1.IDLOCAL     = 
+         tblDctosOrdenesDetalle.idLocalOrigen
+AND tblDctosOrdenesDetalle_1.IDTIPOORDEN = 
+     tblDctosOrdenesDetalle.idTipoOrdenOrigen

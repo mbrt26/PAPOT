@@ -1,0 +1,86 @@
+1 ============ CREAR ESTOS CAMPOS EN tblDctosOrdenesDetalle
+
+cantidadDisponible decimal (10, 2)
+
+--
+UPDATE [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+   SET [cantidadDisponible] = 0
+
+2 ============ CREAR ESTOS CAMPOS EN TBLLOCALES
+
+diasHistoria		int		Checked
+diasInventario		int		Checked
+porcentajeExceso	decimal(10, 2)	Checked
+diasInventarioMinimo	int		Checked
+diasEntrega		int		Checked
+
+3 ============ CREAR TABLA NUEVA tblLocalesAgenda
+
+USE [BDCommerce]
+GO
+/****** Objeto:  Table [dbo].[tblLocalesAgenda]    Fecha de la secuencia de comandos: 09/25/2011 22:07:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblLocalesAgenda](
+	[idLocal] [int] NOT NULL,
+	[idDiaSemana] [int] NOT NULL,
+	[horaInicial] [int] NULL,
+	[horaFinal] [int] NULL,
+	[estado] [float] NULL,
+ CONSTRAINT [PK_tblLocalesAgenda] PRIMARY KEY CLUSTERED 
+(
+	[idLocal] ASC,
+	[idDiaSemana] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+4 ============ ACTUALIZAR TABLA TBLLOCALESIP (almacenes medellin)
+El [idLocalPadre] con el idLocal de la BODEGA=51
+
+4 ============ ACTUALIZAR TABLA TBLLOCALESIP (almacenes caucasia)
+El [idLocalPadre] con el idLocal de la BODEGA=12
+
+5 ============ ACTUALIZAR TABLA CTRLUSUARIOS
+Crear el idUsuario = 99999999 RESURTIDO en todos los almacenes
+
+5 ============ ACTUALIZAR TABLA CTRLUSUARIOS
+Crear el idUsuario = 99999999 RESURTIDO en todos los almacenes
+
+6 ============ ACTUALIZAR TABLA CTRLUSUARIOS
+Crear el idUsuario = 99999999 RESURTIDO en todos los almacenes
+
+7 ============ CREAR TABLA tblPlusEstado
+USE [BDCommerce]
+GO
+/****** Objeto:  Table [dbo].[tblPlus]    Fecha de la secuencia de comandos: 10/25/2011 12:25:21 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblPlusEstado](
+	[estado] [smallint] NOT NULL,
+	[nombreEstado] [nvarchar](50) COLLATE Modern_Spanish_CI_AS NULL,
+ CONSTRAINT [PK_tblPlusEstado] PRIMARY KEY CLUSTERED 
+(
+	[estado] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+---     -------------
+0	ACTIVO
+2	DESCONTINUADO
+3	INACTIVO
+4	NUEVO
+5	PROMOCION
+
+7 ============ RESURTIDOS VIEJOS (6-->IDORIGEN) <--MANUAL
+UPDATE    tblDctosOrdenes
+SET       tblDctosOrdenes.IDORIGEN = 6
+WHERE idTipoOrden IN (52,55)
+
+8 ============ REEMPLAZAR IDLOCALPADRE EN TBLLOCALIP
+Reemplazar idLocalPadre = 12 almacenes dependen bodega
+
+

@@ -1,0 +1,328 @@
+SELECT 'SALDO INICIAL' AS nombreTipoOrden,
+       '  ' AS aliasUsuario,
+       1 AS  IDLOCAL,
+       00 AS  idDcto,
+       '00' AS  idCliente,
+       '20120601' AS fechaDcto,
+       '  ' AS nombreTercero,
+       00 AS idLog,
+       00 AS numeroOrden,
+       00 AS item,
+       (-1.0) *
+      (SELECT ISNULL(SUM(tmpSDO.cantidadSalida),0.0)  +
+              ISNULL(SUM(tmpSDO.cantidadEntrada),0.0) -
+             ( SELECT tblPlusInventario.existencia
+        FROM tblPlusInventario
+        WHERE tblPlusInventario.idLocal = 1
+        AND   tblPlusInventario.idPlu   = 95
+        AND   tblPlusInventario.idBodega= 2)
+        FROM
+       ( SELECT (CASE WHEN
+       (tblDctosOrdenesDetalle.CANTIDAD *
+                tblTipoOrden.signo) >=0.0
+       THEN (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+        (CASE WHEN
+        (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+        ELSE (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida
+FROM   tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                  tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+              tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                  tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                         tblDctos.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                     tblDctos.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                         tblDctos.IDORDEN
+INNER JOIN tblTipoOrden
+ON tblDctosOrdenesDetalle.IDTIPOORDEN  =
+                 tblTipoOrden.idTipoOrden
+WHERE tblDctos.fechaDcto BETWEEN '20120601'
+                             AND '20120603'
+AND tblDctosOrdenesDetalle.idPlu = 95
+AND tblDctosOrdenesDetalle.idBodega = 2)
+                               AS tmpSDO )
+                             AS cantidad,
+       0.0 AS cantidadEntrada,
+       0.0 AS cantidadSalida,
+       '  ' AS nombreCategoria,
+       '  ' AS nombreMarca,
+       '  ' AS nombreLinea,
+       tblPlus.idPlu,
+       tblPlus.nombrePlu,
+       0.0 AS saldoInicial
+FROM tblPlus
+WHERE tblPlus.idPlu = 95
+UNION
+SELECT tblTipoOrden.nombreTipoOrden,
+       ctrlUsuarios.aliasUsuario,
+       tmpDET.IDLOCAL,
+       tmpDET.idDcto,
+       tmpDET.idCliente,
+       tmpDET.fechaDcto,
+       tmpDET.nombreTercero,
+       tmpDET.idLog,
+       tmpDET.numeroOrden,
+       tmpDET.item,
+       (tmpDET.CANTIDAD    *
+        tblTipoOrden.signo) AS cantidad,
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+           ELSE (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida,
+       tmpPLU.nombreCategoria,
+       tmpPLU.nombreMarca,
+       tmpPLU.nombreLinea,
+       tmpPLU.idPlu,
+       tmpPLU.nombrePlu,
+       1 AS saldoInicial
+FROM tblTipoOrden
+INNER JOIN (SELECT ALL tblDctos.IDLOCAL,
+       tblDctos.IDTIPOORDEN,
+       tblDctos.IDORDEN,
+       tblDctos.idDcto,
+       tblDctos.indicador,
+       tblDctos.idCliente,
+       tblDctos.fechaDcto,
+       tblDctos.idVendedor,
+       tblDctos.IDUSUARIO,
+       tblDctos.nombreTercero,
+       tblDctosOrdenes.idLog,
+       tblDctosOrdenes.numeroOrden,
+	   tblDctosOrdenesDetalle.item,
+       tblDctosOrdenesDetalle.IDPLU,
+       tblDctosOrdenesDetalle.CANTIDAD,
+       tblDctosOrdenesDetalle.VRVENTAUNITARIO,
+       tblDctosOrdenesDetalle.idBodega
+FROM  tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON  tblDctosOrdenesDetalle.IDLOCAL     =
+                      tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                  tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                      tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenes.IDLOCAL             =
+                             tblDctos.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN        =
+                         tblDctos.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN =
+                             tblDctos.IDORDEN)
+                                    AS tmpDET
+ON  tmpDET.idTipoOrden     =
+                      tblTipoOrden.idTipoOrden
+INNER JOIN ctrlUsuarios
+ON  tmpDET.idVendedor     =
+                      ctrlUsuarios.idUsuario
+INNER JOIN ( SELECT tblCategorias.nombreCategoria,
+                    tblMarcas.nombreMarca,
+                    tblLineas.nombreLinea,
+                    tblPlus.idPlu,
+                    tblPlus.nombrePlu
+FROM   tblPlus
+INNER JOIN tblMarcas
+ON tblPlus.idMarca =
+                  tblMarcas.idMarca
+INNER JOIN tblCategorias
+INNER JOIN tblLineas
+ON tblCategorias.idLinea =
+                  tblLineas.idLinea
+ON tblPlus.idLinea       =
+              tblCategorias.idLinea
+AND tblPlus.idCategoria  =
+          tblCategorias.idCategoria ) AS tmpPLU
+ON  tmpDET.idPlu         = tmpPLU.idPlu
+WHERE tmpDET.idPlu       = 95
+AND   tmpDET.idLocal     = 1
+AND   tmpDET.fechaDcto BETWEEN '20120601'
+                             AND '20120603'
+AND   tmpDET.idBodega    = 2
+UNION
+SELECT 'SALDO INICIAL' AS nombreTipoOrden,
+       '  ' AS aliasUsuario,
+       1 AS  IDLOCAL,
+       00 AS  idDcto,
+       '00' AS  idCliente,
+       '20120601' AS fechaDcto,
+       '  ' AS nombreTercero,
+       00 AS idLog,
+       00 AS numeroOrden,
+       00 AS item,
+       (-1.0) *
+      (SELECT ISNULL(SUM(tmpSDO.cantidadSalida),0.0)  +
+              ISNULL(SUM(tmpSDO.cantidadEntrada),0.0) -
+             ( SELECT tblPlusInventario.existencia
+        FROM tblPlusInventario
+        WHERE tblPlusInventario.idLocal = 1
+        AND   tblPlusInventario.idPlu   = 95
+        AND   tblPlusInventario.idBodega= 2)
+        FROM
+       ( SELECT (CASE WHEN
+       (tblDctosOrdenesDetalle.CANTIDAD *
+                tblTipoOrden.signo) >=0.0
+       THEN (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+        (CASE WHEN
+        (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+        ELSE (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida
+FROM   tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                  tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+              tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                  tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                         tblDctos.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                     tblDctos.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                         tblDctos.IDORDEN
+INNER JOIN tblTipoOrden
+ON tblDctosOrdenesDetalle.IDTIPOORDEN  =
+                 tblTipoOrden.idTipoOrden
+WHERE tblDctos.fechaDcto BETWEEN '20120601'
+                             AND '20120603'
+AND tblDctosOrdenesDetalle.idPlu = 95
+AND tblDctosOrdenesDetalle.idBodega = 2)
+                               AS tmpSDO )
+                             AS cantidad,
+       0.0 AS cantidadEntrada,
+       0.0 AS cantidadSalida,
+       '  ' AS nombreCategoria,
+       '  ' AS nombreMarca,
+       '  ' AS nombreLinea,
+       tblPlus.idPlu,
+       tblPlus.nombrePlu,
+       0.0 AS saldoInicial
+FROM tblPlus
+WHERE tblPlus.idPlu = 95
+UNION
+SELECT tblTipoOrden.nombreTipoOrden,
+       ctrlUsuarios.aliasUsuario,
+       tmpDET.IDLOCAL,
+       tmpDET.idDcto,
+       tmpDET.idCliente,
+       tmpDET.fechaDcto,
+       tmpDET.nombreTercero,
+       tmpDET.idLog,
+       tmpDET.numeroOrden,
+       tmpDET.item,
+       (tmpDET.CANTIDAD    *
+        tblTipoOrden.signo) AS cantidad,
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+           ELSE (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida,
+       tmpPLU.nombreCategoria,
+       tmpPLU.nombreMarca,
+       tmpPLU.nombreLinea,
+       tmpPLU.idPlu,
+       tmpPLU.nombrePlu,
+       1 AS saldoInicial
+FROM tblTipoOrden
+INNER JOIN (SELECT ALL tblDctos.IDLOCAL,
+       tblDctos.IDTIPOORDEN,
+       tblDctos.IDORDEN,
+       tblDctos.idDcto,
+       tblDctos.indicador,
+       tblDctos.idCliente,
+       tblDctos.fechaDcto,
+       tblDctos.idVendedor,
+       tblDctos.IDUSUARIO,
+       tblDctos.nombreTercero,
+       tblDctosOrdenes.idLog,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenesDetalle.item,
+       tblDctosOrdenesDetalle.IDPLU,
+       tblDctosOrdenesDetalle.CANTIDAD,
+       tblDctosOrdenesDetalle.VRVENTAUNITARIO,
+       tblDctosOrdenesDetalle.idBodega
+FROM  tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON  tblDctosOrdenesDetalle.IDLOCAL     =
+                      tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                  tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                      tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenes.IDLOCAL             =
+                             tblDctos.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN        =
+                         tblDctos.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN =
+                             tblDctos.IDORDEN)
+                                    AS tmpDET
+ON  tmpDET.idTipoOrden     =
+                      tblTipoOrden.idTipoOrden
+INNER JOIN ctrlUsuarios
+ON  tmpDET.idVendedor     =
+                      ctrlUsuarios.idUsuario
+INNER JOIN ( SELECT tblCategorias.nombreCategoria,
+                    tblMarcas.nombreMarca,
+                    tblLineas.nombreLinea,
+                    tblPlus.idPlu,
+                    tblPlus.nombrePlu
+FROM   tblPlus
+INNER JOIN tblMarcas
+ON tblPlus.idMarca =
+                  tblMarcas.idMarca
+INNER JOIN tblCategorias
+INNER JOIN tblLineas
+ON tblCategorias.idLinea =
+                  tblLineas.idLinea
+ON tblPlus.idLinea       =
+              tblCategorias.idLinea
+AND tblPlus.idCategoria  =
+          tblCategorias.idCategoria ) AS tmpPLU
+ON  tmpDET.idPlu         = tmpPLU.idPlu
+WHERE tmpDET.idPlu       = 95
+AND   tmpDET.idLocal     = 1
+AND   tmpDET.fechaDcto BETWEEN '20120601'
+                             AND '20120603'
+AND   tmpDET.idBodega    = 2
+ORDER BY 3, 6, 4

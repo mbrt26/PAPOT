@@ -1,0 +1,98 @@
+.letraTitulo {
+    font-family: Verdana;
+    font-size: 14px;
+    font-style: normal;
+    background-color: #FFFF99;
+    font-weight: bold;
+    color: #000000;
+    white-space: nowrap;}
+     
+.letraDetalle {
+    font-family: Verdana;
+    font-size: 12px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: #000000;
+    white-space: nowrap;}
+
+.letraDetalleDespacho {
+    font-family: Verdana;
+    font-size: 15px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: 0000FF;
+    white-space: nowrap;}
+    
+.letraResaltada {
+    font-family: Verdana;
+    font-size: 11px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;}
+
+.letraResaltadaGrande {
+    font-family: Verdana;
+    font-size: 15px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;}
+
+.letraResaltadaDetalle {
+
+    font-family: Verdana;
+    font-size: 12px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;}
+
+.letraResaltadaGrande {
+    font-family: Verdana;
+    font-size: 15px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;}
+
+.letraResaltadaTitulo {
+    font-family: Verdana;
+    font-size: 14px;
+    font-style: normal;
+    background-color: #FFFF99;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;}
+
+.letraResaltadaTituloGrande {
+    font-family: Verdana;
+    font-size: 15px;
+    font-style: normal;
+    background-color: #FFFF99;
+    font-weight: bold;
+    color: #FF0000;
+    white-space: nowrap;}
+
+.letraResaltadaLogo {
+    font-family: Verdana;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: bold;
+    color: #008400;
+    white-space: nowrap;}
+
+.letraResaltadaGrandeExistencia {
+    font-family: Verdana;
+    font-size: 15px;
+    font-style: normal;
+    background-color: #CEE7FF;
+    font-weight: bold;
+    color: #008400;
+    white-space: nowrap;}

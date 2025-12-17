@@ -1,0 +1,198 @@
+-- INCLUIR TBLJOBOPERACION
+
+idColor	nchar(10)	Checked
+
+
+1	PEDIDO		1	1	#000000   
+2	EXTRUSION	1	1	#FF0000   
+3	IMPRESION	1	1	#00FFFF   
+4	REFILADO	1	1	#FF962D   
+5	SELLADO		1	1	#FFED11   
+6	MANUAL		1	1	#00FF00   
+7	EXTERNO		1	1	#000000   
+8	REMISION	1	1	#000000   
+9	FACTURACION	1	1	#000000   
+888	NINGUNO		1	1	#000000   
+999	ALMACEN		1	1	#FFFFFF   
+
+
+
+--  PASA OPERACION INICIAL  ( mal creado )
+UPDATE    tblPlusFicha
+SET              vrEscala = 2
+WHERE     (idEscala = 610) 
+AND (idOperacion = 1) 
+AND (vrEscala = 999)
+
+
+
+-------------------
+tblJobEscala
+---
+620	PRODUCTO	9	1
+
+---
+tblJobEscalaDetalle
+---
+620	1	PRODUCCION	1
+
+---
+tblJobEscalaOperacion
+---
+
+620	1	1	9990
+620	999	1	9990
+
+
+--- INGRESA PRODUCTO 620
+DELETE FROM [tblPlusFicha]
+WHERE idOperacion=1
+AND idEscala IN (620)
+
+--
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,1 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion=1
+AND idEscala IN (620)) AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+
+--
+DELETE FROM [tblPlusFicha]
+WHERE idOperacion=999
+AND idEscala IN (620)
+
+--
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,1 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion=999
+AND idEscala IN (620)) AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+      
+--- OJO VERIFICAR
+UPDATE    tblPlusFicha
+SET              vrEscala = 1
+WHERE   (idEscala = 620)
+AND idOperacion   = 2
+
+---
+UPDATE tblDctosOrdenesDetalle
+   SET [CANTIDADpedida] = [CANTIDAD]
+ WHERE idTipoOrden=59
+      
+      
+---
+---
+SELECT [idLocal]
+      ,[idTipoOrden]
+      ,[idOrden]
+      ,[itemPadre]
+      ,[idOperacion]
+      ,SUM([cantidadTerminada]) 
+          AS cantidadTerminada
+      ,SUM([pesoTerminado]) 
+              AS pesoTerminado
+INTO tmpTerminado
+FROM [tblDctosOrdenesProgreso]
+GROUP BY [idLocal]
+      ,[idTipoOrden]
+      ,[idOrden]
+      ,[itemPadre]      
+      ,[idOperacion] 
+
+-- ACTUALIZAR PRODUCCION
+UPDATE    tblDctosOrdenesDetalle
+SET       cantidadTerminada = 0,
+          pesoTerminado     = cantidad
+WHERE tblDctosOrdenesDetalle.idTipoOrden = 11
+
+UPDATE    tblDctosOrdenesDetalle
+SET       cantidadTerminada     = 
+                       tmpTerminado.cantidadTerminada
+FROM      tblDctosOrdenesDetalle
+INNER JOIN tmpTerminado
+ON tblDctosOrdenesDetalle.idLocalOrigen      = 
+                             tmpTerminado.idLocal
+AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 
+                         tmpTerminado.idTipoOrden
+AND tblDctosOrdenesDetalle.idOrdenOrigen     = 
+                             tmpTerminado.idOrden
+AND tblDctosOrdenesDetalle.itemPadre         = 
+                           tmpTerminado.itemPadre
+AND tblDctosOrdenesDetalle.idOperacion       = 
+                         tmpTerminado.idOperacion
+                         
+--- INCLUIR EN TBLJOBPROGRAMAPLUSFICHA
+cantidadPedida	float	Checked
+pesoPedido	float	Checked

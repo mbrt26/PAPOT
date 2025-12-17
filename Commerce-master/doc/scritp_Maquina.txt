@@ -1,0 +1,202 @@
+                    SELECT DISTINCT  *                                    
+                    FROM (                                              
+                      SELECT tmpPEN.idLocal,                            
+                           tmpPEN.idTipoOrden,                          
+                           tmpPEN.idOrden,                              
+                           tmpPEN.itemPadre,                            
+                           tmpPEN.idCliente,                            
+                           tmpPEN.numeroOrden,                          
+                           tmpPEN.idFicha,                              
+                           tmpPEN.idLog,                                
+                           tmpPEN.fechaEntrega,                         
+                           tmpPEN.referencia,                           
+                           tmpPEN.nombreOperacion,                      
+                           tmpPEN.idColor,                              
+                           tmpPEN.referenciaCliente,                    
+                           tmpPEN.nombreReferencia,                     
+                           tmpPEN.nombreItem,                           
+                           tmpPEN.nombreTercero,                        
+                           tmpPEN.idOperacionAnterior,                  
+                           tmpPEN.idOperacion,                          
+                           CASE                                         
+                           WHEN   tmpPEN.idOperacionAnterior = 1        
+                                          THEN tmpPEN.pesoPedido        
+                           ELSE   tmpPEN.pesoTerminadoAnterior          
+                           END AS pesoTerminadoAnterior,                
+                           CASE                                         
+                           WHEN   tmpPEN.idOperacionAnterior = 1        
+                                      THEN tmpPEN.cantidadPedida        
+                           ELSE   tmpPEN.cantidadTerminadaAnterior      
+                           END AS cantidadTerminadaAnterior,            
+                           ISNULL(tmpPEN.pesoTerminadoActual,0)         
+                                            AS pesoTerminadoActual,     
+                           ISNULL(tmpPEN.cantidadTerminadaActual,0)     
+                                        AS cantidadTerminadaActual,     
+                           tmpPEN.idOrdenPrograma                       
+                    FROM (                                              
+                    SELECT tmpPED.*,                                    
+                    ( SELECT SUM(tblDctosOrdenesDetalle.pesoTerminado)  
+                    FROM tblDctosOrdenesDetalle                         
+                    WHERE tblDctosOrdenesDetalle.idLocalOrigen     =    
+                                                       tmpPED.idLocal   
+                    AND   tblDctosOrdenesDetalle.idTipoOrdenOrigen =    
+                                                   tmpPED.idTipoOrden   
+                    AND   tblDctosOrdenesDetalle.idOrdenOrigen     =    
+                                                       tmpPED.idOrden   
+                    AND   tblDctosOrdenesDetalle.itemPadre         =    
+                                                     tmpPED.itemPadre   
+                   AND   tblDctosOrdenesDetalle.idOperacion       =     
+                                         tmpPED.idOperacionAnterior )   
+                                           AS pesoTerminadoAnterior,    
+                    ( SELECT                                            
+                        SUM(tblDctosOrdenesDetalle.cantidadTerminada)   
+                    FROM tblDctosOrdenesDetalle                         
+                    WHERE tblDctosOrdenesDetalle.idLocalOrigen     =    
+                                                       tmpPED.idLocal   
+                    AND   tblDctosOrdenesDetalle.idTipoOrdenOrigen =    
+                                                   tmpPED.idTipoOrden   
+                    AND   tblDctosOrdenesDetalle.idOrdenOrigen     =    
+                                                       tmpPED.idOrden   
+                    AND   tblDctosOrdenesDetalle.itemPadre         =    
+                                                     tmpPED.itemPadre   
+                   AND   tblDctosOrdenesDetalle.idOperacion       =     
+                                       tmpPED.idOperacionAnterior   )   
+                                        AS cantidadTerminadaAnterior,   
+                    ( SELECT SUM(tblDctosOrdenesProgreso.pesoTerminado) 
+                    FROM tblDctosOrdenesProgreso                        
+                    WHERE tblDctosOrdenesProgreso.idLocal           =   
+                                                       tmpPED.idLocal   
+                    AND  tblDctosOrdenesProgreso.idControlTipo     != 2 
+                    AND   tblDctosOrdenesProgreso.idTipoOrden       =   
+                                                   tmpPED.idTipoOrden   
+                    AND   tblDctosOrdenesProgreso.idOrden           =   
+                                                       tmpPED.idOrden   
+                    AND   tblDctosOrdenesProgreso.itemPadre         =   
+                                                     tmpPED.itemPadre   
+                    AND   tblDctosOrdenesProgreso.idOperacion       =   
+                                                 tmpPED.idOperacion )   
+                                              AS pesoTerminadoActual,   
+                    ( SELECT                                            
+                        SUM(tblDctosOrdenesProgreso.cantidadTerminada)  
+                    FROM tblDctosOrdenesProgreso                        
+                    WHERE tblDctosOrdenesProgreso.idLocal          =    
+                                                      tmpPED.idLocal    
+                    AND  tblDctosOrdenesProgreso.idControlTipo    != 2  
+                    AND   tblDctosOrdenesProgreso.idTipoOrden      =    
+                                                  tmpPED.idTipoOrden    
+                    AND   tblDctosOrdenesProgreso.idOrden          =    
+                                                      tmpPED.idOrden    
+                    AND   tblDctosOrdenesProgreso.itemPadre        =    
+                                                    tmpPED.itemPadre    
+                    AND   tblDctosOrdenesProgreso.idOperacion       =   
+                                                 tmpPED.idOperacion )   
+                                           AS cantidadTerminadaActual   
+                    FROM (                                              
+                     SELECT tblDctosOrdenes.idLocal,                    
+                            tblDctosOrdenes.idTipoOrden,                
+                            tblDctosOrdenes.idOrden,                    
+                            tblDctosOrdenesDetalle.itemPadre,           
+                            tblDctosOrdenes.idCliente,                  
+                            tblDctosOrdenes.numeroOrden,                
+                            tblDctosOrdenes.idFicha,                    
+                            tblDctosOrdenes.idLog,                      
+                            tblDctosOrdenesDetalle.fechaEntrega,        
+                            tblDctosOrdenesDetalle.cantidad             
+                                              AS cantidadPedida,        
+                            tblDctosOrdenesDetalle.pesoPedido,          
+                            tmpFIC.referencia,                          
+                            tmpFIC.nombreOperacion,                     
+                            tmpFIC.idColor,                             
+                            tmpFIC.referenciaCliente,                   
+                            tmpFIC.nombreReferencia,                    
+                            tmpFIC.nombreItem,                          
+                            tblTerceros.nombreTercero,                  
+                            1 AS idOperacionAnterior,                   
+                            tmpFIC.idOperacion,                         
+                            tmpPPL.idOrdenPrograma                      
+                      FROM   tblDctosOrdenes                            
+                      INNER JOIN tblTerceros                            
+                      ON  tblTerceros.idCliente =                       
+                                          tblDctosOrdenes.idCliente     
+                      INNER JOIN (                                      
+                      SELECT tblJobProgramaPlusFicha.idOrden,                      
+                             tblJobProgramaPlusFicha.idFicha, 
+                             MAX(tblJobProgramaPlusFicha.referencia)               
+                                           AS referencia,               
+                             MAX(tblJobOperacion.nombreOperacion)       
+                                              AS nombreOperacion,       
+                             MAX(tblJobOperacion.idColor)               
+                                                      AS idColor,       
+                             MAX(tblJobProgramaPlusFicha.referenciaCliente)        
+                                            AS referenciaCliente,       
+                             MAX(tblJobProgramaPlusFicha.nombreReferencia)         
+                                             AS nombreReferencia,       
+                             tblJobEscalaDetalle.nombreItem,            
+                             tblJobProgramaPlusFicha.idOperacion                   
+                      FROM   tblJobProgramaPlusFicha                               
+                      INNER JOIN tblJobOperacion                        
+                      ON tblJobProgramaPlusFicha.idOperacion      =                
+                                    tblJobOperacion.idOperacion         
+                      INNER JOIN tblJobEscalaDetalle                    
+                      ON tblJobProgramaPlusFicha.idEscala         =                
+                                   tblJobEscalaDetalle.idEscala         
+                      AND tblJobProgramaPlusFicha.vrEscala        =                
+                                       tblJobEscalaDetalle.item         
+                      WHERE   tblJobProgramaPlusFicha.idOperacion = 2               
+                      AND tblJobProgramaPlusFicha.idEscala                         
+                                       IN (600, 710, 910, 1000,1100) 
+                      GROUP BY tblJobProgramaPlusFicha.idOrden,                    
+                               tblJobProgramaPlusFicha.idFicha,                    
+                               tblJobProgramaPlusFicha.idOperacion,                
+                               tblJobEscalaDetalle.nombreItem)          
+                                                     AS tmpFIC          
+                      ON tblDctosOrdenes.idFicha  =                     
+                                                tmpFIC.idFicha          
+                      AND tblDctosOrdenes.idOrden =                     
+                                                tmpFIC.idOrden  												
+                      INNER JOIN tblDctosOrdenesDetalle                 
+                      ON tblDctosOrdenesDetalle.idLocal     =           
+                                             tblDctosOrdenes.idLocal    
+                      AND   tblDctosOrdenesDetalle.idTipoOrden =        
+                                         tblDctosOrdenes.idTipoOrden    
+                      AND   tblDctosOrdenesDetalle.idOrden     =        
+                                           tblDctosOrdenes.idOrden      
+                      INNER JOIN                                        
+                       ( SELECT tblJobProgramaPlusFicha.idLocal         
+                             ,tblJobProgramaPlusFicha.idTipoOrden       
+                             ,tblJobProgramaPlusFicha.idOrden           
+                             ,tblJobProgramaPlusFicha.itemPadre         
+                             ,tblJobProgramaPlusFicha.idOperacion       
+                             ,tblJobProgramaPlusFicha.fechaPrograma     
+                             ,tblJobProgramaPlusFicha.estadoPrograma    
+                             ,tblJobProgramaPlusFicha.idOrdenPrograma   
+                         FROM tblJobProgramaPlusFicha
+                         WHERE tblJobProgramaPlusFicha.idOperacion = 2 
+                         GROUP BY tblJobProgramaPlusFicha.idLocal       
+                             ,tblJobProgramaPlusFicha.idTipoOrden       
+                             ,tblJobProgramaPlusFicha.idOrden           
+                             ,tblJobProgramaPlusFicha.itemPadre         
+                             ,tblJobProgramaPlusFicha.idOperacion       
+                             ,tblJobProgramaPlusFicha.fechaPrograma     
+                             ,tblJobProgramaPlusFicha.estadoPrograma    
+                             ,tblJobProgramaPlusFicha.idOrdenPrograma)  
+                                                            AS tmpPPL   
+                         ON    tblDctosOrdenesDetalle.idLocal     =     
+                                                        tmpPPL.idLocal  
+                         AND   tblDctosOrdenesDetalle.idTipoOrden =     
+                                                    tmpPPL.idTipoOrden  
+                         AND   tblDctosOrdenesDetalle.idOrden     =     
+                                                        tmpPPL.idOrden  
+                         AND   tblDctosOrdenesDetalle.itemPadre     =   
+                                                      tmpPPL.itemPadre  
+                    WHERE tblDctosOrdenes.idLocal            = 1         
+                   AND   tblDctosOrdenes.idTipoOrden         = 59         
+                   AND   tblDctosOrdenes.numeroOrden         > 0        
+                   AND tblDctosOrdenesDetalle.idEstadoRefOriginal != 9  
+                   AND tmpPPL.idOperacion                    = 2 )                                   
+                                                         AS tmpPED )    
+                                                         AS tmpPEN )    
+                                                           AS tmpRES    
+                      WHERE tmpRES.pesoTerminadoActual <                
+                                    ( tmpRES.pesoTerminadoAnterior *  1.05 )                                 
+                     ORDER BY tmpRES.numeroOrden ;                      ;

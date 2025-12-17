@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+  <tlib-version>1.0</tlib-version>
+  <short-name>listaEstadosAgendaVisita</short-name>
+  <uri>/WEB-INF/tlds/listaEstadosAgendaVisita</uri>
+  <tag>
+    <name>listaEstadosAgendaVisita</name>
+    <tag-class>com.solucionesweb.tags.ListaEstadosAgendaVisitaTag</tag-class>
+    <tei-class>com.solucionesweb.tags.ListaEstadosAgendaVisitaTagExtraInfo</tei-class>
+    <body-content>JSP</body-content>
+    <description>
+      Lista Clientes x vendedor para efectuarles mantenimiento
+    </description>
+  </tag>
+</taglib>

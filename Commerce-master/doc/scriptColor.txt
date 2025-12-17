@@ -1,0 +1,78 @@
+-------------------
+tblJobEscala
+---
+521	COLOR	2	1
+
+---
+tblJobEscalaDetalle
+---
+521	1	-		1
+521	2	AMARILLO	1
+521	3	AZUL 		1
+521	4	AZUL 314C	1
+521	5	AZUL CLARO	1
+521	6	BLANCO		1
+521	7	CAFE		1
+521	8	CIAM		1
+521	9	DORADO		1
+521	10	FUCSIA 		1
+521	11	GRIS		1
+521	12	MAGENTA		1
+521	13	MORADO		1
+521	14	NARANJA 	1
+521	15	NEGRO		1
+521	16	PLATA		1
+521	17	POLICRO		1
+521	18	ROJO		1
+521	19	ROSADO		1
+521	20	VERDE		1
+
+---
+tblJobEscalaOperacion
+---
+
+521	1	1	98
+
+
+--- INGRESA COLOR 521
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion=1
+AND idEscala IN (521)) AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion

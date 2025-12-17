@@ -1,0 +1,63 @@
+---
+1--INCLUIR tblJobProgramaPlusFicha
+
+idFicha				int	Checked
+referenciaCliente	nvarchar(50)	Checked
+nombreReferencia	nvarchar(50)	Checked
+referencia			nvarchar(50)	Checked
+
+2- INCLUIR CAMPO tblDctosOrdenesProgreso
+
+idTipoCausa	int	Checked
+
+UPDATE [BDcommerce].[dbo].[tblDctosOrdenesProgreso]
+   SET [idTipoCausa] = 0
+ WHERE [idTipoCausa] IS NULL
+
+
+
+3- ELIMINAR CAMPO tblDctosOrdenesProgreso
+
+  vrEscala
+  idEscala
+
+---
+4- CREAR TABLA tblJobCausa
+
+USE [BDcommerce]
+GO
+/****** Objeto:  Table [dbo].[tblJobCausa]    Fecha de la secuencia de comandos: 03/24/2012 16:06:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblJobCausa](
+	[idTipoCausa] [int] NOT NULL,
+	[idCausa] [int] NOT NULL,
+	[nombreCausa] [nvarchar](50) COLLATE Modern_Spanish_CI_AS NULL,
+	[estado] [int] NULL,
+ CONSTRAINT [PK_tblJobCausa] PRIMARY KEY CLUSTERED 
+(
+	[idTipoCausa] ASC,
+	[idCausa] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+tblJobCausa
+1	1	Alimentacion		1
+1	2	Calentamiento Maquina	1
+1	3	Falla Mecanica		1
+1	4	Falla Electrica		1
+1	5	Falta Aire		1
+1	6	Mala Calidad		1
+1	7	Cambio Maquina		1
+1	8	Revision Produccion	1
+1	9	Cambio Elementos	1
+1	10	Montaje Pedido		1
+1	11	Montaje Rollo		1
+1	12	Limpieza Maquina	1
+1	13	Reunion Administrativa	1
+2	1	Error Impresion		1
+2	2	Falla Montaje		1
+2	3	Material Defectuoso	1

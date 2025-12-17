@@ -1,0 +1,54 @@
+--- tblJobEscala
+611	MP LINEAL BAJA	1	1
+617	MP LINEAL ALTA	1	1
+
+--- tblJobEscalaOperacion
+617	2	1	1000
+
+--- tblJobEscalaDetalle
+617	1	MP LINEAL ALTA	1
+
+--- LINEAL ALTA
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce_PU_Lab].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce_PU_Lab].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion = 2
+AND idEscala IN (617)) 
+                                     AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+ORDER BY [idFicha]

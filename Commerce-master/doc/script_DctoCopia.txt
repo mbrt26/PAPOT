@@ -1,0 +1,45 @@
+1----
+
+USE [BDCommerce]
+GO
+/****** Objeto:  Table [dbo].[tblDctosCopia]    Fecha de la secuencia de comandos: 01/17/2012 09:03:32 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblDctosCopia](
+	[idTipoOrden] [int] NOT NULL,
+	[idCopia] [int] NOT NULL,
+	[nombreCopia] [nvarchar](50) COLLATE Modern_Spanish_CI_AS NULL,
+	[estado] [int] NULL,
+ CONSTRAINT [PK_tblDctosCopia] PRIMARY KEY CLUSTERED 
+(
+	[idTipoOrden] ASC,
+	[idCopia] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+9	1	ORIGINAL	1
+9	2	CLIENTE	1
+9	3	CONTABILIDAD	1
+9	4	CARTERA	1
+NULL	NULL	NULL	NULL
+
+2----
+INCLUIR tblPagos
+
+observacion	nvarchar(100)	Checked
+
+
+3----
+Modificar tblMediosPago
+
+1	Efectivo		1	NULL
+2	Cheque			1	NULL
+3	Tranferencia		1	NULL
+4	Consignacion Efectivo	1	NULL
+5	Consignacion Cheque	1	NULL
+
+
+4---- Copiar LogoFactura.jpg en imagenes

@@ -1,0 +1,50 @@
+--
+SELECT [IDORDEN]
+      ,[CANTIDAD]
+      ,[item]
+      ,[idEstadoRefOriginal]
+      ,[pesoPedido]
+      ,[pesoTerminado]
+      ,[cantidadTerminada]
+      ,[cantidadFacturada]
+      ,[pesoFacturado]
+  FROM [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+WHERE idOrden IN (6745,
+7933,
+7934,
+7935,
+7936)
+
+--
+SELECT [idTipoOrden]
+      ,[idOrden]
+      ,[item]
+      ,[idOperacion]
+      ,[cantidadTerminada]
+      ,[pesoTerminado]
+      ,[itemPadre]
+      ,[cantidadPedida]
+      ,[pesoPedido]
+      ,[idControl]
+  FROM [BDCommerce].[dbo].[tblDctosOrdenesProgreso]
+WHERE idOrden IN (6745,
+7933,
+7934,
+7935,
+7936)
+
+--
+SELECT [IDTIPOORDEN]
+      ,[IDORDEN]
+      ,[FECHAORDEN]
+      ,[ESTADO]
+      ,[idCliente]
+      ,[ordenCompra]
+      ,[idRazon]
+      ,[numeroOrden]
+  FROM [BDCommerce].[dbo].[tblDctosOrdenes]
+WHERE idOrden IN (6745,
+7933,
+7934,
+7935,
+7936)

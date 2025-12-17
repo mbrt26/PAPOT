@@ -1,0 +1,11 @@
+ok-	Cambiar la REFERENCIA CLIENTE -1.25 para que la pueda trae con IDFICHA			
+ok-	Permitir consultar la FICHA por numero, no es necesario tener pedido montado. 
+ok-	Ingresar Textos importados directamente
+ok-	Importar datos de Hernando para comparar
+
+Proceso comparar liquidaciones y fichas
+Los textos deben ser completos y en textarea
+
+Ingresar MP en varios registros
+Buscar ficha tecnica por #PEDIDO
+

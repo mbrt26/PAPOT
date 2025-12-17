@@ -1,0 +1,196 @@
+(($F{idTipoEscala}) == new Integer(1)) ? Boolean.TRUE:Boolean.FALSE 
+
+
+--- encabezado
+SELECT  TOP (1) tblDctosOrdenes.idCliente, 
+        tblTerceros.nombreTercero, 
+        tblDctosOrdenes.direccionDespacho, 
+        tblCiudades.nombreCiudad, 
+        tblCiudades.nombreDpto,
+        tblPlusFicha.idFicha, 
+        tblDctosOrdenes.numeroOrden, 
+        tblPlusFicha.referenciaCliente, 
+        tblPlusFicha.idPlu, 
+        tblPlusFicha.referencia, 
+        tblPlusFicha.nombreReferencia, 
+        tblDctosOrdenesDetalle.cantidad,
+        tblDctosOrdenesDetalle.fechaEntrega, 
+        tblPlus.nombrePlu
+FROM    tblDctosOrdenes
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenes.IDLOCAL      = 
+            tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN = 
+        tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN     = 
+            tblDctosOrdenesDetalle.IDORDEN
+INNER JOIN tblPlusFicha
+ON tblDctosOrdenes.idFicha      = 
+                     tblPlusFicha.idFicha
+INNER JOIN tblTerceros
+ON tblDctosOrdenes.idCliente    = 
+                    tblTerceros.idCliente
+INNER JOIN tblPlus
+ON tblPlusFicha.idPlu           = 
+                            tblPlus.idPlu
+INNER JOIN tblCiudades
+ON tblTerceros.idDptoCiudad     = 
+                     tblCiudades.idCiudad
+WHERE (tblDctosOrdenes.numeroOrden = 9128)
+AND (tblDctosOrdenesDetalle.item   = 2)
+
+---
+                 SELECT tblPlusFicha.idOperacion,        
+                        tblPlusFicha.idEscala,           
+                 	   tblPlusFicha.item,               
+                 	   tblPlusFicha.vrEscala,           
+                 	   tblPlusFicha.textoEscala,        
+                 	   tblJobEscala.nombreEscala,       
+                        tblJobEscala.idTipoEscala        
+                 FROM   tblPlusFicha                     
+                 INNER JOIN tblJobEscala                 
+                 ON tblPlusFicha.idEscala =              
+                                tblJobEscala.idEscala    
+                 INNER JOIN tblJobEscalaOperacion        
+                 ON tblJobEscalaOperacion.idEscala     = 
+                                  tblPlusFicha.idEscala  
+                 AND tblJobEscalaOperacion.idOperacion = 
+                                tblPlusFicha.idOperacion 
+                 WHERE tblPlusFicha.idFicha           =  2115
+                 AND   tblJobEscala.idTipoEscala     !=9 
+                 AND   tblPlusFicha.idOperacion      !=1
+                 ORDER BY  tblPlusFicha.idOperacion,                              
+                     tblJobEscalaOperacion.idOrdenSalida,
+                     tblJobEscala.idEscala;
+                     
+--
+SELECT tblPlusFicha.idOperacion, 
+       tblPlusFicha.idEscala, 
+       tblPlusFicha.item, 
+       tblPlusFicha.vrEscala, 
+       tblPlusFicha.textoEscala, 
+       tblJobEscala.nombreEscala, 
+       tblJobEscala.idTipoEscala, 
+       tblJobOperacion.nombreOperacion,
+       ' ' AS nombreItem
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala              = 
+                   tblJobEscala.idEscala
+INNER JOIN tblJobEscalaOperacion
+ON tblJobEscalaOperacion.idEscala     = 
+                   tblPlusFicha.idEscala
+AND tblJobEscalaOperacion.idOperacion = 
+                tblPlusFicha.idOperacion
+INNER JOIN tblJobOperacion
+ON tblJobEscalaOperacion.idOperacion  = 
+             tblJobOperacion.idOperacion
+WHERE  tblPlusFicha.idFicha       = 2115
+AND  tblJobEscala.idTipoEscala   != 2
+AND    tblJobEscala.idTipoEscala != 9
+AND    tblPlusFicha.idOperacion  !=  1
+ORDER BY tblPlusFicha.idOperacion, 
+         tblJobEscalaOperacion.idOrdenSalida, 
+         tblJobEscala.idEscala
+         
+         
+--
+SELECT tblPlusFicha.idOperacion, 
+       tblPlusFicha.idEscala, 
+       tblPlusFicha.item, 
+       tblPlusFicha.vrEscala, 
+       tblPlusFicha.textoEscala, 
+       tblJobEscala.nombreEscala, 
+       tblJobEscala.idTipoEscala, 
+       tblJobOperacion.nombreOperacion, 
+       tblJobEscalaDetalle.nombreItem
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala              = 
+                   tblJobEscala.idEscala
+INNER JOIN tblJobEscalaOperacion
+ON tblJobEscalaOperacion.idEscala     = 
+                   tblPlusFicha.idEscala
+AND tblJobEscalaOperacion.idOperacion = 
+                tblPlusFicha.idOperacion
+INNER JOIN tblJobOperacion
+ON tblJobEscalaOperacion.idOperacion  = 
+             tblJobOperacion.idOperacion
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscala.idEscala              = 
+            tblJobEscalaDetalle.idEscala
+AND tblPlusFicha.vrEscala             = 
+                tblJobEscalaDetalle.item
+WHERE      tblPlusFicha.idFicha = 2115
+AND  tblJobEscala.idTipoEscala  = 2
+AND  tblPlusFicha.idOperacion   != 1
+ORDER BY tblPlusFicha.idOperacion, 
+         tblJobEscalaOperacion.idOrdenSalida, 
+         tblJobEscala.idEscala
+         
+--
+SELECT tmpFIC.*
+FROM 
+( SELECT tblPlusFicha.idOperacion, 
+       tblPlusFicha.idEscala, 
+       tblPlusFicha.item, 
+       tblPlusFicha.vrEscala, 
+       tblPlusFicha.textoEscala, 
+       tblJobEscala.nombreEscala, 
+       tblJobEscala.idTipoEscala, 
+       tblJobOperacion.nombreOperacion,
+       ' ' AS nombreItem,
+       tblJobEscalaOperacion.idOrdenSalida
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala              = 
+                   tblJobEscala.idEscala
+INNER JOIN tblJobEscalaOperacion
+ON tblJobEscalaOperacion.idEscala     = 
+                   tblPlusFicha.idEscala
+AND tblJobEscalaOperacion.idOperacion = 
+                tblPlusFicha.idOperacion
+INNER JOIN tblJobOperacion
+ON tblJobEscalaOperacion.idOperacion  = 
+             tblJobOperacion.idOperacion
+WHERE  tblPlusFicha.idFicha       = 2115
+AND  tblJobEscala.idTipoEscala   != 2
+AND    tblJobEscala.idTipoEscala != 9
+AND    tblPlusFicha.idOperacion  !=  1
+UNION
+SELECT tblPlusFicha.idOperacion, 
+       tblPlusFicha.idEscala, 
+       tblPlusFicha.item, 
+       tblPlusFicha.vrEscala, 
+       tblPlusFicha.textoEscala, 
+       tblJobEscala.nombreEscala, 
+       tblJobEscala.idTipoEscala, 
+       tblJobOperacion.nombreOperacion, 
+       tblJobEscalaDetalle.nombreItem,
+       tblJobEscalaOperacion.idOrdenSalida       
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala              = 
+                   tblJobEscala.idEscala
+INNER JOIN tblJobEscalaOperacion
+ON tblJobEscalaOperacion.idEscala     = 
+                   tblPlusFicha.idEscala
+AND tblJobEscalaOperacion.idOperacion = 
+                tblPlusFicha.idOperacion
+INNER JOIN tblJobOperacion
+ON tblJobEscalaOperacion.idOperacion  = 
+             tblJobOperacion.idOperacion
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscala.idEscala              = 
+            tblJobEscalaDetalle.idEscala
+AND tblPlusFicha.vrEscala             = 
+                tblJobEscalaDetalle.item
+WHERE      tblPlusFicha.idFicha = 2115
+AND  tblJobEscala.idTipoEscala  = 2
+AND  tblPlusFicha.idOperacion   != 1 ) 
+                               AS tmpFIC
+ORDER BY tmpFIC.idOperacion, 
+         tmpFIC.idOrdenSalida, 
+         tmpFIC.idEscala                               
+         
+         

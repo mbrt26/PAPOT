@@ -1,0 +1,189 @@
+1-Crear en tblDctosOrdenes
+
+idVendedor	float	Checked
+
+2-UPADATE tblDctosOrdenes.idUsuario ---> tblDctosOrdenes.idVendedor
+
+3-Ingreso pedidos idUsuario # idVendedor
+
+4-En factura/remision arrastrar idVendedor
+
+
+
+---
+En pedidos de tere, estan saliendo lo ya facturados 100%
+
+
+---
+
+SELECT  tblDctosOrdenesProgreso.idLocal, 
+        tblDctosOrdenesProgreso.idTipoOrden, 
+        tblDctosOrdenesProgreso.idOrden, 
+        tblDctosOrdenesProgreso.item, 
+        tblDctosOrdenesProgreso.idOperacion, 
+        tblDctosOrdenesProgreso.idOperario, 
+        tblDctosOrdenesProgreso.cantidadPerdida, 
+        tblDctosOrdenesProgreso.cantidadTerminada, 
+        tblDctosOrdenesProgreso.pesoPerdido, 
+        tblDctosOrdenesProgreso.pesoTerminado, 
+        tblDctosOrdenesProgreso.fechaInicio, 
+        tblDctosOrdenesProgreso.fechaFin, 
+        tblDctosOrdenesProgreso.idCausa, 
+        tblDctosOrdenesProgreso.estado, 
+        tblDctosOrdenesProgreso.itemPadre, 
+        tblDctosOrdenesProgreso.cantidadPedida, 
+        tblDctosOrdenesProgreso.pesoPedido, 
+        tblDctosOrdenesProgreso.idControl, 
+        tblDctosOrdenesProgreso.idPlu, 
+        tblDctosOrdenesProgreso.idControlTipo, 
+        tblDctosOrdenesProgreso.observacion, 
+        tblDctosOrdenesProgreso.idUsuario, 
+        tblJobOperacion.nombreOperacion, 
+        tblTerceros.nombreTercero,
+        tmpFIC.referenciaCliente,
+        tmpFIC.referencia, 
+        (CASE
+          WHEN tblDctosOrdenesProgreso.idControlTipo = 2
+                                                THEN -1
+          ELSE +1
+       END) AS idSigno
+FROM    tblDctosOrdenesProgreso
+INNER JOIN tblJobOperacion 
+ON tblDctosOrdenesProgreso.idOperacion = 
+                   tblJobOperacion.idOperacion
+INNER JOIN tblTerceros 
+ON tblDctosOrdenesProgreso.idOperario  = 
+                         tblTerceros.idCliente
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenes.idLocal             = 
+               tblDctosOrdenesProgreso.idLocal
+AND tblDctosOrdenes.idTipoOrden        = 
+           tblDctosOrdenesProgreso.idTipoOrden
+AND tblDctosOrdenes.idOrden            = 
+               tblDctosOrdenesProgreso.idOrden
+INNER JOIN ( SELECT  tblPlusFicha.referenciaCliente,
+                     tblPlusFicha.idFicha,
+                     tblPlusFicha.referencia
+             FROM    tblPlusFicha
+             GROUP BY tblPlusFicha.referenciaCliente,
+                      tblPlusFicha.idFicha,
+                      tblPlusFicha.referencia ) AS tmpFIC
+             ON tmpFIC.idFicha = tblDctosOrdenes.idFicha
+WHERE  tblDctosOrdenes.numeroOrden = 9838
+AND    tblDctosOrdenesProgreso.itemPadre = 1
+AND (tblDctosOrdenesProgreso.idControlTipo IN (2, 1))
+ORDER BY tblDctosOrdenesProgreso.idOrden,
+         tblDctosOrdenesProgreso.item
+         
+--
+SELECT  tblDctosOrdenesProgreso.idOrden, 
+        tblDctosOrdenesProgreso.item, 
+        tblDctosOrdenesProgreso.cantidadPerdida, 
+        tblDctosOrdenesProgreso.cantidadTerminada, 
+        tblDctosOrdenesProgreso.pesoPerdido, 
+        tblDctosOrdenesProgreso.pesoTerminado, 
+        tblDctosOrdenesProgreso.fechaInicio, 
+        tblDctosOrdenesProgreso.cantidadPedida, 
+        tblDctosOrdenesProgreso.pesoPedido, 
+        tblDctosOrdenesProgreso.idControlTipo, 
+        tblDctosOrdenesProgreso.observacion, 
+        tblJobOperacion.nombreOperacion, 
+        tblTerceros.nombreTercero,
+        tmpFIC.referenciaCliente,
+        tmpFIC.referencia, 
+        (CASE
+          WHEN tblDctosOrdenesProgreso.idControlTipo = 2
+                                                THEN -1
+          ELSE +1
+       END) AS idSigno
+FROM    tblDctosOrdenesProgreso
+INNER JOIN tblJobOperacion 
+ON tblDctosOrdenesProgreso.idOperacion = 
+                   tblJobOperacion.idOperacion
+INNER JOIN tblTerceros 
+ON tblDctosOrdenesProgreso.idOperario  = 
+                         tblTerceros.idCliente
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenes.idLocal             = 
+               tblDctosOrdenesProgreso.idLocal
+AND tblDctosOrdenes.idTipoOrden        = 
+           tblDctosOrdenesProgreso.idTipoOrden
+AND tblDctosOrdenes.idOrden            = 
+               tblDctosOrdenesProgreso.idOrden
+INNER JOIN ( SELECT  tblPlusFicha.referenciaCliente,
+                     tblPlusFicha.idFicha,
+                     tblPlusFicha.referencia
+             FROM    tblPlusFicha
+             GROUP BY tblPlusFicha.referenciaCliente,
+                      tblPlusFicha.idFicha,
+                      tblPlusFicha.referencia ) AS tmpFIC
+             ON tmpFIC.idFicha = tblDctosOrdenes.idFicha
+WHERE  tblDctosOrdenes.numeroOrden = 9838
+AND    tblDctosOrdenesProgreso.itemPadre = 1
+AND (tblDctosOrdenesProgreso.idControlTipo IN (2, 1))
+ORDER BY tblDctosOrdenesProgreso.idOrden,
+         tblDctosOrdenesProgreso.idPlu,
+         tblDctosOrdenesProgreso.item
+         
+-- OT EXTERNA
+                 SELECT  tblDctosOrdenes.idCliente,            
+                         tblDctosOrdenes.numeroOrden,  
+                         tblDctosOrdenesProgreso.itemPadre, 
+                         MAX(tmpTER.nombreTercero) AS nombreTercero,
+                         SUM(tblDctosOrdenesProgreso.cantidadTerminada *
+                         (CASE                                             
+                          WHEN tblDctosOrdenesProgreso.idControlTipo = 2   
+                                                           THEN -1   
+                          ELSE +1                                          
+                          END)) * (-1) AS cantidadTerminada,  
+                         SUM(tblDctosOrdenesProgreso.pesoTerminado *
+                         (CASE                                             
+                          WHEN tblDctosOrdenesProgreso.idControlTipo = 2   
+                                                           THEN -1   
+                          ELSE +1                                          
+                          END)) * (-1) AS pesoTerminado,      
+                         MAX(tblJobOperacion.nombreOperacion) 
+                                                   AS nombreOperacion,            
+                         MAX(tblTerceros.nombreTercero) 
+                                                   AS nombreTercero,            
+                         MAX(tmpFIC.referenciaCliente) 
+                                                   AS referenciaCliente
+                 FROM    tblDctosOrdenesProgreso                     
+                 INNER JOIN tblJobOperacion                          
+                 ON tblDctosOrdenesProgreso.idOperacion =            
+                                    tblJobOperacion.idOperacion      
+                 INNER JOIN tblTerceros                              
+                 ON tblDctosOrdenesProgreso.idOperario  =            
+                                          tblTerceros.idCliente      
+                 INNER JOIN tblDctosOrdenes                          
+                 ON tblDctosOrdenes.idLocal             =            
+                                tblDctosOrdenesProgreso.idLocal      
+                 AND tblDctosOrdenes.idTipoOrden        =            
+                            tblDctosOrdenesProgreso.idTipoOrden      
+                 AND tblDctosOrdenes.idOrden            =            
+                                tblDctosOrdenesProgreso.idOrden    
+                 INNER JOIN ( SELECT tblTerceros.idCliente,
+                                     MAX(tblTerceros.nombreTercero) 
+                                                  AS nombreTercero 
+                              FROM   tblTerceros
+                              GROUP BY tblTerceros.idCliente )
+                                                         AS tmpTER         
+                 ON tmpTER.idCliente  =  tblDctosOrdenes.idCliente
+                 INNER JOIN                                          
+                    ( SELECT  tblPlusFicha.referenciaCliente,        
+                              tblPlusFicha.idFicha,                  
+                              tblPlusFicha.referencia                
+                      FROM    tblPlusFicha                           
+                      GROUP BY tblPlusFicha.referenciaCliente,       
+                               tblPlusFicha.idFicha,                 
+                               tblPlusFicha.referencia )             
+                	                               AS tmpFIC        
+                    ON tmpFIC.idFicha                     =          
+                                      tblDctosOrdenes.idFicha        
+                 WHERE  tblDctosOrdenes.idLocal           = 1         
+                 AND    tblDctosOrdenes.idTipoOrden       = 59         
+                 AND  tblDctosOrdenesProgreso.idControlTipo          
+                                                   IN (2, 1) 
+                 GROUP BY tblDctosOrdenes.idCliente,            
+                          tblDctosOrdenes.numeroOrden,  
+                          tblDctosOrdenesProgreso.itemPadre

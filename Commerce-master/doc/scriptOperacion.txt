@@ -1,0 +1,45 @@
+-- ORDEN OPERACION ANTERIOR/ACTUAL
+SELECT tblPlusFicha.idOperacion 
+              AS idOperacionAnterior,
+      ( SELECT tblJobOperacion.nombreOperacion
+        FROM tblJobOperacion
+        WHERE tblJobOperacion.idOperacion = 
+                 tblPlusFicha.idOperacion )
+                AS nombreOperacionAnterior,
+       tblPlusFicha.vrEscala 
+              AS idOperacionActual,
+      ( SELECT tblJobOperacion.nombreOperacion
+        FROM tblJobOperacion
+        WHERE tblJobOperacion.idOperacion = 
+                 tblPlusFicha.vrEscala )
+                AS nombreOperacionActual
+FROM   tblPlusFicha
+INNER JOIN tblJobOperacion
+ON tblPlusFicha.idOperacion = 
+        tblJobOperacion.idOperacion
+WHERE     (tblPlusFicha.idFicha = 741)
+AND (tblPlusFicha.idEscala = 610)
+AND (tblPlusFicha.vrEscala = 2)
+
+-- ORDEN OPERACION ACTUAL/SIGUIENTE
+SELECT tblPlusFicha.idOperacion 
+              AS idOperacionActual,
+      ( SELECT tblJobOperacion.nombreOperacion
+        FROM tblJobOperacion
+        WHERE tblJobOperacion.idOperacion = 
+                 tblPlusFicha.idOperacion )
+                     AS nombreOperacionActual,
+       tblPlusFicha.vrEscala 
+              AS idOperacionSiguiente,
+      ( SELECT tblJobOperacion.nombreOperacion
+        FROM tblJobOperacion
+        WHERE tblJobOperacion.idOperacion = 
+                 tblPlusFicha.vrEscala )
+                AS nombreOperacionSiguiente
+FROM   tblPlusFicha
+INNER JOIN tblJobOperacion
+ON tblPlusFicha.idOperacion = 
+        tblJobOperacion.idOperacion
+WHERE     (tblPlusFicha.idFicha = 741)
+AND (tblPlusFicha.idEscala      = 610)
+AND (tblPlusFicha.idOperacion   = 5)

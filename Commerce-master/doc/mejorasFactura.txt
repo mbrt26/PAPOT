@@ -1,0 +1,23 @@
+Buenos días Noe, luego de retroalimentar a Ricardo un poco sobre los avances en facturación surgen los siguientes cambios en el diseño de la factura que se deben realizar a fin de darle su funcionalidad adecuadamente. Te adjunto hoja con boceto de los cambios enumerados, la explicación de cada uno es la que te doy a continuación:
+ 
+ok	1. En la parte superior izquierda de la factura debe aparecer nuestro logo en escala de grises para que se pueda imprimir sin problema en impresoras a blanco y negro.
+ 
+ok	2. Eliminar este renglón para que no aparezca doble el nombre de la compañía.
+ 
+ok	3. Colocar este nombre de la empresa en "negrita" (un poco más resaltado)
+ 
+ok	4. Ubicar las fechas de elaboración y de vencimiento dentro de un recuadro (dividido para cada fecha) y ubicado en la parte señalada en el boceto.
+ 
+ok	5. Acomodar el espacio para las referencias facturadas de tal  forma que quepan unas 5 referencias aproximadamente con el fin de dar cumplimiento al punto 6 (que describo a continuación)
+ 
+ok	6. Ampliar el tamaño de la letra a lo largo para que sea un poco más visible la información, distribuir las lertras de tal forma que quepan solo 5 referencias como se indicó en el punto anterior.
+ 
+7. Subir un poco el recuado inferior de la factura a fin de que la información legal, subtotales y demás información que allí aparece sea un poco más grande y legible.
+ 
+8. Disminuir y redistribuir cada uno de los recuadros anteriores al cuadro de valores para que queden de un tamaño aproximado al que se coloca resaltado en rosado.
+ 
+9. Pasar el reglón de la persona que elabora la factura al segundo recuadro inferior (que quede en la parte inferior del recuadro que se enuncia como "revisado por")
+ 
+La idea es que estos cambios en la medida de lo posible estén listos para mañana para avanzar con el tema y seguir con el tema de terceros en cuanto a las entradas y salidas de almacén.
+ 
+Cualquier inquietud adicional me cuentas, gracias.

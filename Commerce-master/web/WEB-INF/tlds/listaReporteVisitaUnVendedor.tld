@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+  <tlib-version>1.0</tlib-version>
+  <short-name>listaReporteVisitaUnVendedor</short-name>
+  <uri>/WEB-INF/tlds/listaReporteVisitaUnVendedor</uri>
+  <tag>
+    <name>listaFechaVisita</name>
+    <tag-class>com.solucionesweb.tags.ListaFechaVisitaVendedorTag</tag-class>
+    <tei-class>com.solucionesweb.tags.ListaFechaVisitaVendedorTagExtraInfo</tei-class>
+    <body-content>JSP</body-content>
+    <description>
+      Muestra fecha tipoorden
+    </description>
+    <attribute>
+      <name>idUsuarioTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>fechaInicialTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>fechaFinalTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  <tag>
+    <name>listaVisita</name>
+    <tag-class>com.solucionesweb.tags.ListaLogVisitaVendedorTag</tag-class>
+    <tei-class>com.solucionesweb.tags.ListaLogVisitaVendedorTagExtraInfo</tei-class>
+    <body-content>JSP</body-content>
+    <description>
+      Muestra fecha tipoorden
+    </description>
+    <attribute>
+      <name>idUsuarioTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>fechaVisitaTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+</taglib>

@@ -1,0 +1,33 @@
+--- CANTIDADES PARCIALES
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [pesoPedido] = 0
+ WHERE [pesoPedido] IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET pesoTerminado = 0
+ WHERE pesoTerminado IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [pesoRetal] = 0
+ WHERE [pesoRetal] IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [cantidadTerminada] = 0
+ WHERE [cantidadTerminada] IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [cantidadFacturada] = 0
+ WHERE [cantidadFacturada] IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [pesoFacturado] = 0
+ WHERE [pesoFacturado] IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [cantidadEntregada] = 0
+ WHERE [cantidadEntregada] IS NULL
+
+UPDATE [tblDctosOrdenesDetalle]
+   SET [pesoEntregado] = 0
+ WHERE [pesoEntregado] IS NULL

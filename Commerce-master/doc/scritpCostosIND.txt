@@ -1,0 +1,28 @@
+--
+UPDATE [BDCommerce].[dbo].[tblPlus]
+   SET [vrCostoIND] = 1
+ WHERE [vrCostoIND] = 0 
+OR [vrCostoIND] IS NULL
+
+--
+UPDATE [BDCommerce].[dbo].[tblPlus]
+   SET [vrCosto] = 1
+ WHERE [vrCosto] = 0 
+OR [vrCosto] IS NULL
+
+--
+UPDATE [BDCommerce].[dbo].[tblPlus]
+   SET [factorDespacho] = 1
+ WHERE [factorDespacho] = 0 
+OR [factorDespacho] IS NULL
+
+--
+UPDATE [BDCommerce].[dbo].[tblPlus]
+   SET [idUCompra] = 1
+ WHERE [idUCompra] = 0
+OR [idUCompra] IS NULL
+
+UPDATE [BDCommerce].[dbo].[tblPlus]
+   SET [idUVenta] = 1
+ WHERE [idUVenta] = 0
+OR [idUVenta] IS NULL

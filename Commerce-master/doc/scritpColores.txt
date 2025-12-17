@@ -1,0 +1,188 @@
+--- Cambiar a idTipoEscala = 5 en tblJobEscala
+706	COLOR 1 CARA 1	5	1
+707	COLOR 2 CARA 1	5	1
+708	COLOR 3 CARA 1	5	1
+709	COLOR 4 CARA 1	5	1
+714	COLOR 5 CARA 1	5	1
+715	COLOR 6 CARA 1	5	1
+720	COLOR 1 CARA 2	5	1
+721	COLOR 2 CARA 2	5	1
+722	COLOR 3 CARA 2	5	1
+723	COLOR 4 CARA 2	5	1
+724	COLOR 5 CARA 2	5	1
+725	COLOR 6 CARA 2	5	1
+
+--- tblJobEscalaDetalle
+706	1	-	1
+706	2	AMARILLO	1
+706	3	AZUL 	1
+706	4	AZUL 314C	1
+706	5	AZUL CLARO	1
+706	6	BLANCO	1
+706	7	CAFE	1
+706	8	CIAM	1
+706	9	DORADO	1
+706	10	FUCSIA 	1
+706	11	GRIS	1
+706	12	MAGENTA	1
+706	13	MORADO	1
+706	14	NARANJA 	1
+706	15	NEGRO	1
+706	16	PLATA	1
+706	17	POLICRO	1
+706	18	ROJO	1
+706	19	ROSADO	1
+706	20	VERDE	1
+
+
+--- tblJobEscalaOperacion
+706	3	1	110
+707	3	1	120
+708	3	1	130
+709	3	1	140
+714	3	1	140
+715	3	1	150
+720	3	1	160
+721	3	1	170
+722	3	1	180
+723	3	1	190
+724	3	1	200
+725	3	1	210
+
+--
+DELETE FROM tblPlusFicha
+WHERE     (idEscala IN (706, 707, 708, 709, 714, 715, 720, 721, 722, 723, 724, 725)) AND (idOperacion = 3)
+
+--- IMPRESION
+INSERT INTO [BDCommercePU].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommercePU].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion=3
+AND idEscala IN (706,707,708,709,714,715,720,721,722,723,724,725)) 
+                                     AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+ORDER BY [idFicha]
+
+
+---
+INSERT INTO [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+SELECT 707 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+
+SELECT 708 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+
+SELECT 708 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+SELECT 714 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+
+SELECT 715 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+
+SELECT 720 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+SELECT 721 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+
+SELECT 722 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+SELECT 723 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+SELECT 724 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706
+UNION
+SELECT 725 AS idEscala
+      ,[item]
+      ,[nombreItem]
+      ,1 AS [estado]
+  FROM [BDCommercePU].[dbo].[tblJobEscalaDetalle]
+where idEscala=706

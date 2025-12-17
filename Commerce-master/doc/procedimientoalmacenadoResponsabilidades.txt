@@ -1,0 +1,22 @@
+USE [BDCommerce]
+GO
+/****** Object:  UserDefinedFunction [dbo].[respFiscal]    Script Date: 07/10/2022 10:45:56 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER FUNCTION [dbo].[respFiscal](@tercero nvarchar(15)) returns table
+return(
+select	RTRIM (CONCAT(case WHEN idResp1 != 'null' then (CASE WHEN idResp2 != 'null' THEN Concat(idResp1,';') else Concat(idResp1,'')END) else '' end,
+		case WHEN idResp2 != 'null' then(CASE WHEN idResp3 != 'null' THEN Concat(idResp2,';') else Concat(idResp2,'')END) else '' end,
+		case WHEN idResp3 != 'null' then (CASE WHEN idResp4 != 'null' THEN Concat(idResp3,';') else Concat(idResp3,'')END) ELSE '' end,
+		case WHEN idResp4 != 'null' then (CASE WHEN idResp5 != 'null' THEN Concat(idResp4,';') else Concat(idResp4,'')END) else '' end,
+		case WHEN idResp5 != 'null' then (CASE WHEN idResp6 != 'null' THEN Concat(idResp5,';') else Concat(idResp5,'')END) else '' end,
+		case WHEN idResp6 != 'null' then (CASE WHEN idResp7 != 'null' THEN Concat(idResp6,';') else Concat(idResp6,'')END) else '' end,
+		case WHEN idResp7 != 'null' then (CASE WHEN idResp8 != 'null' THEN Concat(idResp7,';') else Concat(idResp7,'')END) else '' end,
+		case WHEN idResp8 != 'null' then (CASE WHEN idResp9 != 'null' THEN Concat(idResp8,';') else Concat(idResp8,'')END) else '' end,
+		case WHEN idResp9 != 'null' then (CASE WHEN idResp10 != 'null' THEN Concat(idResp9,';') else Concat(idResp9,'')END) else '' end,
+		case WHEN idResp10 != 'null' then Concat(idResp10,';') else '' end)) repFisacal		
+from tblFacturacionTercero
+where idTercero = @tercero)

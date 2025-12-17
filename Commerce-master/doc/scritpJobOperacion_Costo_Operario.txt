@@ -1,0 +1,113 @@
+---
+USE [BDcommerce]
+GO
+/****** Objeto:  Table [dbo].[tblJobCosto]    Fecha de la secuencia de comandos: 03/08/2012 16:36:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblJobCosto](
+	[idCosto] [int] NOT NULL,
+	[nombreCosto] [nvarchar](50) COLLATE Modern_Spanish_CI_AS NULL,
+	[estado] [int] NULL,
+	[idSeq] [int] NULL,
+ CONSTRAINT [PK_tblJobCosto] PRIMARY KEY CLUSTERED 
+(
+	[idCosto] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+---
+1	MATERIAS PRIMAS				1	0
+2	MANO OBRA DIRECTA FABRICACION (M.O.D.)	1	0
+3	COSTOS INDIRECTOS FABRICACION (C.I.F.)	1	0
+
+
+---
+USE [BDcommerce]
+GO
+/****** Objeto:  Table [dbo].[tblJobOperacionCosto]    Fecha de la secuencia de comandos: 03/08/2012 16:37:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblJobOperacionCosto](
+	[idLocal] [int] NOT NULL,
+	[idCosto] [int] NOT NULL,
+	[idOperacion] [int] NOT NULL,
+	[idPeriodo] [int] NOT NULL,
+	[cantidadBase] [decimal](10, 2) NULL,
+	[vrCostoBase] [decimal](10, 2) NULL,
+	[estado] [int] NULL,
+ CONSTRAINT [PK_tblJobOperacionCosto] PRIMARY KEY CLUSTERED 
+(
+	[idLocal] ASC,
+	[idCosto] ASC,
+	[idOperacion] ASC,
+	[idPeriodo] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+
+---
+USE [BDcommerce]
+GO
+/****** Objeto:  Table [dbo].[tblJobOperacionOperario]    Fecha de la secuencia de comandos: 03/08/2012 16:37:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblJobOperacionOperario](
+	[idLocal] [int] NOT NULL,
+	[idOperacion] [int] NOT NULL,
+	[idPeriodo] [int] NOT NULL,
+	[idOperario] [numeric](13, 0) NOT NULL,
+	[estado] [int] NULL,
+ CONSTRAINT [PK_tblJobOperacionOperario] PRIMARY KEY CLUSTERED 
+(
+	[idLocal] ASC,
+	[idOperacion] ASC,
+	[idPeriodo] ASC,
+	[idOperario] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+---
+USE [BDcommerce]
+GO
+/****** Objeto:  Table [dbo].[tblJobProgramaPlusFicha]    Fecha de la secuencia de comandos: 03/08/2012 16:38:18 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[tblJobProgramaPlusFicha](
+	[idLocal] [int] NOT NULL,
+	[idTipoOrden] [int] NOT NULL,
+	[idOrden] [int] NOT NULL,
+	[itemPadre] [int] NOT NULL,
+	[idOperacion] [int] NOT NULL,
+	[idEscala] [int] NOT NULL,
+	[item] [int] NOT NULL,
+	[vrEscala] [decimal](18, 2) NULL,
+	[textoEscala] [varchar](400) COLLATE Modern_Spanish_CI_AS NULL,
+	[fechaPrograma] [datetime] NULL,
+	[estadoPrograma] [int] NULL,
+	[fechaProceso] [datetime] NULL,
+	[idUsuario] [decimal](13, 0) NULL,
+	[estado] [smallint] NULL,
+ CONSTRAINT [PK_tblJobProgramaPlusFicha] PRIMARY KEY CLUSTERED 
+(
+	[idLocal] ASC,
+	[idTipoOrden] ASC,
+	[idOrden] ASC,
+	[itemPadre] ASC,
+	[idOperacion] ASC,
+	[idEscala] ASC,
+	[item] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF

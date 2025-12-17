@@ -1,0 +1,22 @@
+-- tipodocumento C-cedula,A--nit
+UPDATE [BDCommerce].[dbo].[tblTerceros]
+   SET [tipoIdTercero] = 
+      CASE WHEN idTercero < 800000000 THEN 'C'
+           WHEN idTercero >= 800000000 AND idTercero <= 999999999  THEN 'A'
+           WHEN idTercero >  999999999 THEN 'C'
+      END
+-- tipodocumento C-cedula,A--nit
+
+--- Persona Natural / Juridica
+UPDATE [BDCommerce].[dbo].[tblTerceros]
+   SET [idPersona] = 
+      CASE WHEN idTercero < 800000000 THEN 0
+           WHEN idTercero >= 800000000 AND idTercero <= 999999999  THEN 1
+           WHEN idTercero >  999999999 THEN 0
+      END
+            
+--- iniciar RteIva, vrBase Tercero
+UPDATE [BDCommerce].[dbo].[tblTerceros]
+   SET [idRteIva] = 0,
+       [idRteIvaVrBase] = 0,
+       [idRteFuenteVrBase] = 0

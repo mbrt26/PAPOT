@@ -1,0 +1,24 @@
+
+                    TRASLADO  INVENTARIO        Nº:
+                                                    10.9
+
+  FECHA EM     ORI    DEST
+          29/08    nul     nul
+
+  IT PLU REFERENCIA                      PROCESOCANTPESO
+
+  1  209  (209) TERMINADO-SIN IMPRESION  EXTRUSI20,50,00
+  1  209  (209) TERMINADO-SIN IMPRESION  MANUAL -20,0,00
+
+
+
+
+
+                       null
+
+  USUA               20/11/2019 4.51 PM      Pagina 1 de 1
+      null
+
+
+
+

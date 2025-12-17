@@ -1,0 +1,13 @@
+Iniciar BD 
+
+--- Borrar la PROGRAMA de OT
+DELETE FROM [BDCommerce].[dbo].[tblJobProgramaPlusFicha]
+
+--- Borrar la PROGRESO de OT
+DELETE FROM [BDCommerce].[dbo].[tblDctosOrdenesProgreso]
+
+--- cumplir TODAS OT 
+UPDATE    tblDctosOrdenesDetalle
+SET              idEstadoRefOriginal = 9
+WHERE     (IDTIPOORDEN = 59)
+AND idEstadoRefOriginal.idEstadoRefOriginal != 9

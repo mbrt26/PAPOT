@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RepPDFCotizacion1" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<background>
+		<band />
+	</background>
+	<title>
+		<band height="16"/>
+	</title>
+	<pageHeader>
+		<band height="260" >
+			<staticText>
+				<reportElement x="13" y="115" width="554" height="80" />
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cordial Saludo
+Señor
+ISMAEL VERGARA
+Coordinador de Negociación
+COMESTIBLES DAN S.A. ]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement mode="Transparent" x="505" y="11" width="41" height="19" forecolor="#FFFFFF" />
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroOrden}]]></textFieldExpression>
+			</textField>
+			<image vAlign="Top">
+				<reportElement x="10" y="10" width="130" height="120" />
+				<imageExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\imagenes\\Logo-verde-P.PNG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Transparent" x="454" y="10" width="31" height="20" />
+				<box topPadding="2" leftPadding="4" bottomPadding="0" rightPadding="0">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Nº:]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="70" y="101" width="100" height="18" />
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="231" width="554" height="20" />
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Polietileno de Alta densidad 100 % RECUPERADO con Biodegradable impresa 1 color pigmentado blanco con troquel
+camiseta ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="198" width="554" height="31" />
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nos permitimos cotizar el siguiente empaque plástico esperando se adapten a sus necesidades y expectativas. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="100" width="75" height="18" />
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Envigado,]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="487" y="11" width="78" height="19" forecolor="#FFFFFF" backcolor="#009933" />
+			</rectangle>
+			<textField pattern="#,##0">
+				<reportElement mode="Transparent" x="502" y="11" width="41" height="19" forecolor="#FFFFFF" />
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroOrden}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" >
+			<staticText>
+				<reportElement mode="Opaque" x="13" y="3" width="34" height="20" backcolor="#FFFFFF"/>
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="3.0" lineStyle="Double"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[ITEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="435" y="3" width="51" height="20" backcolor="#FFFFFF">
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="3.0" lineStyle="Double"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[CANT MIN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="486" y="3" width="80" height="20" backcolor="#FFFFFF" />
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="3.0" lineStyle="Double"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[PRECIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="297" y="3" width="75" height="20" backcolor="#FFFFFF" />
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="3.0" lineStyle="Double"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MEDIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="372" y="3" width="63" height="20" backcolor="#FFFFFF" />
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="3.0" lineStyle="Double"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[CALIBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="47" y="3" width="250" height="20" backcolor="#FFFFFF" />
+				<box topPadding="0" leftPadding="0">
+					<topPen lineWidth="3.0" lineStyle="Double"/>
+					<bottomPen lineWidth="3.0" lineStyle="Double"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REFERENCIA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="92" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="97" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="33" width="533" height="64" />
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Tener en cuenta que la cantidad puede variar un +/- 10% a la cantidad solicitada.
+Costo de fotopolímeros por cuenta del cliente.
+Tiempo de entrega aproximadamente para materiales impresos es de 20 días.
+Oferta sujeta a variaciones de las resinas e insumos en el mercado.
+
+Cualquier inquietud con gusto será atendida
+
+Cordialmente,
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="13" width="120" height="20" />
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Precio antes de IVA.]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="9" y="4" width="144" height="23"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ricardo Casas
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="28" width="143" height="18"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Gerente]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="33" >
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="3" width="572" height="29" forecolor="#FFFFFF" backcolor="#009933" />
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Carrera 46 # 48 C Sur 92 PBX 4444664 Envigado-Antioquia plasticosunion@plasticosunion.com
+www.plasticosunion.com]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

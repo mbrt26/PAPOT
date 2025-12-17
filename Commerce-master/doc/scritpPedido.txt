@@ -1,0 +1,19 @@
+--- no tiene ALMACEN
+9427 edo=8 	
+9432
+9440
+9441
+9473
+9481
+9502
+9654
+9738 *
+9803
+9804
+9838
+--- con operacion en ALMACEN
+9105 edo=8 	
+9139 edo=8 	 	
+9440 edo=8  	
+9424 edo=8  	 	
+9738 edo=8  

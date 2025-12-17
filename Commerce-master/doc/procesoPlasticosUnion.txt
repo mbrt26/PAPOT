@@ -1,0 +1,15 @@
+PRODUCCION
+
+1. Los pedidos PENDIENTES deben ser validados en PEDIDOS SIN FICHA para:
+
+       1.1. Revisar OPERACIONES
+       1.2. Definir PESO PEDIDO
+       1.3. Definir FICHA TECNICA
+       1.4. Excedente
+       1.5. Numero Rollos
+       1.6. Materias primas
+       
+2. Generar la O.T. por impresion de Ficha Tecnica
+
+3. Consultar el PEDIDO en Pedidos x Estado, deben estar en PENDIENTES
+       

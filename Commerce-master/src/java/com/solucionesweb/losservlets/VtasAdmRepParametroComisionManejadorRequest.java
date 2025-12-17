@@ -1,0 +1,119 @@
+package com.solucionesweb.losservlets;
+
+// Importa los paquetes del lenguaje especificamente io y los
+import com.solucionesweb.losbeans.colaboraciones.ColaboraParametroComisionBean;
+import com.solucionesweb.losbeans.fachada.FachadaParametroComisionBean;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+// Importa la clase que contiene el UsuarioBean
+import com.solucionesweb.losbeans.negocio.UsuarioBean;
+
+// Importa la clase que contiene el UsuarioBean
+import com.solucionesweb.losbeans.utilidades.Validacion;
+/**
+ * Consulta de reporte de cartera efectiva/ 
+ * vtaContenedorRepComisionEfectiva.jsp /
+ *
+ * Este servlet implementa la interface GralManejadorRequest /
+ */
+// 
+public class VtasAdmRepParametroComisionManejadorRequest
+                                               implements GralManejadorRequest {
+     /**
+     * BUTTON--
+     * ("Consultar")- Permite crear un pdf con un reporte de comision de cartera efectiva por cliente/
+     * ("Salir")-Permite retornar al menu principal /
+     * 
+     * Metodo contructor por defecto, es decir, sin parametros /
+     */
+
+  public VtasAdmRepParametroComisionManejadorRequest(){ }
+
+  /**
+   * BUTTON PARAMETER--
+   * "Fecha inicial"- Es la fecha inicial para elaborar reporte/
+   * "Fecha Final"-Es la fecha limite para elaborar reporte/
+   * "Alcance"-Seleccion de cliente /
+   * 
+   * Retorna la URL de la pagina que deberá ser entregada como respuesta
+   * (normalmente un pagina jsp).
+   */
+  public String generaPdf(HttpServletRequest request,
+                              HttpServletResponse response)
+                              throws ServletException,IOException   {
+
+    String accionContenedor = request.getParameter("accionContenedor");
+    System.out.println("accionContenedor :" + accionContenedor );
+
+    //
+    HttpSession sesion      = request.getSession();
+    UsuarioBean usuarioBean = (UsuarioBean)sesion.getAttribute("usuarioBean");
+
+    //
+    int xIdLocalUsuario            = usuarioBean.getIdLocalUsuario();
+    int xIndicadorInicial          = usuarioBean.getIndicadorInicial();
+    int xIndicadorFinal            = usuarioBean.getIndicadorFinal();
+
+    // Validacion de accion relacionada con el formulario requerido
+    if (accionContenedor != null ) {
+
+	    if (accionContenedor.compareTo("Salir") == 0 ) {
+       	    return "/jsp/empty.htm";
+
+        }
+
+        // Consultar
+	       if (accionContenedor.compareTo("Seleccionar") == 0) {
+                   
+                   String xIdLucro        = request.getParameter("xIdLucro");
+
+            ColaboraParametroComisionBean colaboraComisionBean = 
+                    new ColaboraParametroComisionBean();
+
+            FachadaParametroComisionBean fachadaParametroComisionBean = 
+                    new FachadaParametroComisionBean();
+            
+            fachadaParametroComisionBean = colaboraComisionBean.listaParametro(xIdLucro);
+            
+            request.setAttribute("fachadaParametroComisionBean", fachadaParametroComisionBean);
+
+            return "/jsp/vtaFrmLsModificarParaComision.jsp";
+
+        }
+               
+               // Consultar
+	       if (accionContenedor.compareTo("Modificar") == 0) {
+                   
+                   String xIdLucro        = request.getParameter("xIdLucro");
+                   String xNombreRango    = request.getParameter("xNombreRango");
+                   String xDiaInicial    = request.getParameter("xDiaInicial");
+                   String xDiaFinal    = request.getParameter("xDiaFinal");
+                   String xPorcentaje    = request.getParameter("xPorcentaje");
+                   
+                   
+
+            ColaboraParametroComisionBean colaboraComisionBean = 
+                    new ColaboraParametroComisionBean();
+
+            FachadaParametroComisionBean fachadaParametroComisionBean = 
+                    new FachadaParametroComisionBean();          
+                             
+            
+            colaboraComisionBean.actualizaParametro(xIdLucro,xNombreRango,xDiaInicial,xDiaFinal,xPorcentaje);
+
+            return "/jsp/vtaContenedorParametroComision.jsp";
+
+        }
+
+
+	}
+
+    //
+    return "/jsp/empty.htm";
+
+  }
+}

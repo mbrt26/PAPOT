@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="396" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="10" bottomMargin="10">
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\WEB-INF\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_nombreTercero" class="java.lang.String"/>
+	<parameter name="p_referenciaCliente" class="java.lang.String"/>
+	<parameter name="p_idFicha" class="java.lang.Integer"/>
+	<parameter name="p_numeroOrden" class="java.lang.Integer"/>
+	<parameter name="p_item" class="java.lang.Integer"/>
+	<parameter name="p_referencia" class="java.lang.String"/>
+	<parameter name="p_fechaEntrega" class="java.lang.String"/>
+	<parameter name="p_cantidad" class="java.lang.Double"/>
+	<parameter name="p_nombrePlu" class="java.lang.String"/>
+	<parameter name="p_idCliente" class="java.lang.String"/>
+	<parameter name="p_pesoPedido" class="java.lang.String"/>
+	<parameter name="p_anchoSellado" class="java.lang.String"/>
+	<parameter name="p_largoSellado" class="java.lang.String"/>
+	<parameter name="p_calibreSellado" class="java.lang.String"/>
+	<parameter name="p_solapaSellado" class="java.lang.String"/>
+	<parameter name="p_tipoSolapaSellado" class="java.lang.String"/>
+	<parameter name="p_fuelle1Sellado" class="java.lang.String"/>
+	<parameter name="p_fuelle2Sellado" class="java.lang.String"/>
+	<parameter name="p_alturaSellado" class="java.lang.String"/>
+	<parameter name="p_golpeSellado" class="java.lang.String"/>
+	<parameter name="p_bultoSellado" class="java.lang.String"/>
+	<parameter name="p_paqueteSellado" class="java.lang.String"/>
+	<parameter name="p_maquinaSellado" class="java.lang.String"/>
+	<parameter name="p_destinoSellado" class="java.lang.String"/>
+	<parameter name="p_tipoTroquelSellado" class="java.lang.String"/>
+	<parameter name="p_tipoSellado" class="java.lang.String"/>
+	<parameter name="p_tipoFuelleSellado" class="java.lang.String"/>
+	<parameter name="p_observacionSellado" class="java.lang.String"/>
+	<parameter name="p_ordenServicio" class="java.lang.Integer"/>
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_nombreReporte" class="java.lang.String"/>
+	<parameter name="p_tituloReporte" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="idOperacion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idEscala" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="item" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrEscala" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="textoEscala" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estado" class="java.lang.Short">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreEscala" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idTipoEscala" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="100">
+			<image>
+				<reportElement x="0" y="10" width="127" height="67"/>
+				<imageExpression class="java.lang.String"><![CDATA["C:\\proyectoWeb\\Commerce\\web\\imagenes\\logoEmpresa.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="140" y="4" width="300" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tituloReporte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="140" y="45" width="90" height="18"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PROVEEDOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="63" width="90" height="18"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[FECHA ORDEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="27" width="90" height="18"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[O.SERVICIO#]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="27" width="80" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{p_ordenServicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="45" width="300" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="63" width="80" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_fechaEntrega}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="140" y="81" width="90" height="18"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[KILOS  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="81" width="80" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_pesoPedido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="81" width="240" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_referenciaCliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="63" width="30" height="18"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[O.T.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="350" y="63" width="40" height="18"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{p_numeroOrden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="393" y="63" width="10" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{item}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="390" y="63" width="3" height="18"/>
+				<textElement>
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="214">
+			<staticText>
+				<reportElement x="228" y="16" width="35" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Ancho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="228" y="46" width="35" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Golpes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="76" width="80" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="76" width="412" height="43"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_observacionSellado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="500" y="16" width="70" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TipoSolapa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="46" width="35" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Fuelle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="361" y="46" width="35" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Fuelle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="46" width="35" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Bulto X]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="511" y="76" width="60" height="15"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_destinoSellado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="16" width="35" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Solapa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="16" width="35" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Largo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="307" y="46" width="40" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Paq. X]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="16" width="35" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Altura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="511" y="61" width="60" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="16" width="80" height="15"/>
+				<textElement>
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Maquina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="307" y="16" width="40" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Calibre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="112" y="16" width="60" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TipoSellado]]></text>
+			</staticText>
+			<line>
+				<reportElement x="16" y="1" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="112" y="46" width="60" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[TipoTroquel]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="16" y="31" width="80" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_maquinaSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="31" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_anchoSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="267" y="31" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_largoSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="307" y="31" width="40" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_calibreSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="361" y="61" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_fuelle1Sellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="399" y="61" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_fuelle2Sellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="31" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_solapaSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="31" width="70" height="15"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tipoSolapaSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="61" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_golpeSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="267" y="61" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_bultoSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="307" y="61" width="40" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_paqueteSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="31" width="35" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_alturaSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="112" y="31" width="60" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tipoSellado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="112" y="61" width="60" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tipoTroquelSellado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="16" y="2" width="555" height="15" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SELLADO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="16" y="1" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement x="16" y="213" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="361" y="16" width="80" height="15"/>
+				<textElement textAlignment="Left">
+					<font isBold="true" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Tipo Fuelle]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="361" y="31" width="80" height="15"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tipoFuelleSellado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40">
+			<staticText>
+				<reportElement mode="Transparent" x="17" y="15" width="555" height="15" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Elaborado Por                                                            Vo.Bo.Por]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

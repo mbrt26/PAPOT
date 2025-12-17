@@ -1,0 +1,5 @@
+Incluir fecha de grabar produccion
+ok-	Mostrar los proveedores y empleados en grabar produccion
+ok-	Informar el codigo del tiempo perdido en comboCausal 01-Falla Electrica
+OK-	Controlar que no se borren fichas que tienen OT en marcha
+ok-	Facturar NO POS

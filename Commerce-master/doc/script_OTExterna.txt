@@ -1,0 +1,27 @@
+---
+1- Crear campos en tblDctosOrdenesProgreso
+
+	[cantidadPedida] [float] NULL,
+	[pesoPedido] [float] NULL,
+	[idControl] [int] NULL,
+	[idPlu] [int] NULL,
+	[idControlTipo] [int] NULL,	
+	[observacion] [nvarchar](100)
+	[idUsuario] [float] NULL,	
+	
+---	
+2- Llenar 0 cuando es NULL
+
+UPDATE [BDCommerce].[dbo].[tblDctosOrdenesProgreso]
+   SET [cantidadPedida] = 0
+      ,[pesoPedido] = 0
+      ,[idControl] = 0
+      ,[idPlu] = 0
+      ,[idControlTipo] = 0      
+WHERE [cantidadPedida] IS NULL
+
+
+3- tblDctosCopia
+
+59	1	PROVEEDOR	
+59	2	INTERNO	

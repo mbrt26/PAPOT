@@ -1,0 +1,46 @@
+
+#calendar {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; BORDER-COLLAPSE: collapse; border-spacing: 1px
+}
+#calendar TR.header TH {
+	COLOR: #ffffff; FONT-FAMILY: Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #182c6d; TEXT-ALIGN: center; FONT-SIZE: 8pt
+}
+#calendar TR.days TH {
+	COLOR: #ffffff; FONT-FAMILY: Arial, Helvetica, sans-serif; WIDTH: 2.2em; BACKGROUND-COLOR: #5f71ab; TEXT-ALIGN: center; FONT-SIZE: 8pt
+}
+#calendar TR.footer TD {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 4px; BORDER-TOP-STYLE: none; PADDING-TOP: 6px; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+#calendar TD {
+	FONT-FAMILY: Arial, Helvetica, sans-serif; BORDER-RIGHT: #000000 1px solid; PADDING-RIGHT: 0.25em; BORDER-TOP: #000000 1px solid; PADDING-LEFT: 0.25em; PADDING-BOTTOM: 2px; BORDER-LEFT: #000000 1px solid; COLOR: #000000; PADDING-TOP: 2px; BORDER-BOTTOM: #000000 1px solid; empty-cells: show; FONT-SIZE: 8pt
+}
+#calendar TH {
+	FONT-FAMILY: Arial, Helvetica, sans-serif; BORDER-RIGHT: #000000 1px solid; PADDING-RIGHT: 0.25em; BORDER-TOP: #000000 1px solid; PADDING-LEFT: 0.25em; PADDING-BOTTOM: 2px; BORDER-LEFT: #000000 1px solid; COLOR: #000000; PADDING-TOP: 2px; BORDER-BOTTOM: #000000 1px solid; empty-cells: show; FONT-SIZE: 8pt
+}
+#calendar TD {
+	TEXT-ALIGN: right; FONT-SIZE: 8pt
+}
+#calendar TD.weekend {
+	BACKGROUND-COLOR: #EEEEEE; FONT-SIZE: 8pt
+}
+#calendar TD.target {
+	FONT-WEIGHT: bold; BACKGROUND-COLOR: #FBF0D0
+}
+#calendar A {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+#calendar A:visited {
+	COLOR: #000000; TEXT-DECORATION: none
+}
+#calendar A:hover {
+	COLOR: #0000ff; TEXT-DECORATION: none
+}
+#calendar A.button {
+	FONT-WEIGHT: bold; BORDER-RIGHT: #006699 2px solid; PADDING-RIGHT: 0.5em; BORDER-TOP: #00CCFF 2px solid; PADDING-LEFT: 0.5em; FONT-WEIGHT: bold; FONT-SIZE: 80%; PADDING-BOTTOM: 2px; BORDER-LEFT: #00CCFF 2px solid; COLOR: #FFFFFF; PADDING-TOP: 2px; BORDER-BOTTOM: #006699 2px solid; BACKGROUND-COLOR: #0099CC
+}
+#calendar A.button:visited {
+	COLOR: #000000
+}
+#calendar A.button:hover {
+	COLOR: #000000
+}

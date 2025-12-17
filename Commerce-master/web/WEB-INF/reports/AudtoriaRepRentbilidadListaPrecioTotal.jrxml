@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="p_idTipoOrdenINI" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenFIN" class="java.lang.Integer"/>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+      SUM(tblDctos.vrBase)
+            AS vrBase
+      ,SUM(tblDctos.vrPago)
+            AS vrPago
+      ,SUM(tblDctos.vrIva)
+            AS vrIva
+      ,SUM(tblDctos.vrCostoMV)
+            AS vrCostoMV
+      ,SUM(tblDctos.vrCostoIND)
+            AS vrCostoIND
+      ,(CASE
+        WHEN SUM(tblDctos.vrBase) = 0
+        THEN 0
+        ELSE
+        ((SUM(tblDctos.vrBase))
+         -(SUM(tblDctos.vrCostoIND))
+        )/(SUM(tblDctos.vrBase))
+        END
+      )  AS margenLista
+FROM tblDctos
+INNER JOIN tblTerceros
+ON tblTerceros.idCliente
+            = tblDctos.idCliente
+WHERE  tblDctos.idLocal   = $P{p_idLocal}
+AND tblDctos.fechaDcto 	BETWEEN
+							$P{p_fechaInicialSqlServer}
+						AND $P{p_fechaFinalSqlServer}
+AND ( tblDctos.idTipoOrden  =
+						$P{p_idTipoOrdenINI}
+      OR tblDctos.idTipoOrden = $P{p_idTipoOrdenFIN})
+ AND tblDctos.indicador BETWEEN $P{p_indicadorINI}
+                        AND $P{p_indicadorFIN}]]>
+	</queryString>
+	<field name="vrBase" class="java.lang.Double"/>
+	<field name="vrIva" class="java.lang.Double"/>
+	<field name="vrCostoMV" class="java.lang.Double"/>
+	<field name="vrCostoIND" class="java.lang.Double"/>
+	<field name="margenLista" class="java.lang.Double"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="10">
+			<textField pattern="#,##0.00 %">
+				<reportElement x="437" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{margenLista}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="244" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrIva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="303" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoMV}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="370" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoIND}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="185" y="0" width="35" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrBase}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="98" y="0" width="55" height="10"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

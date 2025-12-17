@@ -1,0 +1,38 @@
+SELECT tblPlusFicha.idFicha,
+       SUM(tblPlusFicha.vrEscala) AS vrEscala
+FROM tblPlusFicha
+WHERE tblPlusFicha.idOperacion != 1
+AND tblPlusFicha.vrEscala      != 888
+GROUP BY tblPlusFicha.idFicha
+HAVING SUM(tblPlusFicha.vrEscala) = 0
+
+
+---
+UPDATE    tblDctosOrdenesDetalle
+SET       tblDctosOrdenesDetalle.idEstadoRefOriginal = 1
+FROM      tblDctosOrdenes
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenes.IDLOCAL      = 
+      tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN = 
+  tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN     = 
+      tblDctosOrdenesDetalle.IDORDEN
+INNER JOIN 
+ (SELECT tblPlusFicha.idFicha, 
+         SUM(tblPlusFicha.vrEscala) 
+                       AS vrEscala
+  FROM tblPlusFicha
+  WHERE (tblPlusFicha.idOperacion != 1)
+  AND (tblPlusFicha.vrEscala != 888)
+  GROUP BY idFicha
+  HAVING
+ (SUM(tblPlusFicha.vrEscala) = 0))
+                             AS tmpORD
+ON tmpORD.idFicha = tblDctosOrdenes.idFicha
+WHERE tblDctosOrdenes.IDTIPOORDEN               = 59
+AND  tblDctosOrdenesDetalle.idEstadoRefOriginal = 0
+
+---
+
+

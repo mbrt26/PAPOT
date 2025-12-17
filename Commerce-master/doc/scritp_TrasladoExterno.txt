@@ -1,0 +1,10 @@
+Acciones
+
+1- Registrar cantidad terminada correctamente                   	         -- OK
+2- Registrar peso terminado correctamente                   	                 -- OK
+2- SALIDA queda igual                                                            -- OK
+3- ENTRADA con SALIDA previa, NO DESCARGA MP, solo PT (idPlu=209)                -- OK
+4- En EXTRUSION se hace sin filtro de IDPLU = 209, la diferencia se hace con MP  -- OK
+5- Las OT ORDINARIAS , generan salida SOLO DE EXTRUSION como 209, el inventario descargo bien -- OK
+6- Las O.T. + TRASLADOS DE MP EXTERNOS CON SALIDA ALMACEN , generan salida de MP de bodega EXTRUSION afectando inventario OK
+

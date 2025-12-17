@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ordenVenta" pageWidth="612" pageHeight="792" orientation="Landscape" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["E:\\proyectoWeb\\Comercial\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_razonSocial" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_direccion" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_telefono" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_nit" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_email" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_idOrden" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="p_fechaOrden" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_idTercero" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_telefonoFijo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_direccionTercero" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_formaPago" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="p_nombreTercero" class="java.lang.String"/>
+	<parameter name="p_ciudadTercero" class="java.lang.String"/>
+	<parameter name="p_logo" class="java.lang.String"/>
+	<parameter name="p_textoFactura" class="java.lang.String"/>
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_resolucion" class="java.lang.String"/>
+	<parameter name="p_regimen" class="java.lang.String"/>
+	<parameter name="p_docCopia" class="java.lang.String"/>
+	<parameter name="p_ivaDiscriminado" class="java.lang.String"/>
+	<parameter name="p_fechaVencimiento" class="java.lang.String"/>
+	<parameter name="p_transporte" class="java.lang.String"/>
+	<parameter name="p_observacion" class="java.lang.String"/>
+	<parameter name="p_nombreVendedor" class="java.lang.String"/>
+	<field name="strIdReferencia" class="java.lang.String"/>
+	<field name="nombrePlu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrVentaUnitario" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrVentaSinIva" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="porcentajeDscto" class="java.lang.Double"/>
+	<field name="porcentajeIva" class="java.lang.Double"/>
+	<field name="nombreMarca" class="java.lang.String"/>
+	<field name="nombreCategoria" class="java.lang.String"/>
+	<field name="vrCostoConIva" class="java.lang.Double"/>
+	<field name="vrCosto" class="java.lang.Double"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="400" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="39">
+			<staticText>
+				<reportElement x="2" y="0" width="105" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[C.O.DESPACHA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="108" y="13" width="300" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_direccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="13" width="105" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTREGA]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="372" y="13" width="200" height="13"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_textoFactura}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0;-###0">
+				<reportElement x="108" y="0" width="350" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_idTercero} + "-" + $P{p_nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement mode="Opaque" x="108" y="26" width="200" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_fechaOrden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="26" width="105" height="13"/>
+				<textElement>
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA SOLICITADO]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="13">
+			<rectangle>
+				<reportElement x="1" y="1" width="571" height="12"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="358" y="2" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANT]]></text>
+			</staticText>
+			<elementGroup>
+				<staticText>
+					<reportElement mode="Opaque" x="2" y="2" width="323" height="10"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ARTICULO]]></text>
+				</staticText>
+			</elementGroup>
+			<staticText>
+				<reportElement mode="Opaque" x="507" y="2" width="63" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="424" y="2" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.COSTO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="257" y="2" width="42" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MARCA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11">
+			<textField>
+				<reportElement x="56" y="0" width="201" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombrePlu}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="504" y="0" width="66" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoConIva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="424" y="0" width="50" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCosto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0">
+				<reportElement x="358" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="0" width="47" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{strIdReferencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="257" y="0" width="70" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreMarca}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="12">
+			<rectangle>
+				<reportElement x="0" y="0" width="572" height="12"/>
+			</rectangle>
+			<textField>
+				<reportElement x="310" y="3" width="120" height="7"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" USUARIO " +$P{p_nombreVendedor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

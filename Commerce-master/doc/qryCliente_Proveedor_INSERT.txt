@@ -1,0 +1,92 @@
+-- SCRIPT QUITA COMA, PUNTO
+SELECT 
+			 [CC_Nit]
+			,CASE WHEN 
+				(PatIndex('%-%',[CC_Nit])-1)<=0
+			THEN
+				Replace([CC_Nit],'.','')
+			ELSE
+				Replace(SubString([CC_Nit],1,PatIndex('%-%',[CC_Nit])-1),'.','')
+			END	As idCliente
+
+			,CASE WHEN 
+				(PatIndex('%-%',[CC_Nit])-1)<=0
+			THEN
+				NULL
+			ELSE
+				SubString([CC_Nit],PatIndex('%-%',[CC_Nit])+1,20)
+			END digitoVerificacion
+            INTO Clientes_idCliente
+FROM [BDPlasticos].[dbo].[Tabla_Clientes]
+
+--- INGRESA CLIENTE
+INSERT INTO [BDCommerce].[dbo].[tblTerceros]
+           ([idCliente]
+           ,[idTercero]
+           ,[tipoIdTercero]
+           ,[digitoVerificacion]
+           ,[idTipoTercero]
+           ,[nombreTercero])
+SELECT [CC_Nit] AS [idCliente],
+        idCliente AS [idTercero]
+      ,'A' AS [tipoIdTercero]
+      ,[digitoVerificacion]
+      ,01 AS [idTipoTercero]
+      ,[Nombre_Rcial] AS [nombreTercero]
+  FROM [BDPlasticos].[dbo].[tmpTercero_idcliente]
+  
+--- INGRESA PROVEEDOR
+INSERT INTO [BDCommerce].[dbo].[tblTerceros]
+           ([idCliente]
+           ,[idTercero]
+           ,[tipoIdTercero]
+           ,[digitoVerificacion]
+           ,[idTipoTercero]
+           ,[nombreTercero])
+SELECT [CC_Nit] AS [idCliente],
+        identificacion AS [idTercero]
+      ,'A' AS [tipoIdTercero]
+      ,[digitoVerificacion]
+      ,02 AS [idTipoTercero]
+      ,[Nombre_Rcial] AS [nombreTercero]
+  FROM [BDPlasticos].[dbo].[Proveedores_idCliente]
+  
+---
+UPDATE    tblTerceros
+SET       idPersona = 0, 
+          idAutoRetenedor = 0, 
+          idRegimen = 0, 
+          nombreTercero = tmpPRV.Nombre_Rcial, 
+          direccionTercero = tmpPRV.Direccion,
+          idDptoCiudad = tmpPRV.idDptoCiudad, 
+          telefonoFijo = tmpPRV.Telefono, 
+          telefonoCelular = tmpPRV.Telefono, 
+          telefonoFax = tmpPRV.Fax, 
+          email = '', 
+          idFormaPago = tmpPRV.PPago, 
+          estado = 1 , 
+          idRuta = 0, 
+         nombreEmpresa = tmpPRV.Nombre_Rcial
+         ,cupoCredito = 0
+         ,indicador = 1
+         ,ciudadTercero = tmpPRV.Ciuda
+         /*,contactoTercero = RTRIM(STR(tmpPRV.Contacto))*/
+         ,idListaPrecio = 1
+FROM      tblTerceros
+INNER JOIN (SELECT     CC_Nit, 
+                       Nombre_Rcial, 
+                       Direccion, 
+                       5001 AS idDptoCiudad,
+                       Ciuda, 
+                       Telefono, 
+                       Fax, 
+                       PPago, 
+                       Contacto, 
+                       GranCon, 
+                       AutoRet, 
+                       RegCom,
+                       idCliente, 
+                       digitoVerificacion
+FROM          BDPlasticos.dbo.Clientes_idCliente)
+                                           AS tmpPRV
+ON tblTerceros.idCliente = tmpPRV.CC_Nit

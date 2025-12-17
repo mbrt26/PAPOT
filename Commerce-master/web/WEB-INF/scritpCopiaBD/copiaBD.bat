@@ -1,0 +1,1 @@
+sqlcmd -U sa -P admin123 -i C:\proyectoWeb\Commerce\web\WEB-INF\scritpCopiaBD\backup.sql

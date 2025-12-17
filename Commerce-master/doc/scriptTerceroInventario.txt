@@ -1,0 +1,117 @@
+SELECT tblTerceros.nombreTercero                    
+      ,tblDctosOrdenes.IDLOCAL                    
+      ,tblDctosOrdenes.IDTIPOORDEN                
+      ,tblDctosOrdenes.idOrden                    
+      ,tblDctosOrdenes.idFicha                    
+      ,tblDctosOrdenes.numeroOrden                
+      ,tmpFIC.referenciaCliente                   
+      ,tmpORD.existenciaCantidad                  
+      ,tmpORD.existenciaPeso                      
+      ,tmpORD.idOperacion                         
+      ,tblJobOperacion.nombreOperacion            
+      ,tblJobEscalaDetalle.nombreItem             
+      ,tmpTER.nombreOperario                       
+FROM tblDctosOrdenes                            
+INNER JOIN (                                      
+   SELECT tblJobProgramaPlusFicha.idOperacion     
+         ,tblJobProgramaPlusFicha.idOrden        
+         ,tblJobProgramaPlusFicha.idFicha        
+         ,tblJobProgramaPlusFicha.idEscala       
+         ,tblJobProgramaPlusFicha.vrEscala,      
+     MAX(tblJobProgramaPlusFicha.referenciaCliente)   
+                             AS referenciaCliente         
+   FROM tblJobProgramaPlusFicha                   
+   WHERE tblJobProgramaPlusFicha.idEscala         
+          IN ( 600, 710, 910, 1000, 1100, 1200 )         
+   AND tblJobProgramaPlusFicha.idOperacion = 3     
+   GROUP BY tblJobProgramaPlusFicha.idOperacion   
+           ,tblJobProgramaPlusFicha.idOrden        
+          ,tblJobProgramaPlusFicha.idFicha        
+          ,tblJobProgramaPlusFicha.idEscala       
+          ,tblJobProgramaPlusFicha.vrEscala )
+                                        AS tmpFIC  
+ON  tblDctosOrdenes.idFicha =  tmpFIC.idFicha     
+AND tblDctosOrdenes.idOrden =  tmpFIC.idOrden     
+INNER JOIN (                                      
+  SELECT tblDctosOrdenesDetalle.idLocalOrigen       
+        ,tblDctosOrdenesDetalle.idTipoORdenOrigen   
+        ,tblDctosOrdenesDetalle.idOrdenOrigen       
+        ,SUM(tblDctosOrdenesDetalle.cantidadTerminada  
+                       * (-1)) AS existenciaCantidad    
+    ,SUM(tblDctosOrdenesDetalle.pesoTerminado * (-1)) 
+                                   AS existenciaPeso     
+        ,tblDctosOrdenesDetalle.idOperacion         
+  FROM tblDctosOrdenesDetalle                     
+  WHERE tblDctosOrdenesDetalle.idPlu     =  209     
+  GROUP BY tblDctosOrdenesDetalle.idLocalOrigen     
+          ,tblDctosOrdenesDetalle.IDTIPOORDENorigen   
+          ,tblDctosOrdenesDetalle.IDORDENORIGEN       
+          ,tblDctosOrdenesDetalle.idOperacion)        
+       	                               AS tmpORD      
+ON  tblDctosOrdenes.IDLOCAL     =                 
+                                  tmpORD.idLocalOrigen   
+AND tblDctosOrdenes.IDTIPOORDEN =                 
+                              tmpORD.IDTIPOORDENOrigen   
+AND tblDctosOrdenes.IDORDEN     =                 
+                                  tmpORD.IDORDENOrigen   
+INNER JOIN tblTerceros                            
+ON  tblTerceros.idCliente       =                 
+                             tblDctosOrdenes.idCliente   
+INNER JOIN tblJobOperacion                        
+ON tblJobOperacion.idOperacion =                  
+                                    tmpORD.idOperacion   
+INNER JOIN tblJobEscalaDetalle                    
+ON tblJobEscalaDetalle.idEscala                   
+                         = tmpFIC.idEscala                    
+AND tblJobEscalaDetalle.item                      
+                         = tmpFIC.vrEscala 
+--
+INNER JOIN
+( SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.idOperacion
+      ,ISNULL(MAX(tmpOPE.nombreTercero),'') 
+                          AS nombreOperario
+FROM tblDctosOrdenesProgreso
+LEFT JOIN  
+( SELECT tblTerceros.idTercero
+      ,MAX(tblTerceros.nombreTercero) 
+                     AS nombreTercero
+FROM tblTerceros
+GROUP BY tblTerceros.idTercero ) 
+                            AS tmpOPE
+ON tmpOPE.idTercero = 
+            tblDctosOrdenesProgreso.idOperario
+GROUP BY tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.idOperacion) 
+                                     AS tmpTER
+ON  tblDctosOrdenes.idLocal     = 
+                        tmpTER.idLocal
+AND tblDctosOrdenes.idTipoOrden = 
+                    tmpTER.idTipoOrden
+AND tblDctosOrdenes.idOrden     = 
+                        tmpTER.idOrden
+AND tmpORD.idOperacion          = 
+                     tmpTER.idOperacion
+--                   
+WHERE tblTerceros.idTipoTercero   = 1             
+AND   tblDctosOrdenes.idTipoOrden = 59            
+AND   tblDctosOrdenes.idLocal     = 1              
+AND   tmpORD.idOperacion          = 3              
+AND EXISTS (                                      
+    SELECT tblJobProgramaPlusFicha.*               
+    FROM tblJobProgramaPlusFicha                   
+    WHERE tblJobProgramaPlusFicha.idEscala         
+          IN ( 600, 710, 910, 1000, 1100, 1200 )  
+    AND tblJobProgramaPlusFicha.idOperacion =      
+                              tmpORD.idOperacion 
+    AND tblJobProgramaPlusFicha.idFicha     =      
+                         tblDctosOrdenes.idFicha 
+    AND tblJobProgramaPlusFicha.idOrden     =      
+                       tblDctosOrdenes.idOrden ) 
+    ORDER BY tmpORD.idOperacion,                      
+             tblJobEscalaDetalle.nombreItem,            
+             tblDctosOrdenes.numeroOrden;             

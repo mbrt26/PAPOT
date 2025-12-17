@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty">
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_tercero" class="java.lang.String"/>
+	<parameter name="p_direccion" class="java.lang.String"/>
+	<parameter name="p_numeroDctos" class="java.lang.String"/>
+	<parameter name="p_vrBaseTotal" class="java.lang.Double"/>
+	<parameter name="p_vrIvaTotal" class="java.lang.Double"/>
+	<parameter name="p_vrRteFuente" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="idDctoNitCC" class="java.lang.String"/>
+	<field name="fechaDcto" class="java.lang.String"/>
+	<field name="nombreTercero" class="java.lang.String"/>
+	<field name="vrIva" class="java.lang.Double"/>
+	<field name="idCliente" class="java.lang.String"/>
+	<field name="vrBase" class="java.lang.Double"/>
+	<field name="idLocal" class="java.lang.Integer"/>
+	<field name="vrRteFuente" class="java.lang.Double"/>
+	<group name="idLocal">
+		<groupExpression><![CDATA[$F{idLocal}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement x="294" y="3" width="66" height="17"/>
+					<textElement textAlignment="Center">
+						<font fontName="Verdana" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTALES]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="369" y="3" width="67" height="14"/>
+					<textElement textAlignment="Right">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$P{p_vrBaseTotal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement x="443" y="3" width="56" height="14"/>
+					<textElement textAlignment="Right">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$P{p_vrIvaTotal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement x="506" y="2" width="56" height="14"/>
+					<textElement textAlignment="Right">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$P{p_vrRteFuente}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="62">
+			<textField>
+				<reportElement x="12" y="1" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="21" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="41" width="554" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="288" y="2" width="74" height="18"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FEC.FRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="69" y="2" width="66" height="17"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT/CC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="2" width="53" height="18"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[#FRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="2" width="138" height="17"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="2" width="67" height="17"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.BASE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="2" width="58" height="17"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.IVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="506" y="2" width="58" height="17"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.RFTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13">
+			<elementGroup/>
+			<textField>
+				<reportElement x="69" y="1" width="66" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="142" y="1" width="138" height="10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="288" y="1" width="74" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fechaDcto}.substring(0,10)]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="441" y="1" width="58" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrIva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="369" y="1" width="67" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrBase}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="2" width="52" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idDctoNitCC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="506" y="2" width="56" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrRteFuente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="32"/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

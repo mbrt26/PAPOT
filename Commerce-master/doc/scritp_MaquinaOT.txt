@@ -1,0 +1,92 @@
+---
+SELECT tblPlusFicha.idEscala
+      ,tblPlusFicha.vrEscala
+      ,tblPlusFicha.idFicha
+      ,tblJobEscalaDetalle.nombreItem
+      ,tblPlusFicha.idOperacion
+FROM tblPlusFicha
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscalaDetalle.idEscala 
+              = tblPlusFicha.idEscala
+AND tblJobEscalaDetalle.item 
+              = tblPlusFicha.vrEscala
+WHERE tblPlusFicha.idEscala 
+ IN ( 600, 710, 910, 1000, 1100,1200)
+
+
+--
+ SELECT tblTerceros.nombreTercero                      
+       ,tblDctosOrdenes.IDLOCAL                      
+       ,tblDctosOrdenes.IDTIPOORDEN                  
+       ,tblDctosOrdenes.IDORDEN                      
+       ,tblDctosOrdenes.idFicha                      
+       ,tblDctosOrdenes.numeroOrden                  
+       ,tmpFIC.referenciaCliente                     
+       ,tmpORD.existenciaCantidad                    
+       ,tmpORD.existenciaPeso                        
+       ,tmpORD.idOperacion                           
+       ,tblJobOperacion.nombreOperacion 
+       ,tmpMAQ.nombreItem             
+   FROM tblDctosOrdenes   
+ INNER JOIN (                                        
+    SELECT MAX(referenciaCliente)                    
+            AS referenciaCliente                     
+          ,idFicha                                   
+    FROM tblPlusFicha                                
+    GROUP BY idFicha ) AS tmpFIC                     
+ ON  tblDctosOrdenes.idFicha =                       
+                  tmpFIC.idFicha                     
+ INNER JOIN (                                        
+ SELECT tblDctosOrdenesDetalle.idLocalOrigen         
+       ,tblDctosOrdenesDetalle.idTipoORdenOrigen     
+       ,tblDctosOrdenesDetalle.idOrdenOrigen         
+       ,SUM(tblDctosOrdenesDetalle.cantidad * (-1))  
+                              AS existenciaCantidad  
+   ,SUM(tblDctosOrdenesDetalle.pesoTerminado * (-1)) 
+                              AS existenciaPeso      
+       ,tblDctosOrdenesDetalle.idOperacion           
+   FROM tblDctosOrdenesDetalle                       
+ WHERE tblDctosOrdenesDetalle.idPlu           =209   
+ GROUP BY tblDctosOrdenesDetalle.idLocalOrigen       
+       ,tblDctosOrdenesDetalle.IDTIPOORDENorigen     
+       ,tblDctosOrdenesDetalle.IDORDENORIGEN         
+       ,tblDctosOrdenesDetalle.idOperacion           
+ HAVING SUM(tblDctosOrdenesDetalle.cantidad * (-1))  
+                                 > 0)   AS tmpORD    
+ ON  tblDctosOrdenes.IDLOCAL     =                   
+                              tmpORD.idLocalOrigen   
+ AND tblDctosOrdenes.IDTIPOORDEN =                   
+                          tmpORD.IDTIPOORDENOrigen   
+ AND tblDctosOrdenes.IDORDEN     =                   
+                              tmpORD.IDORDENOrigen   
+ INNER JOIN tblTerceros                              
+ ON  tblTerceros.idCliente       =                   
+                         tblDctosOrdenes.idCliente   
+ INNER JOIN tblJobOperacion                          
+ ON tblJobOperacion.idOperacion =                    
+                                tmpORD.idOperacion   
+
+INNER JOIN (
+SELECT tblPlusFicha.idEscala
+      ,tblPlusFicha.vrEscala
+      ,tblPlusFicha.idFicha
+      ,tblJobEscalaDetalle.nombreItem
+      ,tblPlusFicha.idOperacion
+FROM tblPlusFicha
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscalaDetalle.idEscala 
+              = tblPlusFicha.idEscala
+AND tblJobEscalaDetalle.item 
+              = tblPlusFicha.vrEscala
+WHERE tblPlusFicha.idEscala 
+ IN ( 600, 710, 910, 1000, 1100 ) ) AS tmpMAQ
+ON tmpORD.idOperacion  = tmpMAQ.idOperacion  
+AND tblDctosOrdenes.idFicha   = tmpMAQ.idFicha  
+
+ WHERE tblTerceros.idTipoTercero   = 1               
+ AND   tblDctosOrdenes.idTipoOrden = 59              
+ AND   tblDctosOrdenes.idLocal     = 1                
+ AND   tmpORD.idOperacion          = 2                
+ ORDER BY tmpORD.idOperacion,                        
+         tmpMAQ.nombreItem,
+         tblDctosOrdenes.numeroOrden                 ;

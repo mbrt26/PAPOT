@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <servlet>
+        <servlet-name>GralControladorServlet</servlet-name>
+        <servlet-class>com.solucionesweb.losservlets.GralControladorServlet</servlet-class>
+    </servlet>
+    <!--<servlet>
+        <servlet-name>GralFileUpLoadServlet</servlet-name>
+        <servlet-class>com.solucionesweb.losservlets.GralFileUpLoadServlet</servlet-class>
+    </servlet>-->
+    <servlet>
+        <servlet-name>Comun</servlet-name>
+        <servlet-class>com.solucionesweb.losservlets.Comun</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubirArchivo</servlet-name>
+        <servlet-class>com.solucionesweb.losservlets.SubirArchivo</servlet-class>
+    </servlet>
+    <!--<servlet>
+        <servlet-name>StartupServlet</servlet-name>
+        <servlet-class>co.linxsi.controlador.cliente.cotizacion.task.StartUpServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>-->
+    <servlet-mapping>
+        <servlet-name>GralControladorServlet</servlet-name>
+        <url-pattern>/GralControladorServlet</url-pattern>
+    </servlet-mapping>
+    <!--<servlet-mapping>
+        <servlet-name>GralFileUpLoadServlet</servlet-name>
+        <url-pattern>/GralFileUpLoadServlet</url-pattern>
+    </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>Comun</servlet-name>
+        <url-pattern>/Comun</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubirArchivo</servlet-name>
+        <url-pattern>/SubirArchivo</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>/jsp/gralFrmLogin.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

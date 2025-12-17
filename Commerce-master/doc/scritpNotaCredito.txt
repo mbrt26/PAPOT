@@ -1,0 +1,91 @@
+-- NOTA DEVOLUCION
+SELECT tblDctosOrdenesDetalle.IDLOCALORIGEN
+      ,tblDctosOrdenesDetalle.IDTIPOORDENORIGEN
+      ,tblDctosOrdenesDetalle.IDORDENORIGEN
+      ,tblDctosOrdenesDetalle.IDPLU
+      ,tblDctosOrdenesDetalle.CANTIDAD
+  FROM tblDctosOrdenesDetalle
+where tblDctosOrdenesDetalle.idLocal   = 1 
+AND tblDctosOrdenesDetalle.idTipoOrden = 29
+AND tblDctosOrdenesDetalle.idorden     = 5791
+
+-- NOTA DEVOLUCION + ORDEN INICIAL
+SELECT tblDctosOrdenesDetalle.idLocalOrigen,
+       tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+       tblDctosOrdenesDetalle.idOrdenOrigen,
+       tmpORD.item,
+       tmpORD.cantidadFacturada,
+       tmpORD.pesoFacturado
+FROM   tblDctosOrdenesDetalle
+INNER JOIN
+( SELECT tblDctosOrdenesDetalle.idLocalOrigen,
+         tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+         tblDctosOrdenesDetalle.idOrdenOrigen,
+         tblDctosOrdenesDetalle.item,
+         tblDctosOrdenesDetalle.idPlu,
+         tblDctosOrdenesDetalle.cantidad 
+                           AS cantidadFacturada,
+         tblDctosOrdenesDetalle.pesoFacturado
+  FROM tblDctosOrdenesDetalle
+  WHERE tblDctosOrdenesDetalle.idLocal   = 1 
+  AND tblDctosOrdenesDetalle.idTipoOrden = 29
+  AND tblDctosOrdenesDetalle.idorden     = 5791 ) 
+                                      AS tmpORD
+ON  tblDctosOrdenesDetalle.idLocal     = 
+                             tmpORD.idLocalOrigen
+AND tblDctosOrdenesDetalle.idTipoOrden = 
+                         tmpORD.idTipoOrdenOrigen
+AND tblDctosOrdenesDetalle.idorden     = 
+                             tmpORD.idOrdenOrigen
+                             
+--
+UPDATE tblDctosOrdenesDetalle
+SET    tblDctosOrdenesDetalle.cantidadFacturada = 
+        (tblDctosOrdenesDetalle.cantidadFacturada + 
+            tmpORG.cantidadFacturada),
+       tblDctosOrdenesDetalle.pesoFacturado     = 
+        (tblDctosOrdenesDetalle.pesoFacturado     + 
+            tmpORG.pesoFacturado),
+       tblDctosOrdenesDetalle.estado            = 4
+FROM   tblDctosOrdenesDetalle
+INNER JOIN (
+SELECT tblDctosOrdenesDetalle.idLocalOrigen,
+       tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+       tblDctosOrdenesDetalle.idOrdenOrigen,
+       tmpORD.idPlu,
+       tmpORD.item,
+       tmpORD.cantidadFacturada,
+       tmpORD.pesoFacturado
+FROM   tblDctosOrdenesDetalle
+INNER JOIN
+( SELECT tblDctosOrdenesDetalle.idLocalOrigen,
+         tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+         tblDctosOrdenesDetalle.idOrdenOrigen,
+         tblDctosOrdenesDetalle.item,
+         tblDctosOrdenesDetalle.idPlu,
+         tblDctosOrdenesDetalle.cantidad 
+                           AS cantidadFacturada,
+         tblDctosOrdenesDetalle.pesoFacturado
+  FROM tblDctosOrdenesDetalle
+  WHERE tblDctosOrdenesDetalle.idLocal   = 1 
+  AND tblDctosOrdenesDetalle.idTipoOrden = 29
+  AND tblDctosOrdenesDetalle.idorden     = 5791 ) 
+                                      AS tmpORD
+ON  tblDctosOrdenesDetalle.idLocal     = 
+                             tmpORD.idLocalOrigen
+AND tblDctosOrdenesDetalle.idTipoOrden = 
+                         tmpORD.idTipoOrdenOrigen
+AND tblDctosOrdenesDetalle.idorden     = 
+                            tmpORD.idOrdenOrigen)
+                                        AS tmpORG
+ON  tblDctosOrdenesDetalle.IDLOCAL     = 
+                             tmpORG.idLocalOrigen
+AND tblDctosOrdenesDetalle.IDTIPOORDEN = 
+                         tmpORG.idTipoOrdenOrigen
+AND tblDctosOrdenesDetalle.IDORDEN     = 
+                             tmpORG.idOrdenOrigen
+AND tblDctosOrdenesDetalle.idPlu       = 
+                                     tmpORG.idPlu
+AND tblDctosOrdenesDetalle.item        = 
+                                      tmpORG.item
+WHERE tblDctosOrdenesDetalle.estado   != 4

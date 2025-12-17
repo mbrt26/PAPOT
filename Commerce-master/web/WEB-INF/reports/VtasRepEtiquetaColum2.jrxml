@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" columnCount="2" pageWidth="144" pageHeight="72" columnWidth="68" columnSpacing="7" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="p_idPluEtiqueta" class="java.lang.String"/>
+	<parameter name="p_idPlu" class="java.lang.Integer"/>
+	<parameter name="p_descripcion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT  tblMarcas.nombreMarca
+		,tblPlus.nombrePlu
+		,tblMarcas.nombreMarca + tblPlus.nombrePlu AS nombre
+FROM    tblMarcas
+INNER JOIN tblPlus
+ON tblMarcas.idMarca = tblPlus.idMarca
+WHERE tblPlus.idPlu = 208]]>
+	</queryString>
+	<field name="nombreMarca" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombrePlu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="72">
+			<textField>
+				<reportElement x="0" y="42" width="73" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="sansserif" size="6" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="32" width="73" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="sansserif" size="7" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{p_idPlu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="73" height="32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="3 of 9 Barcode" size="10" pdfFontName="C:\proyectoWeb\Commerce\web\WEB-INF\fonts\3OF9.TTF"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_idPluEtiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="42" width="71" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="sansserif" size="6" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="32" width="71" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="sansserif" size="7" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{p_idPlu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="0" width="71" height="32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="3 of 9 Barcode" size="10" pdfFontName="C:\proyectoWeb\Commerce\web\WEB-INF\fonts\3OF9.TTF"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_idPluEtiqueta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

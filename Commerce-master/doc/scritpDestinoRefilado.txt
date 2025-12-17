@@ -1,0 +1,60 @@
+--- Cambiar a idTipoEscala = 5 en tblJobEscala
+
+610	DESTINO	2	1
+
+--- tblJobEscalaDetalle
+610	4	REFILADO	1
+
+
+--- tblJobEscalaOperacion
+610	4	1	800
+
+
+--
+DELETE FROM tblPlusFicha
+WHERE     (idEscala IN (610)) AND (idOperacion = 4)
+
+--- REFILADO
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion=4
+AND idEscala IN (610)) 
+                                     AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+ORDER BY [idFicha]

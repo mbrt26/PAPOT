@@ -1,0 +1,844 @@
+<InvcDtl>
+		<Company>811040799</Company>
+		<InvoiceNum>27985</InvoiceNum>
+		<InvoiceLine>01</InvoiceLine>
+		<LineType/>
+		<ContractNum>0</ContractNum>
+		<XPartNum>42</XPartNum>
+		<XRevisionNum/>
+		<PartNum>42</PartNum>
+		<LineDesc>BOLSA PAN PRIMAVERA 800GR</LineDesc>
+		<IUM/>
+		<RevisionNum />
+		<POLine ></POLine >
+		<TaxExempt />
+		<TaxCatID/>
+		<Commissionable>false</Commissionable>
+		<DiscountPercent>0</DiscountPercent>
+		<UnitPrice>58.0</UnitPrice>
+		<DocUnitPrice>58.0</DocUnitPrice>
+		<PricePerCode>E</PricePerCode>
+		<OurOrderQty>0</OurOrderQty>
+		<ExtPrice>0</ExtPrice>
+		<DocExtPrice>17400.0</DocExtPrice>
+		<Discount>0</Discount>
+		<DocDiscount>0</DocDiscount>
+		<TotalMiscChrg>0</TotalMiscChrg>
+		<DocTotalMiscChrg>0</DocTotalMiscChrg>
+		<ProdCode/>
+		<OurShipQty>0</OurShipQty>
+		<PackNum/>
+		<PackLine/>
+		<OrderNum>0</OrderNum>
+		<OrderLine/>
+		<OrderRelNum/>
+		<ShipToCustNum/>
+		<ShipToNum />
+		<ShipDate/>
+		<ShipViaCode/>
+		<AdvanceBillCredit>0</AdvanceBillCredit>
+		<DocAdvanceBillCredit>0</DocAdvanceBillCredit>
+		<CustNum/>
+		<InvoiceComment />
+		<ShpConNum>0</ShpConNum>
+		<MtlUnitCost>0</MtlUnitCost>
+		<LbrUnitCost>0.0000</LbrUnitCost>
+		<BurUnitCost>0.0000</BurUnitCost>
+		<SubUnitCost>0.0000</SubUnitCost>
+		<MtlBurUnitCost>0</MtlBurUnitCost>
+		<COSPostingReqd>true</COSPostingReqd>
+		<COSPosted>false</COSPosted>
+		<ContractCode />
+		<CallNum>0</CallNum>
+		<CallCode />
+		<RMANum>0</RMANum>
+		<RMALine>0</RMALine>
+		<SalesCatID />
+		<FiscalYear>0</FiscalYear>
+		<FiscalPeriod>0</FiscalPeriod>
+		<JournalCode />
+		<JournalNum>0</JournalNum>
+		<SellingOrderQty>0</SellingOrderQty>
+		<SellingShipQty>300.0</SellingShipQty>
+		<SalesUM>5 CAJAS</SalesUM>
+		<SellingFactor>0</SellingFactor>
+		<ProjectID />
+		<MilestoneID />
+		<ListPrice>0</ListPrice>
+		<DocListPrice>0</DocListPrice>
+		<OrdBasedPrice>0</OrdBasedPrice>
+		<DocOrdBasedPrice>0</DocOrdBasedPrice>
+		<AdvGainLoss>0</AdvGainLoss>
+		<SellingFactorDirection>D</SellingFactorDirection>
+		<RepRate1>0.00</RepRate1>
+		<RepRate2>0.00</RepRate2>
+		<RepRate3>0.00</RepRate3>
+		<RepRate4>0.00</RepRate4>
+		<RepRate5>0.00</RepRate5>
+		<RepSplit1>0</RepSplit1>
+		<RepSplit2>0</RepSplit2>
+		<RepSplit3>0</RepSplit3>
+		<RepSplit4>0</RepSplit4>
+		<RepSplit5>0</RepSplit5>
+		<BTCustNum>0</BTCustNum>
+		<JCMtlUnitCost>0.0000</JCMtlUnitCost>
+		<JCLbrUnitCost>0.0000</JCLbrUnitCost>
+		<JCBurUnitCost>0.0000</JCBurUnitCost>
+		<JCSubUnitCost>0.0000</JCSubUnitCost>
+		<JCMtlBurUnitCost>0.0000</JCMtlBurUnitCost>
+		<ChangedBy/>
+		<ChangeDate/>
+		<ChangeTime/>
+		<RevChargeMethod />
+		<OverrideReverseCharge>false</OverrideReverseCharge>
+		<RevChargeApplied>false</RevChargeApplied>
+		<TaxConnectCalc>false</TaxConnectCalc>
+		<GetDfltTaxIds>true</GetDfltTaxIds>
+		<Rpt1AdvanceBillCredit>0.000</Rpt1AdvanceBillCredit>
+		<Rpt2AdvanceBillCredit>0.000</Rpt2AdvanceBillCredit>
+		<Rpt3AdvanceBillCredit>0.000</Rpt3AdvanceBillCredit>
+		<Rpt1Discount>0.000</Rpt1Discount>
+		<Rpt2Discount>0.000</Rpt2Discount>
+		<Rpt3Discount>0.000</Rpt3Discount>
+		<Rpt1ExtPrice>0.000</Rpt1ExtPrice>
+		<Rpt2ExtPrice>0.000</Rpt2ExtPrice>
+		<Rpt3ExtPrice>0.000</Rpt3ExtPrice>
+		<Rpt1ListPrice>0.0000</Rpt1ListPrice>
+		<Rpt2ListPrice>0.0000</Rpt2ListPrice>
+		<Rpt3ListPrice>0.0000</Rpt3ListPrice>
+		<Rpt1OrdBasedPrice>0.0000</Rpt1OrdBasedPrice>
+		<Rpt2OrdBasedPrice>0.0000</Rpt2OrdBasedPrice>
+		<Rpt3OrdBasedPrice>0.0000</Rpt3OrdBasedPrice>
+		<Rpt1TotalMiscChrg>0.000</Rpt1TotalMiscChrg>
+		<Rpt2TotalMiscChrg>0.000</Rpt2TotalMiscChrg>
+		<Rpt3TotalMiscChrg>0.000</Rpt3TotalMiscChrg>
+		<Rpt1UnitPrice>0.0000</Rpt1UnitPrice>
+		<Rpt2UnitPrice>0.0000</Rpt2UnitPrice>
+		<Rpt3UnitPrice>0.0000</Rpt3UnitPrice>
+		<Rpt1AdvGainLoss>0.000</Rpt1AdvGainLoss>
+		<Rpt2AdvGainLoss>0.000</Rpt2AdvGainLoss>
+		<Rpt3AdvGainLoss>0.000</Rpt3AdvGainLoss>
+		<FiscalYearSuffix />
+		<FiscalCalendarID />
+		<TaxRegionCode/>
+		<UseOTS>false</UseOTS>
+		<OTSName />
+		<OTSAddress1 />
+		<OTSAddress2 />
+		<OTSAddress3 />
+		<OTSCity />
+		<OTSState />
+		<OTSZIP />
+		<OTSResaleID />
+		<OTSTaxRegionCode />
+		<OTSContact />
+		<OTSFaxNum />
+		<OTSPhoneNum />
+		<OTSCountryNum>0</OTSCountryNum>
+		<Plant/>
+		<WarehouseCode/>
+		<CallLine>0</CallLine>
+		<DropShipPackLine>0</DropShipPackLine>
+		<DropShipPackSlip />
+		<FinChargeCode />
+		<ABTUID />
+		<InUnitPrice>0.0000</InUnitPrice>
+		<DocInUnitPrice>0.0000</DocInUnitPrice>
+		<InExtPrice>0.000</InExtPrice>
+		<DocInExtPrice>0.000</DocInExtPrice>
+		<InDiscount>0.000</InDiscount>
+		<DocInDiscount>0.000</DocInDiscount>
+		<InTotalMiscChrg>0.000</InTotalMiscChrg>
+		<DocInTotalMiscChrg>0.000</DocInTotalMiscChrg>
+		<InListPrice>0.0000</InListPrice>
+		<DocInListPrice>0.0000</DocInListPrice>
+		<InOrdBasedPrice>0.0000</InOrdBasedPrice>
+		<DocInOrdBasedPrice>0.0000</DocInOrdBasedPrice>
+		<Rpt1InDiscount>0.000</Rpt1InDiscount>
+		<Rpt2InDiscount>0.000</Rpt2InDiscount>
+		<Rpt3InDiscount>0.000</Rpt3InDiscount>
+		<Rpt1InExtPrice>0.000</Rpt1InExtPrice>
+		<Rpt2InExtPrice>0.000</Rpt2InExtPrice>
+		<Rpt3InExtPrice>0.000</Rpt3InExtPrice>
+		<Rpt1InListPrice>0.0000</Rpt1InListPrice>
+		<Rpt2InListPrice>0.0000</Rpt2InListPrice>
+		<Rpt3InListPrice>0.0000</Rpt3InListPrice>
+		<Rpt1InOrdBasedPrice>0.0000</Rpt1InOrdBasedPrice>
+		<Rpt2InOrdBasedPrice>0.0000</Rpt2InOrdBasedPrice>
+		<Rpt3InOrdBasedPrice>0.0000</Rpt3InOrdBasedPrice>
+		<Rpt1InTotalMiscChrg>0.000</Rpt1InTotalMiscChrg>
+		<Rpt2InTotalMiscChrg>0.000</Rpt2InTotalMiscChrg>
+		<Rpt3InTotalMiscChrg>0.000</Rpt3InTotalMiscChrg>
+		<Rpt1InUnitPrice>0.0000</Rpt1InUnitPrice>
+		<Rpt2InUnitPrice>0.0000</Rpt2InUnitPrice>
+		<Rpt3InUnitPrice>0.0000</Rpt3InUnitPrice>
+		<CorrectionDtl>false</CorrectionDtl>
+		<AssetNum />
+		<DisposalNum>0</DisposalNum>
+		<IncomeTaxCode />
+		<PBLineType />
+		<InvoiceLineRef>0</InvoiceLineRef>
+		<InvoiceRef>0</InvoiceRef>
+		<LotNum />
+		<PBInvoiceLine>0</PBInvoiceLine>
+		<RAID>0</RAID>
+		<RADtlID>0</RADtlID>
+		<DeferredRev>false</DeferredRev>
+		<RACode />
+		<ChargeDefRev>false</ChargeDefRev>
+		<RenewalNbr>0</RenewalNbr>
+		<DefRevPosted>false</DefRevPosted>
+		<LinkedInvcUnitPrice>0.0000</LinkedInvcUnitPrice>
+		<DspWithholdAmt>0.000</DspWithholdAmt>
+		<DocDspWithholdAmt>0.000</DocDspWithholdAmt>
+		<Rpt1DspWithholdAmt>0.000</Rpt1DspWithholdAmt>
+		<Rpt2DspWithholdAmt>0.000</Rpt2DspWithholdAmt>
+		<Rpt3DspWithholdAmt>0.000</Rpt3DspWithholdAmt>
+		<LinkedCurrencyCode />
+		<PhaseID />
+		<PEBOEHeadNum>0</PEBOEHeadNum>
+		<MXSellingShipQty>0.00000</MXSellingShipQty>
+		<MXUnitPrice>0.0000</MXUnitPrice>
+		<DocMXUnitPrice>0.0000</DocMXUnitPrice>
+		<Rpt1MXUnitPrice>0.0000</Rpt1MXUnitPrice>
+		<Rpt2MXUnitPrice>0.0000</Rpt2MXUnitPrice>
+		<Rpt3MXUnitPrice>0.0000</Rpt3MXUnitPrice>
+		<CustCostCenter />
+		<DEIsServices>false</DEIsServices>
+		<DEIsSecurityFinancialDerivative>false</DEIsSecurityFinancialDerivative>
+		<DEInternationalSecuritiesID />
+		<DEIsInvestment>false</DEIsInvestment>
+		<DEPayStatCode />
+		<EntityUseCode />
+		<Reclassified>false</Reclassified>
+		<PartiallyDefer>false</PartiallyDefer>
+		<DeferredPercent>0.00</DeferredPercent>
+		<Reclass>false</Reclass>
+		<DeferredOnly>false</DeferredOnly>
+		<ReclassCodeID />
+		<ReclassReasonCode />
+		<ReclassComments />
+		<DeferredRevAmt>0.000</DeferredRevAmt>
+		<DocDeferredRevAmt>0.000</DocDeferredRevAmt>
+		<Rpt1DeferredRevAmt>0.000</Rpt1DeferredRevAmt>
+		<Rpt2DeferredRevAmt>0.000</Rpt2DeferredRevAmt>
+		<Rpt3DeferredRevAmt>0.000</Rpt3DeferredRevAmt>
+		<ChargeReclass>false</ChargeReclass>
+		<DEDenomination />
+		<DropShipPONum>0</DropShipPONum>
+		<DocInAdvanceBillCredit>0.000</DocInAdvanceBillCredit>
+		<InAdvanceBillCredit>0.000</InAdvanceBillCredit>
+		<Rpt1InAdvanceBillCredit>0.000</Rpt1InAdvanceBillCredit>
+		<Rpt2InAdvanceBillCredit>0.000</Rpt2InAdvanceBillCredit>
+		<Rpt3InAdvanceBillCredit>0.000</Rpt3InAdvanceBillCredit>
+		<MYIndustryCode />
+		<DockingStation />
+		<ConsolidateLines>false</ConsolidateLines>
+		<AllowReclassify>true</AllowReclassify>
+		<AllowTaxCodeUpd>true</AllowTaxCodeUpd>
+		<AllowUpdPartDefer>false</AllowUpdPartDefer>
+		<BillToCustID/>
+		<BTCustName/>
+		<ChangeDateTime/>
+		<CheckAmortAmounts>false</CheckAmortAmounts>
+		<CNGTIDescription1 />
+		<CNGTIDescription2 />
+		<CNGTIDescription3 />
+		<CNGTIDiscountTaxAmount>0.00</CNGTIDiscountTaxAmount>
+		<CNGTIIUM />
+		<CNGTINetAmount>0.00</CNGTINetAmount>
+		<CNGTIPartDescription />
+		<CNGTISpecification />
+		<CNGTITaxAmount>0.00</CNGTITaxAmount>
+		<CNGTITaxCode />
+		<CNGTITaxPercent>0.00</CNGTITaxPercent>
+		<CNGTITotalAmount>0.00</CNGTITotalAmount>
+		<CNGTIUnitPrice>0.00</CNGTIUnitPrice>
+		<ContractSuspended>false</ContractSuspended>
+		<CurrencyCode>COP</CurrencyCode>
+		<CurrencySwitch>false</CurrencySwitch>
+		<CustID/>
+		<CustName/>
+		<CustomerName/>
+		<DeleteRASchedule>false</DeleteRASchedule>
+		<DispGLAcct />
+		<DisplaySymbol />
+		<DispPONum />
+		<DispShipToAddr/>
+		<DocDisplaySymbol />
+		<DocDspUnitPrice>0</DocDspUnitPrice>
+		<DocLessDiscount>0.000</DocLessDiscount>
+		<DocLineTax>0.000</DocLineTax>
+		<DocLineTotal>0.000</DocLineTotal>
+		<DocPEDetAmt>0.000</DocPEDetAmt>
+		<DropShipment>false</DropShipment>
+		<DspAdvanceBillCredit>0.000</DspAdvanceBillCredit>
+		<DspDiscount>0.000</DspDiscount>
+		<DspDocAdvanceBillCredit>0.000</DspDocAdvanceBillCredit>
+		<DspDocDiscount>0.000</DspDocDiscount>
+		<DspDocExtPrice>17400.0</DspDocExtPrice>
+		<DspDocLessDiscount>0.000</DspDocLessDiscount>
+		<DspDocLineTax>0.000</DspDocLineTax>
+		<DspDocLineTotal>0.000</DspDocLineTotal>
+		<DspDocTotalMiscChrg>0.000</DspDocTotalMiscChrg>
+		<DspExtPrice>0.000</DspExtPrice>
+		<DspInvoiceRef>0</DspInvoiceRef>
+		<DspLessDiscount>0.000</DspLessDiscount>
+		<DspLineTax>0.000</DspLineTax>
+		<DspLineTotal>0.000</DspLineTotal>
+		<DspOurShipQty>0.00000</DspOurShipQty>
+		<DspSellingShipQty>0.00000</DspSellingShipQty>
+		<DspTaxExempt />
+		<DspTotalMiscChrg>0.000</DspTotalMiscChrg>
+		<DspUnitPrice>0.0000</DspUnitPrice>
+		<EnableDspWithholdAmt>false</EnableDspWithholdAmt>
+		<EnableRMADelete>false</EnableRMADelete>
+		<EnableRMAUpdate>false</EnableRMAUpdate>
+		<GLTranAmt>0</GLTranAmt>
+		<GroupID/>
+		<InPrice>false</InPrice>
+		<InvLegalNum />
+		<InvoiceDate>11-25-2019 00:00:00</InvoiceDate>
+		<InvoiceType>SHP</InvoiceType>
+		<IsCommisBtnSensitive>false</IsCommisBtnSensitive>
+		<IsIntrastatSensitive>false</IsIntrastatSensitive>
+		<IsTaxBtnSensitive>false</IsTaxBtnSensitive>
+		<LessDiscount>0.000</LessDiscount>
+		<LineTax>0.000</LineTax>
+		<LineTotal>0.000</LineTotal>
+		<LinkedCurrencySymbol />
+		<OpenInvoice>true</OpenInvoice>
+		<OrderUM>UNIDAD</OrderUM>
+		<OrigTaxCat/>
+		<PEDetAmt>0.000</PEDetAmt>
+		<PEDspCurrencySymbol />
+		<Posted>true</Posted>
+		<RADesc />
+		<RASchedExists>false</RASchedExists>
+		<Rpt1DspAdvanceBillCredit>0.000</Rpt1DspAdvanceBillCredit>
+		<Rpt1DspDiscount>0.000</Rpt1DspDiscount>
+		<Rpt1DspExtPrice>0.000</Rpt1DspExtPrice>
+		<Rpt1DspLessDiscount>0.000</Rpt1DspLessDiscount>
+		<Rpt1DspLineTax>0.000</Rpt1DspLineTax>
+		<Rpt1DspLineTotal>0.000</Rpt1DspLineTotal>
+		<Rpt1DspTotalMiscChrg>0.000</Rpt1DspTotalMiscChrg>
+		<Rpt1DspUnitPrice>0.0000</Rpt1DspUnitPrice>
+		<Rpt1LineTax>0.000</Rpt1LineTax>
+		<Rpt1LineTotal>0.000</Rpt1LineTotal>
+		<Rpt1PEDetAmt>0.000</Rpt1PEDetAmt>
+		<Rpt2DspAdvanceBillCredit>0.000</Rpt2DspAdvanceBillCredit>
+		<Rpt2DspDiscount>0.000</Rpt2DspDiscount>
+		<Rpt2DspExtPrice>0.000</Rpt2DspExtPrice>
+		<Rpt2DspLessDiscount>0.000</Rpt2DspLessDiscount>
+		<Rpt2DspLineTax>0.000</Rpt2DspLineTax>
+		<Rpt2DspLineTotal>0.000</Rpt2DspLineTotal>
+		<Rpt2DspTotalMiscChrg>0.000</Rpt2DspTotalMiscChrg>
+		<Rpt2DspUnitPrice>0.0000</Rpt2DspUnitPrice>
+		<Rpt2LineTax>0.000</Rpt2LineTax>
+		<Rpt2LineTotal>0.000</Rpt2LineTotal>
+		<Rpt2PEDetAmt>0.000</Rpt2PEDetAmt>
+		<Rpt3DspAdvanceBillCredit>0.000</Rpt3DspAdvanceBillCredit>
+		<Rpt3DspDiscount>0.000</Rpt3DspDiscount>
+		<Rpt3DspExtPrice>0.000</Rpt3DspExtPrice>
+		<Rpt3DspLessDiscount>0.000</Rpt3DspLessDiscount>
+		<Rpt3DspLineTax>0.000</Rpt3DspLineTax>
+		<Rpt3DspLineTotal>0.000</Rpt3DspLineTotal>
+		<Rpt3DspTotalMiscChrg>0.000</Rpt3DspTotalMiscChrg>
+		<Rpt3DspUnitPrice>0.0000</Rpt3DspUnitPrice>
+		<Rpt3LineTax>0.000</Rpt3LineTax>
+		<Rpt3LineTotal>0.000</Rpt3LineTotal>
+		<Rpt3PEDetAmt>0.000</Rpt3PEDetAmt>
+		<SalesRepCode1>5.0</SalesRepCode1>
+		<SalesRepCode2 />
+		<SalesRepCode3 />
+		<SalesRepCode4 />
+		<SalesRepCode5 />
+		<SalesRepName1>EMPRESA PRUEBA</SalesRepName1>
+		<SalesRepName2 />
+		<SalesRepName3 />
+		<SalesRepName4 />
+		<SalesRepName5 />
+		<ShipToContactEMailAddress />
+		<ShipToContactFaxNum />
+		<ShipToContactName />
+		<ShipToContactPhoneNum/>
+		<ShpLegalNum />
+		<SoldToCustID/>
+		<SoldToCustName/>
+		<TermsCode />
+		<AdvBillEnabled>false</AdvBillEnabled>
+		<MXCustomsDuty />
+		<BitFlag>0</BitFlag>
+		<CallCodeCallDescription />
+		<ContractCodeContractDescription />
+		<ContractNumSuspended>false</ContractNumSuspended>
+		<CustCntName />
+		<CustCntMiddleName />
+		<CustCntFirstName />
+		<CustCntFaxNum />
+		<CustCntCorpName />
+		<CustCntPhoneNum />
+		<CustCntLastName />
+		<CustNumCustID/>
+		<CustNumName/>
+		<CustNumAllowShipTo3>false</CustNumAllowShipTo3>
+		<CustNumBTName />
+		<IncomeTaxDescription />
+		<InvoiceNumTermsCode/>
+		<InvoiceNumCardMemberName />
+		<JournalCodeJrnlDescription />
+		<MilestoneIDDescription />
+		<OrderLineLineDesc/>
+		<OrderNumCurrencyCode/>
+		<OrderNumCardMemberName />
+		<OTSCntryDescription />
+		<PackLineLineDesc />
+		<PackNumName />
+		<PartNumPartDescription>BOLSA PAN PRIMAVERA 800GR</PartNumPartDescription>
+		<PartNumTrackDimension>false</PartNumTrackDimension>
+		<PartNumIUM>UNIDAD</PartNumIUM>
+		<PartNumSellingFactor>0.00000</PartNumSellingFactor>
+		<PartNumSalesUM>UNIDAD</PartNumSalesUM>
+		<PartNumPricePerCode>E</PartNumPricePerCode>
+		<PartNumTrackLots>false</PartNumTrackLots>
+		<PartNumTrackSerialNum>false</PartNumTrackSerialNum>
+		<ProdCodeDescription/>
+		<ProjectIDDescription />
+		<ReclassCodeDescription />
+		<ReclassReasonDescription />
+		<RMALineLineDesc />
+		<SalesCatIDDescription />
+		<ShipToCustCustID/>
+		<ShipToCustName/>
+		<ShipToCustBTName />
+		<ShipViaCodeDescription/>
+		<ShipViaCodeWebDesc />
+		<TaxCatIDDescription/>
+		<TaxRegionDescription/>
+		<RowMod />
+		<Number01>0.0000</Number01>
+		<CheckBox12>false</CheckBox12>
+		<ShortChar07 />
+	</InvcDtl>
+        <InvcDtl>
+		<Company>811040799</Company>
+		<InvoiceNum>27985</InvoiceNum>
+		<InvoiceLine>02</InvoiceLine>
+		<LineType/>
+		<ContractNum>0</ContractNum>
+		<XPartNum>42</XPartNum>
+		<XRevisionNum/>
+		<PartNum>42</PartNum>
+		<LineDesc>BOLSA PAN PRIMAVERA QUESO 800GR</LineDesc>
+		<IUM/>
+		<RevisionNum />
+		<POLine ></POLine >
+		<TaxExempt />
+		<TaxCatID/>
+		<Commissionable>false</Commissionable>
+		<DiscountPercent>0</DiscountPercent>
+		<UnitPrice>31000.0</UnitPrice>
+		<DocUnitPrice>31000.0</DocUnitPrice>
+		<PricePerCode>E</PricePerCode>
+		<OurOrderQty>0</OurOrderQty>
+		<ExtPrice>0</ExtPrice>
+		<DocExtPrice>1.86E7</DocExtPrice>
+		<Discount>0</Discount>
+		<DocDiscount>0</DocDiscount>
+		<TotalMiscChrg>0</TotalMiscChrg>
+		<DocTotalMiscChrg>0</DocTotalMiscChrg>
+		<ProdCode/>
+		<OurShipQty>0</OurShipQty>
+		<PackNum/>
+		<PackLine/>
+		<OrderNum>0</OrderNum>
+		<OrderLine/>
+		<OrderRelNum/>
+		<ShipToCustNum/>
+		<ShipToNum />
+		<ShipDate/>
+		<ShipViaCode/>
+		<AdvanceBillCredit>0</AdvanceBillCredit>
+		<DocAdvanceBillCredit>0</DocAdvanceBillCredit>
+		<CustNum/>
+		<InvoiceComment />
+		<ShpConNum>0</ShpConNum>
+		<MtlUnitCost>0</MtlUnitCost>
+		<LbrUnitCost>0.0000</LbrUnitCost>
+		<BurUnitCost>0.0000</BurUnitCost>
+		<SubUnitCost>0.0000</SubUnitCost>
+		<MtlBurUnitCost>0</MtlBurUnitCost>
+		<COSPostingReqd>true</COSPostingReqd>
+		<COSPosted>false</COSPosted>
+		<ContractCode />
+		<CallNum>0</CallNum>
+		<CallCode />
+		<RMANum>0</RMANum>
+		<RMALine>0</RMALine>
+		<SalesCatID />
+		<FiscalYear>0</FiscalYear>
+		<FiscalPeriod>0</FiscalPeriod>
+		<JournalCode />
+		<JournalNum>0</JournalNum>
+		<SellingOrderQty>0</SellingOrderQty>
+		<SellingShipQty>600.0</SellingShipQty>
+		<SalesUM>10 BULTOS</SalesUM>
+		<SellingFactor>0</SellingFactor>
+		<ProjectID />
+		<MilestoneID />
+		<ListPrice>0</ListPrice>
+		<DocListPrice>0</DocListPrice>
+		<OrdBasedPrice>0</OrdBasedPrice>
+		<DocOrdBasedPrice>0</DocOrdBasedPrice>
+		<AdvGainLoss>0</AdvGainLoss>
+		<SellingFactorDirection>D</SellingFactorDirection>
+		<RepRate1>0.00</RepRate1>
+		<RepRate2>0.00</RepRate2>
+		<RepRate3>0.00</RepRate3>
+		<RepRate4>0.00</RepRate4>
+		<RepRate5>0.00</RepRate5>
+		<RepSplit1>0</RepSplit1>
+		<RepSplit2>0</RepSplit2>
+		<RepSplit3>0</RepSplit3>
+		<RepSplit4>0</RepSplit4>
+		<RepSplit5>0</RepSplit5>
+		<BTCustNum>0</BTCustNum>
+		<JCMtlUnitCost>0.0000</JCMtlUnitCost>
+		<JCLbrUnitCost>0.0000</JCLbrUnitCost>
+		<JCBurUnitCost>0.0000</JCBurUnitCost>
+		<JCSubUnitCost>0.0000</JCSubUnitCost>
+		<JCMtlBurUnitCost>0.0000</JCMtlBurUnitCost>
+		<ChangedBy/>
+		<ChangeDate/>
+		<ChangeTime/>
+		<RevChargeMethod />
+		<OverrideReverseCharge>false</OverrideReverseCharge>
+		<RevChargeApplied>false</RevChargeApplied>
+		<TaxConnectCalc>false</TaxConnectCalc>
+		<GetDfltTaxIds>true</GetDfltTaxIds>
+		<Rpt1AdvanceBillCredit>0.000</Rpt1AdvanceBillCredit>
+		<Rpt2AdvanceBillCredit>0.000</Rpt2AdvanceBillCredit>
+		<Rpt3AdvanceBillCredit>0.000</Rpt3AdvanceBillCredit>
+		<Rpt1Discount>0.000</Rpt1Discount>
+		<Rpt2Discount>0.000</Rpt2Discount>
+		<Rpt3Discount>0.000</Rpt3Discount>
+		<Rpt1ExtPrice>0.000</Rpt1ExtPrice>
+		<Rpt2ExtPrice>0.000</Rpt2ExtPrice>
+		<Rpt3ExtPrice>0.000</Rpt3ExtPrice>
+		<Rpt1ListPrice>0.0000</Rpt1ListPrice>
+		<Rpt2ListPrice>0.0000</Rpt2ListPrice>
+		<Rpt3ListPrice>0.0000</Rpt3ListPrice>
+		<Rpt1OrdBasedPrice>0.0000</Rpt1OrdBasedPrice>
+		<Rpt2OrdBasedPrice>0.0000</Rpt2OrdBasedPrice>
+		<Rpt3OrdBasedPrice>0.0000</Rpt3OrdBasedPrice>
+		<Rpt1TotalMiscChrg>0.000</Rpt1TotalMiscChrg>
+		<Rpt2TotalMiscChrg>0.000</Rpt2TotalMiscChrg>
+		<Rpt3TotalMiscChrg>0.000</Rpt3TotalMiscChrg>
+		<Rpt1UnitPrice>0.0000</Rpt1UnitPrice>
+		<Rpt2UnitPrice>0.0000</Rpt2UnitPrice>
+		<Rpt3UnitPrice>0.0000</Rpt3UnitPrice>
+		<Rpt1AdvGainLoss>0.000</Rpt1AdvGainLoss>
+		<Rpt2AdvGainLoss>0.000</Rpt2AdvGainLoss>
+		<Rpt3AdvGainLoss>0.000</Rpt3AdvGainLoss>
+		<FiscalYearSuffix />
+		<FiscalCalendarID />
+		<TaxRegionCode/>
+		<UseOTS>false</UseOTS>
+		<OTSName />
+		<OTSAddress1 />
+		<OTSAddress2 />
+		<OTSAddress3 />
+		<OTSCity />
+		<OTSState />
+		<OTSZIP />
+		<OTSResaleID />
+		<OTSTaxRegionCode />
+		<OTSContact />
+		<OTSFaxNum />
+		<OTSPhoneNum />
+		<OTSCountryNum>0</OTSCountryNum>
+		<Plant/>
+		<WarehouseCode/>
+		<CallLine>0</CallLine>
+		<DropShipPackLine>0</DropShipPackLine>
+		<DropShipPackSlip />
+		<FinChargeCode />
+		<ABTUID />
+		<InUnitPrice>0.0000</InUnitPrice>
+		<DocInUnitPrice>0.0000</DocInUnitPrice>
+		<InExtPrice>0.000</InExtPrice>
+		<DocInExtPrice>0.000</DocInExtPrice>
+		<InDiscount>0.000</InDiscount>
+		<DocInDiscount>0.000</DocInDiscount>
+		<InTotalMiscChrg>0.000</InTotalMiscChrg>
+		<DocInTotalMiscChrg>0.000</DocInTotalMiscChrg>
+		<InListPrice>0.0000</InListPrice>
+		<DocInListPrice>0.0000</DocInListPrice>
+		<InOrdBasedPrice>0.0000</InOrdBasedPrice>
+		<DocInOrdBasedPrice>0.0000</DocInOrdBasedPrice>
+		<Rpt1InDiscount>0.000</Rpt1InDiscount>
+		<Rpt2InDiscount>0.000</Rpt2InDiscount>
+		<Rpt3InDiscount>0.000</Rpt3InDiscount>
+		<Rpt1InExtPrice>0.000</Rpt1InExtPrice>
+		<Rpt2InExtPrice>0.000</Rpt2InExtPrice>
+		<Rpt3InExtPrice>0.000</Rpt3InExtPrice>
+		<Rpt1InListPrice>0.0000</Rpt1InListPrice>
+		<Rpt2InListPrice>0.0000</Rpt2InListPrice>
+		<Rpt3InListPrice>0.0000</Rpt3InListPrice>
+		<Rpt1InOrdBasedPrice>0.0000</Rpt1InOrdBasedPrice>
+		<Rpt2InOrdBasedPrice>0.0000</Rpt2InOrdBasedPrice>
+		<Rpt3InOrdBasedPrice>0.0000</Rpt3InOrdBasedPrice>
+		<Rpt1InTotalMiscChrg>0.000</Rpt1InTotalMiscChrg>
+		<Rpt2InTotalMiscChrg>0.000</Rpt2InTotalMiscChrg>
+		<Rpt3InTotalMiscChrg>0.000</Rpt3InTotalMiscChrg>
+		<Rpt1InUnitPrice>0.0000</Rpt1InUnitPrice>
+		<Rpt2InUnitPrice>0.0000</Rpt2InUnitPrice>
+		<Rpt3InUnitPrice>0.0000</Rpt3InUnitPrice>
+		<CorrectionDtl>false</CorrectionDtl>
+		<AssetNum />
+		<DisposalNum>0</DisposalNum>
+		<IncomeTaxCode />
+		<PBLineType />
+		<InvoiceLineRef>0</InvoiceLineRef>
+		<InvoiceRef>0</InvoiceRef>
+		<LotNum />
+		<PBInvoiceLine>0</PBInvoiceLine>
+		<RAID>0</RAID>
+		<RADtlID>0</RADtlID>
+		<DeferredRev>false</DeferredRev>
+		<RACode />
+		<ChargeDefRev>false</ChargeDefRev>
+		<RenewalNbr>0</RenewalNbr>
+		<DefRevPosted>false</DefRevPosted>
+		<LinkedInvcUnitPrice>0.0000</LinkedInvcUnitPrice>
+		<DspWithholdAmt>0.000</DspWithholdAmt>
+		<DocDspWithholdAmt>0.000</DocDspWithholdAmt>
+		<Rpt1DspWithholdAmt>0.000</Rpt1DspWithholdAmt>
+		<Rpt2DspWithholdAmt>0.000</Rpt2DspWithholdAmt>
+		<Rpt3DspWithholdAmt>0.000</Rpt3DspWithholdAmt>
+		<LinkedCurrencyCode />
+		<PhaseID />
+		<PEBOEHeadNum>0</PEBOEHeadNum>
+		<MXSellingShipQty>0.00000</MXSellingShipQty>
+		<MXUnitPrice>0.0000</MXUnitPrice>
+		<DocMXUnitPrice>0.0000</DocMXUnitPrice>
+		<Rpt1MXUnitPrice>0.0000</Rpt1MXUnitPrice>
+		<Rpt2MXUnitPrice>0.0000</Rpt2MXUnitPrice>
+		<Rpt3MXUnitPrice>0.0000</Rpt3MXUnitPrice>
+		<CustCostCenter />
+		<DEIsServices>false</DEIsServices>
+		<DEIsSecurityFinancialDerivative>false</DEIsSecurityFinancialDerivative>
+		<DEInternationalSecuritiesID />
+		<DEIsInvestment>false</DEIsInvestment>
+		<DEPayStatCode />
+		<EntityUseCode />
+		<Reclassified>false</Reclassified>
+		<PartiallyDefer>false</PartiallyDefer>
+		<DeferredPercent>0.00</DeferredPercent>
+		<Reclass>false</Reclass>
+		<DeferredOnly>false</DeferredOnly>
+		<ReclassCodeID />
+		<ReclassReasonCode />
+		<ReclassComments />
+		<DeferredRevAmt>0.000</DeferredRevAmt>
+		<DocDeferredRevAmt>0.000</DocDeferredRevAmt>
+		<Rpt1DeferredRevAmt>0.000</Rpt1DeferredRevAmt>
+		<Rpt2DeferredRevAmt>0.000</Rpt2DeferredRevAmt>
+		<Rpt3DeferredRevAmt>0.000</Rpt3DeferredRevAmt>
+		<ChargeReclass>false</ChargeReclass>
+		<DEDenomination />
+		<DropShipPONum>0</DropShipPONum>
+		<DocInAdvanceBillCredit>0.000</DocInAdvanceBillCredit>
+		<InAdvanceBillCredit>0.000</InAdvanceBillCredit>
+		<Rpt1InAdvanceBillCredit>0.000</Rpt1InAdvanceBillCredit>
+		<Rpt2InAdvanceBillCredit>0.000</Rpt2InAdvanceBillCredit>
+		<Rpt3InAdvanceBillCredit>0.000</Rpt3InAdvanceBillCredit>
+		<MYIndustryCode />
+		<DockingStation />
+		<ConsolidateLines>false</ConsolidateLines>
+		<AllowReclassify>true</AllowReclassify>
+		<AllowTaxCodeUpd>true</AllowTaxCodeUpd>
+		<AllowUpdPartDefer>false</AllowUpdPartDefer>
+		<BillToCustID/>
+		<BTCustName/>
+		<ChangeDateTime/>
+		<CheckAmortAmounts>false</CheckAmortAmounts>
+		<CNGTIDescription1 />
+		<CNGTIDescription2 />
+		<CNGTIDescription3 />
+		<CNGTIDiscountTaxAmount>0.00</CNGTIDiscountTaxAmount>
+		<CNGTIIUM />
+		<CNGTINetAmount>0.00</CNGTINetAmount>
+		<CNGTIPartDescription />
+		<CNGTISpecification />
+		<CNGTITaxAmount>0.00</CNGTITaxAmount>
+		<CNGTITaxCode />
+		<CNGTITaxPercent>0.00</CNGTITaxPercent>
+		<CNGTITotalAmount>0.00</CNGTITotalAmount>
+		<CNGTIUnitPrice>0.00</CNGTIUnitPrice>
+		<ContractSuspended>false</ContractSuspended>
+		<CurrencyCode>COP</CurrencyCode>
+		<CurrencySwitch>false</CurrencySwitch>
+		<CustID/>
+		<CustName/>
+		<CustomerName/>
+		<DeleteRASchedule>false</DeleteRASchedule>
+		<DispGLAcct />
+		<DisplaySymbol />
+		<DispPONum />
+		<DispShipToAddr/>
+		<DocDisplaySymbol />
+		<DocDspUnitPrice>0</DocDspUnitPrice>
+		<DocLessDiscount>0.000</DocLessDiscount>
+		<DocLineTax>0.000</DocLineTax>
+		<DocLineTotal>0.000</DocLineTotal>
+		<DocPEDetAmt>0.000</DocPEDetAmt>
+		<DropShipment>false</DropShipment>
+		<DspAdvanceBillCredit>0.000</DspAdvanceBillCredit>
+		<DspDiscount>0.000</DspDiscount>
+		<DspDocAdvanceBillCredit>0.000</DspDocAdvanceBillCredit>
+		<DspDocDiscount>0.000</DspDocDiscount>
+		<DspDocExtPrice>1.86E7</DspDocExtPrice>
+		<DspDocLessDiscount>0.000</DspDocLessDiscount>
+		<DspDocLineTax>0.000</DspDocLineTax>
+		<DspDocLineTotal>0.000</DspDocLineTotal>
+		<DspDocTotalMiscChrg>0.000</DspDocTotalMiscChrg>
+		<DspExtPrice>0.000</DspExtPrice>
+		<DspInvoiceRef>0</DspInvoiceRef>
+		<DspLessDiscount>0.000</DspLessDiscount>
+		<DspLineTax>0.000</DspLineTax>
+		<DspLineTotal>0.000</DspLineTotal>
+		<DspOurShipQty>0.00000</DspOurShipQty>
+		<DspSellingShipQty>0.00000</DspSellingShipQty>
+		<DspTaxExempt />
+		<DspTotalMiscChrg>0.000</DspTotalMiscChrg>
+		<DspUnitPrice>0.0000</DspUnitPrice>
+		<EnableDspWithholdAmt>false</EnableDspWithholdAmt>
+		<EnableRMADelete>false</EnableRMADelete>
+		<EnableRMAUpdate>false</EnableRMAUpdate>
+		<GLTranAmt>0</GLTranAmt>
+		<GroupID/>
+		<InPrice>false</InPrice>
+		<InvLegalNum />
+		<InvoiceDate>11-25-2019 00:00:00</InvoiceDate>
+		<InvoiceType>SHP</InvoiceType>
+		<IsCommisBtnSensitive>false</IsCommisBtnSensitive>
+		<IsIntrastatSensitive>false</IsIntrastatSensitive>
+		<IsTaxBtnSensitive>false</IsTaxBtnSensitive>
+		<LessDiscount>0.000</LessDiscount>
+		<LineTax>0.000</LineTax>
+		<LineTotal>0.000</LineTotal>
+		<LinkedCurrencySymbol />
+		<OpenInvoice>true</OpenInvoice>
+		<OrderUM>UNIDAD</OrderUM>
+		<OrigTaxCat/>
+		<PEDetAmt>0.000</PEDetAmt>
+		<PEDspCurrencySymbol />
+		<Posted>true</Posted>
+		<RADesc />
+		<RASchedExists>false</RASchedExists>
+		<Rpt1DspAdvanceBillCredit>0.000</Rpt1DspAdvanceBillCredit>
+		<Rpt1DspDiscount>0.000</Rpt1DspDiscount>
+		<Rpt1DspExtPrice>0.000</Rpt1DspExtPrice>
+		<Rpt1DspLessDiscount>0.000</Rpt1DspLessDiscount>
+		<Rpt1DspLineTax>0.000</Rpt1DspLineTax>
+		<Rpt1DspLineTotal>0.000</Rpt1DspLineTotal>
+		<Rpt1DspTotalMiscChrg>0.000</Rpt1DspTotalMiscChrg>
+		<Rpt1DspUnitPrice>0.0000</Rpt1DspUnitPrice>
+		<Rpt1LineTax>0.000</Rpt1LineTax>
+		<Rpt1LineTotal>0.000</Rpt1LineTotal>
+		<Rpt1PEDetAmt>0.000</Rpt1PEDetAmt>
+		<Rpt2DspAdvanceBillCredit>0.000</Rpt2DspAdvanceBillCredit>
+		<Rpt2DspDiscount>0.000</Rpt2DspDiscount>
+		<Rpt2DspExtPrice>0.000</Rpt2DspExtPrice>
+		<Rpt2DspLessDiscount>0.000</Rpt2DspLessDiscount>
+		<Rpt2DspLineTax>0.000</Rpt2DspLineTax>
+		<Rpt2DspLineTotal>0.000</Rpt2DspLineTotal>
+		<Rpt2DspTotalMiscChrg>0.000</Rpt2DspTotalMiscChrg>
+		<Rpt2DspUnitPrice>0.0000</Rpt2DspUnitPrice>
+		<Rpt2LineTax>0.000</Rpt2LineTax>
+		<Rpt2LineTotal>0.000</Rpt2LineTotal>
+		<Rpt2PEDetAmt>0.000</Rpt2PEDetAmt>
+		<Rpt3DspAdvanceBillCredit>0.000</Rpt3DspAdvanceBillCredit>
+		<Rpt3DspDiscount>0.000</Rpt3DspDiscount>
+		<Rpt3DspExtPrice>0.000</Rpt3DspExtPrice>
+		<Rpt3DspLessDiscount>0.000</Rpt3DspLessDiscount>
+		<Rpt3DspLineTax>0.000</Rpt3DspLineTax>
+		<Rpt3DspLineTotal>0.000</Rpt3DspLineTotal>
+		<Rpt3DspTotalMiscChrg>0.000</Rpt3DspTotalMiscChrg>
+		<Rpt3DspUnitPrice>0.0000</Rpt3DspUnitPrice>
+		<Rpt3LineTax>0.000</Rpt3LineTax>
+		<Rpt3LineTotal>0.000</Rpt3LineTotal>
+		<Rpt3PEDetAmt>0.000</Rpt3PEDetAmt>
+		<SalesRepCode1>5.0</SalesRepCode1>
+		<SalesRepCode2 />
+		<SalesRepCode3 />
+		<SalesRepCode4 />
+		<SalesRepCode5 />
+		<SalesRepName1>EMPRESA PRUEBA</SalesRepName1>
+		<SalesRepName2 />
+		<SalesRepName3 />
+		<SalesRepName4 />
+		<SalesRepName5 />
+		<ShipToContactEMailAddress />
+		<ShipToContactFaxNum />
+		<ShipToContactName />
+		<ShipToContactPhoneNum/>
+		<ShpLegalNum />
+		<SoldToCustID/>
+		<SoldToCustName/>
+		<TermsCode />
+		<AdvBillEnabled>false</AdvBillEnabled>
+		<MXCustomsDuty />
+		<BitFlag>0</BitFlag>
+		<CallCodeCallDescription />
+		<ContractCodeContractDescription />
+		<ContractNumSuspended>false</ContractNumSuspended>
+		<CustCntName />
+		<CustCntMiddleName />
+		<CustCntFirstName />
+		<CustCntFaxNum />
+		<CustCntCorpName />
+		<CustCntPhoneNum />
+		<CustCntLastName />
+		<CustNumCustID/>
+		<CustNumName/>
+		<CustNumAllowShipTo3>false</CustNumAllowShipTo3>
+		<CustNumBTName />
+		<IncomeTaxDescription />
+		<InvoiceNumTermsCode/>
+		<InvoiceNumCardMemberName />
+		<JournalCodeJrnlDescription />
+		<MilestoneIDDescription />
+		<OrderLineLineDesc/>
+		<OrderNumCurrencyCode/>
+		<OrderNumCardMemberName />
+		<OTSCntryDescription />
+		<PackLineLineDesc />
+		<PackNumName />
+		<PartNumPartDescription>BOLSA PAN PRIMAVERA QUESO 800GR</PartNumPartDescription>
+		<PartNumTrackDimension>false</PartNumTrackDimension>
+		<PartNumIUM>UNIDAD</PartNumIUM>
+		<PartNumSellingFactor>0.00000</PartNumSellingFactor>
+		<PartNumSalesUM>UNIDAD</PartNumSalesUM>
+		<PartNumPricePerCode>E</PartNumPricePerCode>
+		<PartNumTrackLots>false</PartNumTrackLots>
+		<PartNumTrackSerialNum>false</PartNumTrackSerialNum>
+		<ProdCodeDescription/>
+		<ProjectIDDescription />
+		<ReclassCodeDescription />
+		<ReclassReasonDescription />
+		<RMALineLineDesc />
+		<SalesCatIDDescription />
+		<ShipToCustCustID/>
+		<ShipToCustName/>
+		<ShipToCustBTName />
+		<ShipViaCodeDescription/>
+		<ShipViaCodeWebDesc />
+		<TaxCatIDDescription/>
+		<TaxRegionDescription/>
+		<RowMod />
+		<Number01>0.0000</Number01>
+		<CheckBox12>false</CheckBox12>
+		<ShortChar07 />
+	</InvcDtl>

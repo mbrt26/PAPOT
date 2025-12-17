@@ -1,0 +1,138 @@
+                 SELECT tblDctosOrdenes.IDLOCAL                          
+                       ,tblDctosOrdenes.IDTIPOORDEN                    
+                       ,tblDctosOrdenes.IDORDEN                        
+                       ,tblDctosOrdenes.FECHAORDEN                     
+                       ,tblDctosOrdenes.idCliente                      
+                       ,tblDctosOrdenes.numeroOrden                    
+                       ,tblDctosOrdenes.idFicha                        
+                       ,tblTerceros.nombreTercero                      
+                       ,tmpORD.itemPadre                               
+                       ,tmpORD.idOperacion                             
+                       ,tmpORD.nombreOperacion                         
+                       ,tmpORD.vrCostoBaseMAT                          
+                       ,tmpORD.vrCostoBaseCIF                          
+                       ,tmpORD.vrCostoBaseMOD                          
+                       ,tmpORD.pesoTerminado                           
+                 FROM tblDctosOrdenes                                  
+                 INNER JOIN tblTerceros                                
+                 ON tblTerceros.idCliente          =                   
+                              tblDctosOrdenes.idCliente                
+                 INNER JOIN (                                          
+                 SELECT tmpCOS.idLocal,                                
+                        tmpCOS.idTipoOrden,                            
+                        tmpCOS.idOrden,                                
+                        tmpCOS.itemPadre,                              
+                        tmpCOS.idOperacion,                            
+                        tblJobOperacion.nombreOperacion,               
+                        SUM(tmpCOS.vrCostoBaseMAT)                     
+                 	                 AS vrCostoBaseMAT,               
+                        SUM(tmpCOS.vrCostoBaseCIF)                     
+                 	                 AS vrCostoBaseCIF,               
+                        SUM(tmpCOS.vrCostoBaseMOD)                     
+                 	                 AS vrCostoBaseMOD,               
+                        SUM(tmpCOS.pesoTerminado)                      
+                 	                   AS pesoTerminado               
+                 FROM (                                                
+                 SELECT tmpCST.idLocal,                                
+                        tmpCST.idTipoOrden,                            
+                        tmpCST.idOrden,                                
+                        tmpCST.itemPadre,                              
+                        tmpCST.idOperacion,                            
+                        MAX(tmpCST.vrCostoMAT) *                       
+                        MAX(tmpCST.pesoTerminado)                      
+                               AS vrCostoBaseMAT,                      
+                        MAX(tmpCST.vrCostoCIF) *                       
+                        MAX(tmpCST.pesoTerminado)                      
+                               AS vrCostoBaseCIF,                      
+                        MAX(tmpCST.vrCostoMOD) *                       
+                        MAX(tmpCST.pesoTerminado)                      
+                               AS vrCostoBaseMOD,                      
+                        MAX(tmpCST.pesoTerminado)                      
+                                AS pesoTerminado                       
+                 FROM                                                  
+                 ( SELECT tblDctosOrdenesProgreso.idLocal              
+                       ,tblDctosOrdenesProgreso.idTipoOrden            
+                       ,tblDctosOrdenesProgreso.idOrden                
+                       ,tblDctosOrdenesProgreso.itemPadre              
+                       ,tblDctosOrdenesProgreso.idOperacion            
+                       ,0 AS vrCostoMAT                                
+                    ,MAX (tblDctosOrdenesProgreso.vrCostoBaseCIF)      
+                                                    AS vrCostoCIF      
+                   ,MAX ( tblDctosOrdenesProgreso.vrCostoBaseMOD)      
+                                   AS vrCostoMOD                       
+                       ,SUM(tblDctosOrdenesProgreso.pesoTerminado)     
+                                AS pesoTerminado                       
+                 FROM tblDctosOrdenesProgreso                          
+                 WHERE tblDctosOrdenesProgreso.idLocal       =   1      
+                 AND   tblDctosOrdenesProgreso.idTipoOrden   =  59       
+                   AND CONVERT(CHAR(10),                               
+	           tblDctosOrdenesProgreso.fechaFin,112) BETWEEN '20120602' AND '20120602' 
+                 GROUP BY tblDctosOrdenesProgreso.idLocal              
+                         ,tblDctosOrdenesProgreso.idTipoOrden          
+                         ,tblDctosOrdenesProgreso.idOrden              
+                         ,tblDctosOrdenesProgreso.itemPadre            
+                         ,tblDctosOrdenesProgreso.idOperacion          
+                 UNION                                                 
+                 SELECT tblDctosOrdenesDetalle.idLocalOrigen           
+                       ,tblDctosOrdenesDetalle.idTipoOrdenOrigen       
+                       ,tblDctosOrdenesDetalle.idOrdenOrigen           
+                       ,tblDctosOrdenesDetalle.itemOrden               
+                                                    AS itemPadre       
+                       ,tblDctosOrdenesDetalle.idOperacion             
+                       ,SUM(tblDctosOrdenesDetalle.cantidad *          
+                         tblDctosOrdenesDetalle.vrCostoIND) /          
+                        SUM(tblDctosOrdenesDetalle.cantidad)           
+                                                 AS vrCostoMAT         
+                       ,0 AS vrCostoCIF                                
+                       ,0 AS vrCostoMOD                                
+                       ,SUM(tblDctosOrdenesDetalle.cantidad)           
+                                               AS pesoTerminado        
+                 FROM tblDctosOrdenesDetalle                           
+                 WHERE tblDctosOrdenesDetalle.idLocalOrigen     =   1   
+                 AND   tblDctosOrdenesDetalle.idTipoOrdenOrigen =  59    
+                 AND   tblDctosOrdenesDetalle.idBodega         !=      
+                                tblDctosOrdenesDetalle.idOperacion     
+                 AND EXISTS ( SELECT tblDctosOrdenes.*                 
+                              FROM tblDctosOrdenes                     
+                              WHERE tblDctosOrdenes.idLocal     =      
+                                    tblDctosOrdenesDetalle.idLocal     
+                              AND   tblDctosOrdenes.idTipoOrden =      
+                                   tblDctosOrdenesDetalle.idTipoOrden  
+                              AND   tblDctosOrdenes.idOrden     =      
+                                    tblDctosOrdenesDetalle.idOrden     
+                              AND tblDctosOrdenes.fechaOrden BETWEEN '20120602' AND '20120602'    )                        
+                 GROUP BY tblDctosOrdenesDetalle.idLocalOrigen         
+                         ,tblDctosOrdenesDetalle.idTipoOrdenOrigen     
+                         ,tblDctosOrdenesDetalle.idOrdenOrigen         
+                         ,tblDctosOrdenesDetalle.itemOrden             
+                         ,tblDctosOrdenesDetalle.idOperacion           
+                 HAVING SUM(tblDctosOrdenesDetalle.cantidad) != 0  )   
+                                                          AS tmpCST    
+                 GROUP BY tmpCST.idLocal,                              
+                          tmpCST.idTipoOrden,                          
+                          tmpCST.idOrden,                              
+                          tmpCST.itemPadre,                            
+                          tmpCST.idOperacion ) AS tmpCOS               
+                 INNER JOIN tblJobOperacion                            
+                 ON tblJobOperacion.idOperacion                        
+                                     = tmpCOS.idOperacion              
+                 WHERE tblJobOperacion.idOperacion                     
+                                  NOT IN (1,7,9,8,999,888)             
+                 GROUP BY  tmpCOS.idLocal,                             
+                        tmpCOS.idTipoOrden,                            
+                        tmpCOS.idOrden,                                
+                        tmpCOS.itemPadre,                              
+                        tmpCOS.idOperacion,                            
+                        tblJobOperacion.nombreOperacion )              
+                                                 AS tmpORD             
+                 ON tmpORD.idLocal      =                              
+                                   tblDctosOrdenes.idLocal             
+                 AND tmpORD.idTipoOrden =                              
+                              tblDctosOrdenes.idTipoOrden              
+                 AND tmpORD.idOrden     =                              
+                                  tblDctosOrdenes.idOrden              
+                 WHERE  tblTerceros.idTipoTercero  = 1                 
+                 ORDER BY  tblDctosOrdenes.FECHAORDEN,                 
+                           tblDctosOrdenes.numeroOrden,                
+                          tmpORD.itemPadre,                            
+                          tmpORD.idOperacion                           ;

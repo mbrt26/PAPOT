@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="239"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_tercero" class="java.lang.String"/>
+	<parameter name="p_direccion" class="java.lang.String"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\WEB-INF\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenFIN" class="java.lang.Integer"/>
+	<parameter name="p_idVendedor" class="java.lang.Double"/>
+	<parameter name="p_ipServidor" class="java.lang.String"/>
+	<parameter name="p_puerto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT tblDctos.idLocal,
+                       tblDctos.idTipoOrden,
+		       tblDctos.idOrden,
+		       tblDctos.idOrdenCruce,
+                       tblDctos.idDcto,
+                       tblDctos.fechaDcto,
+                       tblDctos.indicador,
+                       tblDctos.idCliente,
+                       tblDctos.vrBase,
+                       tblDctos.vrIva,
+                       tblDctos.vrCostoMV,
+                       tblDctos.nombreTercero,
+                       tblDctos.idDctoNitCC,
+                       tblDctos.fechaDctoNitCC,
+                       tblDctos.idLocalCruce,
+                       tblDctos.idTipoOrdenCruce,
+                       tblDctos.idDctoCruce,
+                       (tblDctos.vrBase      +
+                        tblDctos.vrIva       -
+                        tblDctos.vrRteFuente -
+                        tblDctos.vrRteIva) AS vrFactura,
+                       tblDctos.vrDescuento,
+                       tblDctos.vrRteFuente,
+                       (CASE WHEN
+                             tblDctos.idTipoOrden = 1
+                        THEN    tblDctos.idDctoNitCC
+                        ELSE    STR(tblDctos.idDcto)
+                        END) AS idDctoStr,
+                       tblDctos.idTipoNegocio,
+                       (CASE WHEN
+                             tblDctos.idTipoNegocio = 1
+                        THEN      'CONTADO'
+                        ELSE      'CREDITO'
+                        END) AS nombreTipoNegocio,
+                       tblDctos.idTipoNegocio,
+                       ( SELECT ctrlUsuarios.aliasUsuario
+                         FROM ctrlUsuarios
+                         WHERE ctrlUsuarios.idUsuario =
+                                     tblDctos.idVendedor )
+                                           AS aliasUsuario
+                FROM   tblDctos
+                WHERE EXISTS
+                   ( SELECT *
+                     FROM   tblDctosOrdenes
+                     INNER JOIN tblDctosOrdenesDetalle
+                     ON tblDctosOrdenes.IDLOCAL      =
+                        tblDctosOrdenesDetalle.IDLOCAL
+                     AND tblDctosOrdenes.IDTIPOORDEN =
+                        tblDctosOrdenesDetalle.IDTIPOORDEN
+                     AND tblDctosOrdenes.IDORDEN     =
+                        tblDctosOrdenesDetalle.IDORDEN
+                     WHERE tblDctosOrdenes.IDLOCAL   =
+                                          tblDctos.IDLOCAL
+                     AND tblDctosOrdenes.IDTIPOORDEN =
+                                      tblDctos.IDTIPOORDEN
+                     AND tblDctosOrdenes.IDORDEN     =
+                                         tblDctos.IDORDEN)
+                AND tblDctos.idLocal   = $P{p_idLocal}
+                AND tblDctos.fechaDcto BETWEEN $P{p_fechaInicialSqlServer}
+                                             AND $P{p_fechaFinalSqlServer}
+                AND ( tblDctos.idTipoOrden  = $P{p_idTipoOrdenINI}
+                           OR tblDctos.idTipoOrden = $P{p_idTipoOrdenFIN})
+                AND tblDctos.indicador BETWEEN $P{p_indicadorINI}
+                                                    AND $P{p_indicadorFIN}
+                AND tblDctos.idVendedor     = $P{p_idVendedor}
+                ORDER BY tblDctos.fechaDcto,
+                         tblDctos.idTipoOrden,
+                         tblDctos.idDcto]]>
+	</queryString>
+	<field name="idLocal" class="java.lang.Integer"/>
+	<field name="idTipoOrden" class="java.lang.Integer"/>
+	<field name="idDcto" class="java.lang.Integer"/>
+	<field name="fechaDcto" class="java.lang.String"/>
+	<field name="indicador" class="java.lang.Integer"/>
+	<field name="idCliente" class="java.lang.String"/>
+	<field name="vrBase" class="java.lang.Double"/>
+	<field name="vrIva" class="java.lang.Double"/>
+	<field name="vrCostoMV" class="java.lang.Double"/>
+	<field name="nombreTercero" class="java.lang.String"/>
+	<field name="idDctoNitCC" class="java.lang.String"/>
+	<field name="fechaDctoNitCC" class="java.lang.String"/>
+	<field name="idLocalCruce" class="java.lang.Double"/>
+	<field name="idTipoOrdenCruce" class="java.lang.Double"/>
+	<field name="idDctoCruce" class="java.lang.Double"/>
+	<field name="vrFactura" class="java.lang.Double"/>
+	<field name="vrDescuento" class="java.lang.Double"/>
+	<field name="vrRteFuente" class="java.lang.Double"/>
+	<field name="idDctoStr" class="java.lang.String"/>
+	<field name="nombreTipoNegocio" class="java.lang.String"/>
+	<field name="idTipoNegocio" class="java.lang.Double"/>
+	<field name="aliasUsuario" class="java.lang.String"/>
+	<field name="idOrden" class="java.lang.Integer"/>
+	<field name="idOrdenCruce" class="java.lang.Integer"/>
+	<variable name="vrCostoTotal" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrCostoMV}]]></variableExpression>
+	</variable>
+	<variable name="cuentaDocumentos" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{idDcto}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<group name="idLocal">
+		<groupExpression><![CDATA[$F{idLocal}]]></groupExpression>
+		<groupFooter>
+			<band height="13">
+				<textField pattern="#,##0.00">
+					<reportElement x="427" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{vrCostoTotal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="146" y="0" width="50" height="10"/>
+					<textElement textAlignment="Right">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL DCTOS]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="266" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{cuentaDocumentos}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="62">
+			<textField>
+				<reportElement x="12" y="1" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="21" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="41" width="554" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="270" y="2" width="35" height="12"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[F.FRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="2" width="39" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2" width="39" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[#DOC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="85" y="2" width="181" height="12"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="426" y="2" width="40" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[V.COSTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="537" y="2" width="22" height="12"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="0" width="50" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FRA.ORIG]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<elementGroup/>
+			<textField hyperlinkType="Reference">
+				<reportElement x="0" y="0" width="40" height="10" forecolor="#0000FF"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idDctoStr}]]></textFieldExpression>
+				<hyperlinkReferenceExpression><![CDATA["http://"+$P{p_ipServidor}+":"+$P{p_puerto}+"/Commerce/GralControladorServlet?nombrePaginaRequest="+
+"/jsp/vtaFrmLstEmpresaHPedido.jsp&accionContenedor="+
+"detallarCotizacion&idLocal="+$F{idLocal}+
+"&idTipoOrden="+$F{idTipoOrden}+
+"&idOrden="+$F{idOrden}]]></hyperlinkReferenceExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="39" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="0" width="180" height="10"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="270" y="0" width="50" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fechaDcto}.substring(0,10)]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="427" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoMV}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="538" y="0" width="22" height="10"/>
+				<textElement textAlignment="Left">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{aliasUsuario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" hyperlinkType="Reference">
+				<reportElement x="335" y="0" width="50" height="10" forecolor="#0000FF"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{idDctoCruce}]]></textFieldExpression>
+				<hyperlinkReferenceExpression><![CDATA["http://"+$P{p_ipServidor}+":"+$P{p_puerto}+"/Commerce/GralControladorServlet?nombrePaginaRequest="+
+"/jsp/vtaFrmLstEmpresaHPedido.jsp&accionContenedor="+
+"detallarCotizacion&idLocal="+$F{idLocal}+
+"&idTipoOrden=9"+
+"&idOrden="+$F{idOrdenCruce}]]></hyperlinkReferenceExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="32"/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

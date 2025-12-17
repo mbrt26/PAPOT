@@ -1,0 +1,96 @@
+package com.solucionesweb.losservlets;
+
+// Importa los paquetes del lenguaje especificamente io y los
+// que permiten trabajar el servlet.
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+// Importa el Bean de Asignaturas
+import com.solucionesweb.losbeans.colaboraciones.ColaboraReporteLogBean;
+
+// Importa la clase que contiene el ValidacionDctoOrdenBean
+import com.solucionesweb.losbeans.utilidades.ValidacionColaboraReporteDctoBean;
+
+// Este servlet implementa la interface GralManejadorRequest
+public class VtasAdmReporteVisitaUnVendedorManejadorRequest implements GralManejadorRequest {
+
+  // Metodo contructor por defecto, es decir, sin parametros
+  public VtasAdmReporteVisitaUnVendedorManejadorRequest () { }
+
+  /**
+   * Retorna la URL de la pagina que deber� ser entregada como respuesta
+   * (normalmente un pagina jsp).
+   */
+  public String generaPdf(HttpServletRequest request,HttpServletResponse response)
+                throws ServletException, IOException  {
+
+    //
+    String accionContenedor = request.getParameter("accionContenedor");
+
+    // Validacion de accion relacionada con el formulario requerido
+    if (accionContenedor != null ) {
+
+        //
+	    if (accionContenedor.compareTo("Regresar") == 0 ) {
+            return "/jsp/mnuControlPedidoBB.jsp";
+        }
+
+        //
+	    if (accionContenedor.compareTo("Consultar") == 0 ) {
+
+           String idDestinacion = request.getParameter("idDestinacion");
+    	   String fechaInicial  = request.getParameter("fechaInicial");
+    	   String fechaFinal    = request.getParameter("fechaFinal");
+    	   String idUsuario     = request.getParameter("idUsuario");
+
+           //
+   	       if (idUsuario == null) {
+              return "/jsp/mnuControlPedidoBB.jsp";
+   	       }
+
+
+           // Instancia el Bean de Validacion para validar los campos
+           ValidacionColaboraReporteDctoBean campoAValidar = new ValidacionColaboraReporteDctoBean("fechaInicial",fechaInicial);
+           campoAValidar.validarCampoFecha();
+           campoAValidar.setPaginaRetorno("/jsp/vtaContenedorReporteVisitaUnVendedor.jsp");
+
+           if (campoAValidar.isValido() == false){
+
+             // Aqui escribe el Bean de Validacion en el Request para manejar el error
+	         request.setAttribute("validacionColaboraReporteDctoBean",campoAValidar);
+             return "/jsp/gralErrReporte.jsp";
+           }
+
+           campoAValidar.reasignar("fechaFinal",fechaFinal);
+           campoAValidar.validarCampoFecha();
+           campoAValidar.setPaginaRetorno("/jsp/vtaContenedorReporteVisitaUnVendedor.jsp");
+
+           if (campoAValidar.isValido() == false){
+
+             // Aqui escribe el Bean de Validacion en el Request para manejar el error
+	         request.setAttribute("validacionColaboraReporteDctoBean",campoAValidar);
+             return "/jsp/gralErrReporte.jsp";
+           }
+
+    	   //  listaFechasTipoOrdenLocal
+    	   ColaboraReporteLogBean colaboraReporteLogBean = new ColaboraReporteLogBean();
+    	   colaboraReporteLogBean.setIdUsuario(idUsuario);
+    	   colaboraReporteLogBean.setFechaInicial(fechaInicial);
+    	   colaboraReporteLogBean.setFechaFinal(fechaFinal);
+
+           //
+           request.setAttribute("colaboraReporteLogBean",colaboraReporteLogBean);
+           if (idDestinacion.compareTo("Pantalla") == 0 ){
+              return "/jsp/vtaFrmLstReporteVisitaUnVendedor.jsp";
+           } else {
+              return "jsp/vtaFrmLstReporteVisitaUnVendedorArchivo.jsp";
+          }
+        }
+    }
+
+    return "/jsp/mnuControlPedidoBB.jsp";
+
+  }
+}

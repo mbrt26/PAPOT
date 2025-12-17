@@ -1,0 +1,6 @@
+EXPLICA TIPOS IDESCALA
+
+1. 	Valor numerico Digitado		
+2. 	Valor numerico Seleccion
+3.	Valor = 0 + texto Observacion
+4.	Valor # 0 + texto codigo producto	ADDCION

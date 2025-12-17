@@ -1,0 +1,260 @@
+PENDIENTE NOTAS CREDITO
+
+---
+1. Ingresar la mercancia a la orden de produccion original en la operacion ALMACEN
+
+---
+2. Crear Campos , en tblDctosOrdenesDetalle
+
+cantidadEntregada	float	Checked
+pesoEntregado		float	Checked
+
+UPDATE [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+   SET [cantidadEntregada] = 0
+      ,[pesoEntregado] = 0
+ WHERE [cantidadEntregada] IS NULL
+ 
+---
+3 Retira PEDIDOS
+
+UPDATE [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+   SET [idEstadoRefOriginal] = 9
+   
+UPDATE [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+   SET [unidadVenta] = 1
+WHERE ([unidadVenta] = 0 OR
+[unidadVenta] IS NULL)
+   
+
+
+---
+4. Las consultas EXTERNAS deben incluir 
+
+     tblDctosOrdenesDetalle.idEstadoRefOriginal != 9
+     
+5. Las consultas de PRODUCCION por Operacion / Maquina
+
+6. Pedidos en estao = PENDIENTE deben mostrar ESTADO X OPERACION
+
+7. Las variaciones del PEDIDO deben originar FICHA TECNICA nueva
+8. Falta incluir NOMBRE OPERACION EN PDF SALIDA
+
+---
+SELECT tblDctosOrdenesDetalle.*
+FROM tblDctosOrdenesDetalle
+INNER JOIN (
+SELECT tblDctosOrdenesDetalle.idLocalOrigen,
+       tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+       tblDctosOrdenesDetalle.idOrdenOrigen,
+       tblDctosOrdenesDetalle.idPlu
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idLocal         =    1
+AND tblDctosOrdenesDetalle.idTipoOrden       =   29
+AND tblDctosOrdenesDetalle.idOrden           = 4720 ) 
+                                           AS tmpDOR
+ON  tmpDOR.idLocalOrigen     = tblDctosOrdenesDetalle.idLocal
+AND tmpDOR.idTipoOrdenOrigen = tblDctosOrdenesDetalle.idTipoOrden
+AND tmpDOR.idOrdenOrigen     = tblDctosOrdenesDetalle.idOrden
+AND tmpDOR.idPlu             = tblDctosOrdenesDetalle.idPlu
+
+
+---
+SELECT tblDctosOrdenesDetalle.*
+FROM tblDctosOrdenesDetalle
+INNER JOIN 
+(SELECT tmpDOC.idLocalOrigen
+      ,tmpDOC.idTipoOrdenOrigen
+      ,tmpDOC.idOrdenOrigen
+      ,tmpDOC.item
+      ,tmpDET.CANTIDAD 
+        AS cantidadFacturada
+      ,tmpDET.pesoFacturado
+FROM tblDctosOrdenesDetalle 
+                           tmpDET
+INNER JOIN tblDctosOrdenesDetalle
+                           tmpDOC
+ON tmpDET.idLocalOrigen      = 
+                 tmpDOC.idLocal
+AND tmpDET.idTipoOrdenOrigen = 
+            tmpDOC.idTipoOrden
+AND tmpDET.idOrdenOrigen     =
+                tmpDOC.idOrden
+AND tmpDET.item              =
+                   tmpDOC.item
+WHERE tmpDET.idLocal    = 1
+AND tmpDET.idTipoOrden  = 29
+AND tmpDET.idOrden      = 28617
+--AND tmpDET.estado      != 4 
+                    ) AS tmpORD
+ON tblDctosOrdenesDetalle.idLocal       
+            =     tmpORD.idLocalOrigen
+AND tblDctosOrdenesDetalle.idTipoOrden  
+            = tmpORD.idTipoOrdenOrigen
+AND tblDctosOrdenesDetalle.idOrden     
+            =   tmpORD.idOrdenOrigen
+
+---
+UPDATE tblDctosOrdenesDetalle
+SET    tblDctosOrdenesDetalle.cantidadFacturada  = 
+      ( tblDctosOrdenesDetalle.cantidadFacturada + 
+        tmpORD.cantidadFacturadaNota ) ,
+        tblDctosOrdenesDetalle.pesoFacturado     = 
+      ( tblDctosOrdenesDetalle.pesoFacturado     + 
+             tmpORD.pesoFacturadoNota ),
+       tblDctosOrdenesDetalle.estado             = 4
+FROM  tblDctosOrdenesDetalle
+INNER JOIN
+ (SELECT tmpDOC.idLocalOrigen, 
+         tmpDOC.idTipoOrdenOrigen, 
+         tmpDOC.idOrdenOrigen, 
+         tmpDOC.item, 
+         tmpDET.CANTIDAD 
+         AS cantidadFacturadaNota,
+         tmpDET.pesoFacturado 
+              AS pesoFacturadoNota
+  FROM tblDctosOrdenesDetalle
+                         AS tmpDET
+INNER JOIN tblDctosOrdenesDetalle 
+                         AS tmpDOC
+ON tmpDET.idLocalOrigen      = 
+                    tmpDOC.IDLOCAL
+AND tmpDET.idTipoOrdenOrigen = 
+                tmpDOC.IDTIPOORDEN
+AND tmpDET.idOrdenOrigen     = 
+                    tmpDOC.IDORDEN
+AND tmpDET.item = tmpDOC.item
+WHERE   tmpDET.IDLOCAL = 1 
+AND  tmpDET.IDTIPOORDEN = 29 
+AND  tmpDET.IDORDEN = 28617 
+                      ) AS tmpORD
+ON tblDctosOrdenesDetalle.IDLOCAL      = 
+                    tmpORD.idLocalOrigen 
+AND tblDctosOrdenesDetalle.IDTIPOORDEN = 
+                tmpORD.idTipoOrdenOrigen
+AND tblDctosOrdenesDetalle.IDORDEN     = 
+                    tmpORD.idOrdenOrigen
+WHERE tblDctosOrdenesDetalle.estado   != 4
+
+---
+
+
+                 SELECT tmpDcto.idPlu,                                     
+                        SUM(tmpDcto.CANTIDAD) AS cantidad,               
+                        SUM(tmpDcto.pesoFacturado) AS pesoFacturado,     
+                        MIN(tmpDcto.NOMBREPLU) AS nombrePlu,             
+                        MIN(tmpDcto.vrVentaUnitario)                     
+                                            AS vrVentaUnitario,          
+                        MIN(tmpDcto.PORCENTAJEIVA)                       
+                                            AS porcentajeIva,            
+                        MIN(tmpDcto.VRCOSTO) AS vrCosto ,                
+                        tmpDcto.item,                                    
+                        MIN(tmpDcto.vrVentaConIva)                       
+                                          AS vrVentaConIva,              
+                        MIN(tmpDcto.vrCostoConIva)                       
+                                              AS vrCostoConIva,          
+                        MIN(tmpDcto.unidadVenta)                         
+                                              AS unidadVenta,            
+                   MIN(tmpDcto.idLocalOrigen) AS idLocalOrigen,          
+                   MIN(tmpDcto.idTipoOrdenOrigen)                        
+                                           AS idTipoOrdenOrigen,         
+                   MIN(tmpDcto.idOrdenOrigen) AS idOrdenOrigen           
+                 FROM (                                                  
+                 SELECT tblDctosOrdenesDetalle.IDPLU,                    
+                        tblDctosOrdenesDetalle.CANTIDAD,                 
+                        tblDctosOrdenesDetalle.pesoFacturado,            
+                        tblDctosOrdenesDetalle.NOMBREPLU,                
+                    tblDctosOrdenesDetalle.vrVentaUnitario    *          
+                   (1 - tblDctosOrdenesDetalle.porcentajeDscto / 100) *  
+                  (1 - tblDctosOrdenesDetalle.vrDsctoPie / 100)          
+                                            AS vrVentaUnitario,          
+                        tblDctosOrdenesDetalle.PORCENTAJEIVA,            
+                        tblDctosOrdenesDetalle.VRCOSTO,                  
+                        tblDctosOrdenesDetalle.item,                     
+                   ((tblDctosOrdenesDetalle.CANTIDAD          *          
+                     tblDctosOrdenesDetalle.vrVentaUnitario ) *          
+                   (1 - tblDctosOrdenesDetalle.porcentajeDscto           
+                                                       / 100) *          
+                   (1 - tblDctosOrdenesDetalle.vrDsctoPie                
+                                                       / 100))           
+                                              AS vrVentaConIva,          
+                   (tblDctosOrdenesDetalle.CANTIDAD          *           
+                               tblDctosOrdenesDetalle.VRCOSTO )          
+                                              AS vrCostoConIva,          
+                   tblDctosOrdenesDetalle.unidadVenta,                   
+                   tblDctosOrdenesDetalle.idLocalOrigen,                 
+                   tblDctosOrdenesDetalle.idTipoOrdenOrigen,             
+                   tblDctosOrdenesDetalle.idOrdenOrigen                  
+                 FROM   tblDctos                                         
+                 INNER JOIN tblDctosOrdenes                              
+                 ON  tblDctos.IDLOCAL            =                       
+                                       tblDctosOrdenes.IDLOCAL           
+                 AND tblDctos.IDTIPOORDEN        =                       
+                                   tblDctosOrdenes.IDTIPOORDEN           
+                 AND tblDctos.IDORDEN            =                       
+                                       tblDctosOrdenes.IDORDEN           
+                 INNER JOIN tblDctosOrdenesDetalle                       
+                 ON  tblDctosOrdenes.IDLOCAL     =                       
+                                tblDctosOrdenesDetalle.IDLOCAL           
+                 AND tblDctosOrdenes.IDTIPOORDEN =                       
+                            tblDctosOrdenesDetalle.IDTIPOORDEN           
+                 AND tblDctosOrdenes.IDORDEN     =                       
+                                tblDctosOrdenesDetalle.IDORDEN           
+                WHERE tblDctos.IDLOCAL          =  1            
+                AND tblDctos.IDTIPOORDEN        =  9             
+                AND tblDctos.idOrden            = 27422             
+                AND tblDctos.indicador          = 1             
+                 UNION                                                   
+                 SELECT tblDctosOrdenesDetalle.IDPLU,                    
+                        SUM(tblDctosOrdenesDetalle.CANTIDAD)             
+                                                  AS CANTIDAD ,          
+                        SUM(tblDctosOrdenesDetalle.pesoFacturado)        
+                                                  AS pesoFacturado ,     
+                        MAX(tblDctosOrdenesDetalle.NOMBREPLU)            
+                                                  AS NOMBREPLU,          
+                    MAX(tblDctosOrdenesDetalle.VRVENTAUNITARIO)          
+                                            AS VRVENTAUNITARIO,          
+                    MAX(tblDctosOrdenesDetalle.PORCENTAJEIVA)            
+                                              AS PORCENTAJEIVA,          
+                    MAX(tblDctosOrdenesDetalle.VRCOSTO)                  
+                                                    AS VRCOSTO,          
+                    tblDctosOrdenesDetalle.item,                         
+                    SUM(tblDctosOrdenesDetalle.CANTIDAD      *           
+                        tblDctosOrdenesDetalle.VRVENTAUNITARIO)          
+                                              AS vrVentaConIva,          
+                   SUM(tblDctosOrdenesDetalle.CANTIDAD       *           
+                               tblDctosOrdenesDetalle.VRCOSTO )          
+                                              AS vrCostoConIva,          
+                   MIN(tblDctosOrdenesDetalle.unidadVenta)               
+                                        AS unidadVenta,                  
+                   MIN(tblDctosOrdenesDetalle.idLocalOrigen)             
+                                            AS idLocalOrigen,            
+                   MIN(tblDctosOrdenesDetalle.idTipoOrdenOrigen)         
+                                           AS idTipoOrdenOrigen,         
+                   MIN(tblDctosOrdenesDetalle.idOrdenOrigen)             
+                                             AS idOrdenOrigen            
+                 FROM   tblDctos                                         
+                 INNER JOIN tblDctosOrdenes                              
+                 ON  tblDctos.IDLOCAL            =                       
+                                       tblDctosOrdenes.IDLOCAL           
+                 AND tblDctos.IDTIPOORDEN        =                       
+                                   tblDctosOrdenes.IDTIPOORDEN           
+                 AND tblDctos.IDORDEN            =                       
+                                       tblDctosOrdenes.IDORDEN           
+                 INNER JOIN tblDctosOrdenesDetalle                       
+                 ON  tblDctosOrdenes.IDLOCAL     =                       
+                                tblDctosOrdenesDetalle.IDLOCAL           
+                 AND tblDctosOrdenes.IDTIPOORDEN =                       
+                            tblDctosOrdenesDetalle.IDTIPOORDEN           
+                 AND tblDctosOrdenes.IDORDEN     =                       
+                                tblDctosOrdenesDetalle.IDORDEN           
+                WHERE tblDctos.IDLOCALCruce     = 1             
+                AND tblDctos.IDTIPOORDENCRUCE   = 9             
+                AND tblDctos.idOrdenCruce       = 27422             
+                AND tblDctos.indicador          = 1             
+                + xIndicador                                   
+                 GROUP BY tblDctosOrdenesDetalle.IDPLU,                  
+                          tblDctosOrdenesDetalle.item )                  
+                                                    AS tmpDcto           
+                 GROUP BY tmpDcto.IDPLU,                                 
+                          tmpDcto.item                                   
+                 ORDER BY 7                                               ;

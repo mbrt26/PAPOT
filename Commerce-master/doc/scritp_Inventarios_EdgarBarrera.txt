@@ -1,0 +1,395 @@
+--------------------------------------------------------------------------------------------------
+--- PARA QUITAR CAUSA EN RETAL = 0 
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblDctosOrdenesProgreso]
+   SET [idTipoCausa] = 0
+WHERE [idTipoCausa] = 2
+AND pesoPerdido = 0
+
+
+--- CAMBIAR BODEGA COMPRAS
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblCategorias]
+   SET [idBodega] = 888
+ WHERE idBodega = 999
+ 
+--- CAMBIAR NOMBRE BODEGA
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobOperacion]
+   SET [nombreOperacion] = 'MATERIALES'
+ WHERE idOperacion = 888
+ 
+--- CAMBIAR NOMBRE BODEGA
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblLocalesBodega]
+   SET [nombreBodega] = 'MATERIALES'
+      ,[codigoBodega] = 'MATERIALES'
+ WHERE idBodega = 888
+ 
+--- CAMBIAR NOMBRE BODEGA
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobOperacion]
+   SET [nombreOperacion] = 'TERMINADOS'
+ WHERE idOperacion = 999
+ 
+--- CAMBIAR NOMBRE BODEGA
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblLocalesBodega]
+   SET [nombreBodega] = 'TERMINADOS'
+      ,[codigoBodega] = 'TERMINADOS'
+ WHERE idBodega = 999
+ 
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+   SET [nombreItem] = 'TERMINADOS'
+WHERE [nombreItem] LIKE '%ALMACEN%' 
+
+------------------------------------------------2--------------------------------------------------
+ 
+--- CREAR BODEGA --
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobOperacion]
+           ([idOperacion]
+           ,[nombreOperacion]
+           ,[estado]
+           ,[idSeq]
+           ,[idColor])
+     VALUES
+           (777
+           ,'--'
+           ,1
+           ,1
+           ,'#000000')
+           
+           
+--- CREAR OPERACION RETALES
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobOperacion]
+           ([idOperacion]
+           ,[nombreOperacion]
+           ,[estado]
+           ,[idSeq]
+           ,[idColor])
+     VALUES
+           (666
+           ,'RETALES'
+           ,1
+           ,1
+           ,'#000000')
+           
+--- CREAR BODEGA RETALES           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblLocalesBodega]
+           ([idLocal]
+           ,[idBodega]
+           ,[nombreBodega]
+           ,[estado]
+           ,[idSeq]
+           ,[codigoBodega])
+     VALUES
+           (1
+           ,666
+           ,'RETALES'
+           ,1
+           ,0
+           ,'RETALES')
+
+--- CREAR PLUS RETALES  
+                INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblPlusInventario]
+                           (idLocal             
+                           ,idBodega            
+                           ,idPlu               
+                           ,existencia          
+                           ,idTipoOrden         
+                           ,idOrden             
+                           ,cantidadOrden       
+                           ,estado)             
+                SELECT tblLocalesBodega.idLocal,
+                      tblLocalesBodega.idBodega,
+                       tblPlus.idPlu,           
+                       0.0 AS existencia,       
+                       0  AS idTipoOrden,       
+                       0  AS idOrden,           
+                       0.0 AS cantidadOrden,    
+                       01 AS estado             
+                FROM [BDCommerce_PU_Lab].[dbo].[tblPlus],                   
+                     tblLocalesBodega           
+                WHERE NOT EXISTS                
+                  (SELECT tblPlusInventario.*   
+                   FROM [BDCommerce_PU_Lab].[dbo].[tblPlusInventario]       
+                   WHERE tblPlus.idPlu =        
+                      tblPlusInventario.idPlu
+                   AND tblLocalesBodega.idBodega =        
+                      tblPlusInventario.idBodega)
+           
+----------------------------------------------3----------------------------------------------------          
+          
+--- REEMPLAZAR BODEGA PLUSFICHA          
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblPlusFicha]
+   SET [vrEscala] = 777
+ WHERE [vrEscala] = 888           
+ 
+
+--- 
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+           ([idEscala]
+           ,[nombreEscala]
+           ,[idTipoEscala]
+           ,[estado])
+     VALUES
+           ('666'
+           ,'RETALES'
+           ,1
+           ,2)
+           
+---           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+           ([idEscala]
+           ,[nombreEscala]
+           ,[idTipoEscala]
+           ,[estado])
+     VALUES
+           ('777'
+           ,'--'
+           ,1
+           ,2)
+           
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+   SET [nombreItem] = 'MATERIALES'
+ WHERE [idEscala] = 610
+AND  item = 888      
+
+---
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (610
+           ,777
+           ,'--'
+           ,1)           
+
+--- INVENTARIOS OTRAS CATEGORIAS
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblCategorias]
+   SET [idBodega] = 888
+
+---
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblCategorias]
+   SET [idBodega] = 0
+WHERE idLinea = 1
+AND idCategoria IN (9,10,11,12,13,14,15,16,17,18,19,20)
+
+--
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblCategorias]
+   SET [idBodega] = 0
+WHERE idLinea = 2
+AND idCategoria IN (20,21,22,24,26,27,28)   
+
+---
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+           ([idEscala]
+           ,[nombreEscala]
+           ,[idTipoEscala]
+           ,[estado])
+     VALUES
+           (1200
+           ,'MAQUINA RETALES'
+           ,2
+           ,1)
+           
+----------------------------------------------4----------------------------------------------------                     
+---           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (1200
+           ,1
+           ,'--'
+           ,1)           
+
+---           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaOperacion]
+           ([idEscala]
+           ,[idOperacion]
+           ,[estado]
+           ,[idOrdenSalida])
+     VALUES
+           (1200
+           ,666
+           ,1
+           ,10)
+           
+--- CREAR MP LINEAL ALTA
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+   SET [nombreEscala] = 'MP LINEAL BAJA'
+ WHERE idEscala = 611
+ 
+--- 
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+           ([idEscala]
+           ,[nombreEscala]
+           ,[idTipoEscala]
+           ,[estado])
+     VALUES
+           (617
+           ,'MP LINEAL ALTA'
+           ,1
+           ,1) 
+           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaOperacion]
+           ([idEscala]
+           ,[idOperacion]
+           ,[estado]
+           ,[idOrdenSalida])
+     VALUES
+           (617
+           ,2
+           ,1
+           ,990)           
+           
+---           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblPlusOperacion]
+           ([idOperacion]
+           ,[idPlu]
+           ,[idEscala]
+           ,[estado]
+           ,[idSeq]
+           ,[idSigno])
+     VALUES
+           (2
+           ,217
+           ,617
+           ,1
+           ,0
+           ,1)
+           
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (611
+           ,1
+           ,'MP LINEAL BAJA'
+           ,1)
+
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (612
+           ,1
+           ,'MP BAJA'
+           ,1)
+
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (613
+           ,1
+           ,'MP ALTA'
+           ,1)
+
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (614
+           ,1
+           ,'MP PP'
+           ,1)
+
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblJobEscalaDetalle]
+           ([idEscala]
+           ,[item]
+           ,[nombreItem]
+           ,[estado])
+     VALUES
+           (617
+           ,1
+           ,'MP LINEAL ALTA'
+           ,1)           
+           
+--- ADICIONAR TRASLADO EXTERNO
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblTipoOrden]
+           ([idTipoOrden]
+           ,[nombreTipoOrden]
+           ,[estado]
+           ,[signo]
+           ,[idSeq]
+           ,[idAlcance])
+     VALUES
+           (18
+           ,'Externo'
+           ,1
+           ,-1
+           ,0
+           ,1)
+           
+--- PIGMENTO------------------------------------------------------------------------------------------
+
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+   SET [nombreEscala] = 'MP PIGMENTO KG',
+       [idTipoEscala] = 6
+ WHERE [idEscala] = 615
+ 
+--- OTRAS REFCIAS
+
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblJobEscala]
+   SET [nombreEscala] = 'MP OTRAS REF KG',
+       [idTipoEscala] =7
+ WHERE [idEscala] = 616 
+ 
+--- RETIRA idOrdenOrigen en TRASLADO INTERNO
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblDctosOrdenesDetalle]
+   SET [idOrdenOrigen] = 0
+      ,[idLocalOrigen] = 0
+      ,[idTipoOrdenOrigen] = 0
+ WHERE [IDTIPOORDEN] = 4
+ 
+ --- SCRIPT OTRAS REFERENCIAS CONVIERTE A ENTERO ---
+ 
+ UPDATE [BDCommerce_PU_Lab].[dbo].[tblPlusFicha]
+ SET vrEscala = CAST([vrEscala] AS INTEGER)
+ FROM tblPlusFicha
+ WHERE idEscala = 616
+ 
+ 
+ **** FALTA MP LINEAL BAJA CODIGO 217 **** OJO CREARLO ****
+ 
+--- CREAR COLUMNAS EN tblDctosOrdenesProgreso ------ O J O -----
+
+idDctoNitCC	nvarchar(25)
+idOrdenCruce	float
+
+--- ejecutar
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblDctosOrdenesProgreso]
+   SET [idDctoNitCC] = ''
+      ,[idOrdenCruce] = 0
+      
+ 
+--- EJECUTAR scritpRetales.txt <---------- o j o ------
+--- EJECUTAR scritpLinealAlta.txt <---------- o j o ------
+
+                
+                
+--- dos decimales
+Entradas / Salidas
+Arreglar que SALGA PDF con dos decimales en TRASLADO (*** idTipoOrdenOrigen ***) <-- no sale
+NumeroDcto del TRASLADO debe salir en el Kardex
+*** Verifica la creacion de pedido con OPERACION = 777
+
+
+--- ROZO SOCIAL LABORATORIO
+UPDATE [BDCommerce_PU_Lab].[dbo].[tblLocales]
+   SET [nombreLocal] = 'INTELLCOMMERCE SAS'
+      ,[razonSocial] = 'INTELLCOMMERCE SAS'
+      ,[nit] = '900490897-5'
+      ,[direccion] = 'CRA 68A # 44-12'
+      ,[telefono] = '434.07.78'
+      ,[fax] = '434.07.78'
+      ,[resolucion] = 'PRUEBA'
+      ,[ciudad] = 'MEDELLIN-COLOMBIA'

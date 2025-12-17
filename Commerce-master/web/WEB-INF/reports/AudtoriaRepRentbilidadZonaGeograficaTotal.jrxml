@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="p_idTipoOrdenINI" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenFIN" class="java.lang.Integer"/>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+        SUM(tmpDET.vrBase)
+            AS vrBase,
+        SUM(tmpDET.vrCostoIND)
+            AS vrCostoIND,
+        SUM(tmpDET.vrIva)
+            AS vrIva,
+        SUM(tmpDET.vrCostoMV)
+            AS vrCostoMV, (CASE
+        WHEN SUM(tmpDET.vrBase) = 0
+        THEN 0
+        ELSE ((SUM(tmpDET.vrBase)-
+        SUM(tmpDET.vrCostoIND))/
+        SUM(tmpDET.vrBase))
+        END)
+         AS margenZona
+FROM (
+SELECT     tblDctos.IDLOCAL,
+           tblDctos.IDTIPOORDEN,
+           tblDctos.idDcto,
+           tblDctos.IDORDEN,
+           tblDctos.fechaDcto,
+           tblDctos.indicador,
+           tblDctos.idCliente,
+           (CASE WHEN tblDctos.indicador = 1
+            THEN tblDctos.vrBase
+            ELSE (tblDctos.vrBase +
+                  tblDctos.vrIva)
+            END) AS vrBase,
+            (CASE WHEN tblDctos.indicador = 1
+            THEN tblDctos.vrIva
+            ELSE 0
+            END) AS vrIva,
+            tblDctos.vrImpoconsumo,
+            tblDctos.nombreTercero,
+            tblDctos.idDctoNitCC,
+            tblDctos.fechaDctoNitCC,
+            tblDctos.idLocalCruce,
+            tblDctos.idTipoOrdenCruce,
+            tblDctos.idDctoCruce,
+            tblDctos.vrBase +
+            tblDctos.vrIva +
+            tblDctos.vrImpoconsumo -
+            tblDctos.vrRteFuente -
+            tblDctos.vrRteIva
+                     AS vrFactura,
+            tblDctos.vrDescuento,
+            tblDctos.vrRteFuente,
+            tblDctos.vrCostoMV,
+            tblDctos.vrCostoIND,
+            (CASE WHEN tblDctos.idTipoOrden = 1
+            THEN tblDctos.idDctoNitCC
+            ELSE STR(tblDctos.idDcto)
+            END) AS idDctoStr,
+            (CASE WHEN tblDctos.idTipoNegocio = 1
+            THEN 'CONTADO'
+            ELSE 'CREDITO'
+            END) AS nombreTipoNegocio,
+            tblDctos.idTipoNegocio,
+            (SELECT  aliasUsuario
+             FROM    ctrlUsuarios
+             WHERE   (idUsuario =
+                     tblDctos.idVendedor))
+                         AS aliasUsuario,
+             tblCiudades.idCiudad,
+             tblCiudades.nombreCiudad,
+             tblCiudades.nombreDpto
+FROM         tblDctos
+INNER JOIN tblTerceros
+ON tblDctos.idCliente       =
+                    tblTerceros.idCliente
+INNER JOIN tblCiudades
+ON tblTerceros.idDptoCiudad =
+                     tblCiudades.idCiudad
+WHERE     EXISTS
+  (SELECT  tblDctosOrdenesDetalle.*
+   FROM          tblDctosOrdenesDetalle
+   WHERE    tblDctos.IDLOCAL = IDLOCAL
+   AND tblDctos.IDTIPOORDEN = IDTIPOORDEN
+   AND tblDctos.IDORDEN = IDORDEN)
+AND tblDctos.idLocal   = $P{p_idLocal}
+AND tblDctos.fechaDcto BETWEEN $P{p_fechaInicialSqlServer}
+						AND $P{p_fechaFinalSqlServer}
+AND ( tblDctos.idTipoOrden  = $P{p_idTipoOrdenINI}
+		OR tblDctos.idTipoOrden = $P{p_idTipoOrdenFIN})
+AND tblDctos.indicador BETWEEN $P{p_indicadorINI}
+                        AND $P{p_indicadorFIN} )
+                                  AS tmpDET]]>
+	</queryString>
+	<field name="vrBase" class="java.lang.Double"/>
+	<field name="vrIva" class="java.lang.Double"/>
+	<field name="vrCostoMV" class="java.lang.Double"/>
+	<field name="vrCostoIND" class="java.lang.Double"/>
+	<field name="margenZona" class="java.lang.Double"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="10">
+			<textField pattern="#,##0">
+				<reportElement x="170" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrBase}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="355" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoIND}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="229" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrIva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="422" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{margenZona}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="288" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrCostoMV}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="57" y="0" width="89" height="10"/>
+				<textElement>
+					<font size="7" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

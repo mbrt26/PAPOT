@@ -1,0 +1,56 @@
+package com.solucionesweb.tags;
+
+import javax.servlet.jsp.tagext.*;
+
+public class ListaPedidoFechaLocalTagExtraInfo extends TagExtraInfo {
+  public VariableInfo[] getVariableInfo(TagData data) {
+    return new VariableInfo[] {
+      new VariableInfo("idLocalVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idTipoOrdenVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idOrdenVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idDctoVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("indicadorVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("fechaDctoVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrBaseVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrIvaVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("numeroArticuloVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrVentaConIvaVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("fechaDctoFormatoVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("nombreTipoOrdenVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idDctoSf0Var", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idDctoNitCCVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrRteFuenteVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrDescuentoVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrRteIvaVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrRteIcaVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("vrFacturaDf0Var", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idDctoCruceVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("idOrdenOrigenVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("dctoDianVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("urlDianVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+    };
+  }
+}

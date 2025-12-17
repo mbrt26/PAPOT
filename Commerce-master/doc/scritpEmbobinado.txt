@@ -1,0 +1,60 @@
+--- Cambiar a idTipoEscala = 5 en tblJobEscala
+
+805	TIPO EMBOBINADO	1	1
+
+--- tblJobEscalaDetalle
+805	1	TIPO EMBOBINADO	1
+
+
+--- tblJobEscalaOperacion
+805	3	1	600
+
+
+--
+DELETE FROM tblPlusFicha
+WHERE     (idEscala IN (805)) AND (idOperacion = 3)
+
+--- IMPRESION
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion=3
+AND idEscala IN (805)) 
+                                     AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+ORDER BY [idFicha]

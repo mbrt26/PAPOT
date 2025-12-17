@@ -1,0 +1,59 @@
+REGISTRO PRODUCCION
+
+
+
+Ricardo, si puede grabar suministros en la touch, crear una planilla diferente.
+Ricardo, CAUSALES DE RETAL ? listo
+
+ORDENES SERVCIO
+Las ordenes de servicio son parte de la ficha , 
+    se pueden elaborar desde la ficha o llamar la operacion y detallarla
+Se detalla la ficha  se incluye en programacion    
+
+
+Falta tiempo perdido en produccion CAUSALES ? Listas
+Es por pedido al grabarlo ? Se graba por pedido
+
+
+LEGALIZAR COMPRAS PARCIALES
+Debe quedar abierta y el usuario la cierra ?
+Rta/ se debe dejar abierta para que el usuario la cierre, por cumplido pedido (todas las referencias) o ya no se despachara mas.
+
+Computador 
+Donde esta ubicado ?
+
+
+Impresora
+Permitir identificar el rollo en inventario : quien lo termino, fecha, hora, nombre cliente, referencia cliente, numero pedido, kilos, cantidad, operario
+
+---
+
+---
+Incluir en los pedidos INDICADOR IVA (SI/NO), pero solo afecta ese pedido.
+
+---
+Programacion colocar las cantidades de forma como en excel que pueda cerrar columnas para ver mas.
+Programacion, no mostrar pedidos cuando estan CUMPLIDOS.
+Programacion, los pedidos que no aparecen en programacion de la maquina se deben ADICIONAR a esa maquina y mostralos en programacion.
+Programacion, los pedidos que salen en cero en extrusion (10158, 10261, 10263, 10265, 10276) ?
+Rta : tienen ficha ok , entonces ??
+
+
+
+
+
+--
+Grabar, solo informar la cantidad del pedidos y kilos, luego restar lo que se termina en la OPERACION
+Grabar, informar la maquina en el titulo y la operacion.
+Grabar, retirar fecha / hora inicio y fin, se calcula de ultimo registro anterior y registro actual, la diferencia es el tiempo calculado.
+Grabar, las tintas y suministros desde pantalla diferente
+Grabar, a los kilos terminados se les debe restar la TARA.
+
+Hacer pruebas con TARA , se almacena o se resta ?
+---
+
+
+
+
+
+

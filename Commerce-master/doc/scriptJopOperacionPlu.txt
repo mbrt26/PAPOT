@@ -1,0 +1,339 @@
+------------------------------- CREA TABLA
+USE [BDCommerce]
+GO
+/****** Objeto:  Table [dbo].[tblPlusOperacion]    Fecha de la secuencia de comandos: 08/28/2011 07:51:38 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblPlusOperacion](
+	[idOperacion] [int] NOT NULL,
+	[idPlu] [int] NOT NULL,
+	[idEscala] [int] NOT NULL,
+	[estado] [smallint] NULL,
+	[idSeq] [int] NULL,
+ CONSTRAINT [PK_tblPlusOperacion] PRIMARY KEY CLUSTERED 
+(
+	[idOperacion] ASC,
+	[idPlu] ASC,
+	[idEscala] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+--- COMPLETA BODEGAS
+INSERT INTO [BDCommerce].[dbo].[tblLocalesBodega]
+           ([idLocal]
+           ,[idBodega]
+           ,[nombreBodega]
+           ,[estado]
+           ,[idSeq]
+           ,[codigoBodega])
+select 01 AS idLocal,
+       tbljobOperacion.idOperacion AS idBodega,
+       tbljobOperacion.nombreOperacion AS nombreBodega,
+       1 AS estado,
+       0 AS idSeq,
+       tbljobOperacion.nombreOperacion AS codigoBodega
+from tbljobOperacion
+where not exists ( select *
+                   from tbllocalesbodega
+                   where tbllocalesbodega.idbodega =
+                             tbljobOperacion.idoperacion)
+                             
+-- ACTUALIZA NOMBRES BODEGA
+UPDATE tblLocalesBodega
+SET    tblLocalesBodega.nombreBodega = 
+        tblJobOperacion.nombreOperacion,
+       tblLocalesBodega.codigoBodega = 
+        tblJobOperacion.nombreOperacion
+FROM    tblJobOperacion
+INNER JOIN tblLocalesBodega
+ON tblJobOperacion.idOperacion       = 
+              tblLocalesBodega.idBodega
+              
+-- CREAR TBLJOBESCALA
+620	PRODUCCION	9	1
+
+-- CREAR TBLJOBESCALADETALLE
+620	PRODUCCION	1	1
+
+-- CREAR TBLJOBESCALAOPERACION
+620	1	1	999
+620	2	1	999
+620	3	1	999
+620	4	1	999
+620	5	1	999
+620	6	1	999
+
+-- ACTUALIZAR TBLPLUSINVENTARIO
+DELETE FROM [BDCommerce].[dbo].[tblPlusInventario] 
+
+INSERT INTO tblPlusInventario
+           ([idLocal]
+           ,[idPlu]
+           ,[idBodega]
+           ,[existencia]
+           ,[idTipoOrden]
+           ,[idOrden]
+           ,[cantidadOrden]
+           ,[estado])
+SELECT [idLocal]
+      ,[idPlu]
+      ,[idBodega]
+      ,0.0 AS existencia
+      ,0 AS idTipoOrden
+      ,0 AS idOrden
+      ,0.0 AS cantidadOrden
+      ,1 AS estado
+  FROM [BDCommerce].[dbo].[tblPlus],
+      [tblLocalesBodega]
+      
+      
+
+-- ADICIONAR PLU INVENTARIO TERMINADO
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,[idOperacion]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,620 AS [idEscala]
+      ,1   AS [item]
+      ,1   AS [vrEscala]
+      ,'' AS [textoEscala]
+      ,1 AS [estado]
+      ,[idFicha]
+      ,[referencia]
+  FROM [BDCommerce].[dbo].[tblPlusFicha]
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idOperacion]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      
+---
+CREAR CATEGORIA PRODUCTO
+
+CREAR REFERENCIA
+	PRODUCTO TERMINADO 
+
+
+------------------------------- LISTA PLUS + OPERACION + FICHA
+SELECT tblPlusFicha.idCliente, 
+       tblPlusFicha.referenciaCliente, 
+       tblPlusFicha.idOperacion, 
+       tblPlusFicha.idPlu, 
+       tblPlusFicha.nombreReferencia, 
+       tblPlusFicha.idEscala, 
+       tblPlusFicha.item, 
+       tblPlusFicha.vrEscala, 
+       tblPlusFicha.textoEscala, 
+       tblPlusFicha.estado, 
+       tblPlusFicha.idFicha, 
+       tblPlusFicha.referencia, 
+       tblJobEscala.nombreEscala
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala = 
+                 tblJobEscala.idEscala
+INNER JOIN tblPlusOperacion
+ON tblPlusFicha.idOperacion    = 
+        tblPlusOperacion.idOperacion
+AND tblPlusFicha.idEscala      = 
+           tblPlusOperacion.idEscala
+WHERE tblPlusFicha.idFicha     = 1090
+AND   tblPlusFicha.idOperacion = 2
+AND   tblPlusFicha.vrEscala   != 0
+
+---
+SELECT tblPlusFicha.vrEscala / 31 
+                       AS vrPromedio, 
+       tblPlusOperacion.idPlu, 
+       (tblCategorias.nombreCategoria + 
+                                  ' ' +
+       tblPlus.nombrePlu) AS nombrePlu
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala    = 
+                 tblJobEscala.idEscala
+INNER JOIN tblPlusOperacion
+ON tblPlusFicha.idOperacion = 
+          tblPlusOperacion.idOperacion
+AND tblPlusFicha.idEscala   = 
+             tblPlusOperacion.idEscala
+INNER JOIN tblPlus 
+ON tblPlusFicha.idPlu       = 
+                     tblPlus.idPlu
+INNER JOIN tblCategorias
+ON tblPlus.idLinea          = 
+                 tblCategorias.idLinea
+AND tblPlus.idCategoria     = 
+             tblCategorias.IdCategoria
+WHERE     (tblPlusFicha.idFicha = 1090)
+AND (tblPlusFicha.idOperacion = 2)
+AND (tblPlusFicha.vrEscala != 0)
+
+---
+SELECT 01 AS idLocal,
+       01 AS idTipoOrden,
+       01 AS idOrden,       
+       tblPlusOperacion.idPlu,        
+       (tblPlusFicha.vrEscala / 31) 
+                          AS cantidad,        
+       tblPlus.idTipo 
+      ,tblPlus.PORCENTAJEIVA
+      ,tblPlus.vrGeneral 
+                     AS VRVENTAUNITARIO
+      ,tblPlus.ESTADO,
+       (tblCategorias.nombreCategoria + 
+                                  ' ' +
+       tblPlus.nombrePlu) AS nombrePlu,
+       tblPlusOperacion.idPlu AS ean 
+      ,tblPlus.vrGeneral 
+                    AS VRVENTAORIGINAL       
+      ,tblPlus.vrCosto      
+      ,00 AS VRDSCTOPIE
+      ,00 AS PORCENTAJEDSCTO,      
+       (tblPlusFicha.vrEscala / 31) 
+                          AS CANTIDADPEDIDA
+      ,00 AS vrCostoNegociado
+      ,00 AS strIdBodega
+      ,00 AS vrCostoResurtido
+      ,00 AS STRIDLISTA
+      ,tblPlusOperacion.idPlu 
+                 AS STRIDREFERENCIA
+      ,00 AS PESOTEORICO
+      ,'' AS NOMBREUNIDADMEDIDA
+      ,01 AS IDLOCALSUGERIDO
+      ,2 AS IDBODEGASUGERIDO
+      ,'' marcaArteCliente
+      ,tblPlusFicha.referenciaCliente
+      ,'' AS comentario
+      ,tblPlusOperacion.idPlu 
+                              AS item
+      ,tblPlusOperacion.idPlu 
+                        AS itemPadre
+      ,0 AS idEstadoTx
+      ,0 AS idTipoTx
+      ,tblPlusOperacion.idPlu 
+               AS idReferenciaOriginal
+      ,01 AS idEstadoRefOriginal
+      ,00 AS idClasificacion
+      ,'' AS idResponsable
+      ,GETDATE() fechaEntrega
+      ,2 AS idBodega
+      ,0 AS vrImpoconsumo
+      ,tblPlus.vrCosto AS vrCostoIND
+      ,00 AS vrIvaResurtido
+      ,00 AS idSubcuenta
+      ,00 AS cantidadBonificada
+      ,01 AS idOrdenOrigen
+      ,01 AS idLocalOrigen
+      ,01 AS idTipoOrdenOrigen
+      ,tblPlus.idUVenta unidadVenta
+FROM   tblPlusFicha
+INNER JOIN tblJobEscala
+ON tblPlusFicha.idEscala    = 
+                 tblJobEscala.idEscala
+INNER JOIN tblPlusOperacion
+ON tblPlusFicha.idOperacion = 
+          tblPlusOperacion.idOperacion
+AND tblPlusFicha.idEscala   = 
+             tblPlusOperacion.idEscala
+INNER JOIN tblPlus 
+ON tblPlusOperacion.idPlu   = 
+                     tblPlus.idPlu
+INNER JOIN tblCategorias
+ON tblPlus.idLinea          = 
+                 tblCategorias.idLinea
+AND tblPlus.idCategoria     = 
+             tblCategorias.IdCategoria
+WHERE     (tblPlusFicha.idFicha = 1090)
+AND (tblPlusFicha.idOperacion = 2)
+AND (tblPlusFicha.vrEscala != 0)
+
+------------------------ PROCEDIMIENTO
+ingresar costos de plu 92, 93, 94 y 95
+
+-- CREAR TABLA Y POBLAR 
+USE [BDCommerce]
+GO
+/****** Objeto:  Table [dbo].[tblPlusOperacion]    Fecha de la secuencia de comandos: 08/28/2011 07:51:38 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblPlusOperacion](
+	[idOperacion] [int] NOT NULL,
+	[idPlu] [int] NOT NULL,
+	[idEscala] [int] NOT NULL,
+	[estado] [smallint] NULL,
+	[idSeq] [int] NULL,
+ CONSTRAINT [PK_tblPlusOperacion] PRIMARY KEY CLUSTERED 
+(
+	[idOperacion] ASC,
+	[idPlu] ASC,
+	[idEscala] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+--- ACTUALIZAR NOMBRE LOCALES BODEGA
+UPDATE tblLocalesBodega
+SET    tblLocalesBodega.nombreBodega = 
+        tblJobOperacion.nombreOperacion
+FROM    tblJobOperacion
+INNER JOIN tblLocalesBodega
+ON tblJobOperacion.idOperacion       = 
+              tblLocalesBodega.idBodega
+
+
+---
+DELETE FROM [BDCommerce].[dbo].[tblDctosOrdenesProgreso] 
+DELETE FROM [BDCommerce].[dbo].[tblDctosOrdenesDetalle] WHERE idTipoOrden = 11
+DELETE FROM [BDCommerce].[dbo].[tblDctosOrdenes] WHERE idTipoOrden = 11
+DELETE FROM [BDCommerce].[dbo].[tblDctos] WHERE idTipoOrden = 11
+
+--- COMPLETA BODEGAS
+INSERT INTO [BDCommerce].[dbo].[tblLocalesBodega]
+           ([idLocal]
+           ,[idBodega]
+           ,[nombreBodega]
+           ,[estado]
+           ,[idSeq]
+           ,[codigoBodega])
+select 01 AS idLocal,
+       tbljobOperacion.idOperacion AS idBodega,
+       tbljobOperacion.nombreOperacion AS nombreBodega,
+       1 AS estado,
+       0 AS idSeq,
+       tbljobOperacion.nombreOperacion AS codigoBodega
+from tbljobOperacion
+where not exists ( select *
+                   from tbllocalesbodega
+                   where tbllocalesbodega.idbodega =
+                             tbljobOperacion.idoperacion)
+                             
+-- ACTUALIZA NOMBRES BODEGA
+UPDATE tblLocalesBodega
+SET    tblLocalesBodega.nombreBodega = 
+        tblJobOperacion.nombreOperacion,
+       tblLocalesBodega.codigoBodega = 
+        tblJobOperacion.nombreOperacion
+FROM    tblJobOperacion
+INNER JOIN tblLocalesBodega
+ON tblJobOperacion.idOperacion       = 
+              tblLocalesBodega.idBodega

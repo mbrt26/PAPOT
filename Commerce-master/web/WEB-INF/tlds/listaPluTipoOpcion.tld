@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+  <tlib-version>1.0</tlib-version>
+  <short-name>listaPluTipoOpcion</short-name>
+  <uri>/WEB-INF/tlds/listaPluTipoOpcion</uri>
+  <tag>
+    <name>listaPluTipoOpcion</name>
+    <tag-class>com.solucionesweb.tags.ListaPluTipoOpcionTag</tag-class>
+    <tei-class>com.solucionesweb.tags.ListaPluTipoOpcionTagExtraInfo</tei-class>
+    <body-content>JSP</body-content>
+    <description>
+      Lista nombreCategoria para efectuarles mantenimiento
+    </description>
+    <attribute>
+      <name>idTipoTag</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+</taglib>

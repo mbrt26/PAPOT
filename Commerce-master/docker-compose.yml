@@ -1,0 +1,49 @@
+services:
+  # Base de datos SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: commerce-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Tecnnova2018*
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - commerce-network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Tecnnova2018*' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
+  # Aplicación Java/Tomcat
+  commerce-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+    container_name: commerce-app
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    ports:
+      - "9000:8080"
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      - CATALINA_OPTS=-Dfile.encoding=UTF-8
+    volumes:
+      - ./web/META-INF/context-docker.xml:/usr/local/tomcat/webapps/ROOT/META-INF/context.xml
+      - ./logs:/usr/local/tomcat/logs
+    networks:
+      - commerce-network
+    restart: unless-stopped
+
+networks:
+  commerce-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
+    driver: local

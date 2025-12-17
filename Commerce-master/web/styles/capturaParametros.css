@@ -1,0 +1,97 @@
+@charset "iso-8859-1";
+
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt
+}
+
+.body01 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #ffffff;
+	background-color: #f4eed2
+}
+.avisoParametroEntrada {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #000000;
+	background-color: #D9D4D4
+}
+
+.cabecera4 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #182c6d;
+	background-color: #FFFFFF
+}
+
+.fondoBody {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #ffffff;
+	background-color: #f4eed2
+}
+
+.tituloInforme {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #0099CC
+}
+
+.cajaTextoEntrada {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #FFFFFF
+}
+
+.input {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 7pt
+}
+
+.botonSubmit {
+	font-size: 7pt; TEXT-DECORATION: none; FONT-WEIGHT: bold; BORDER-RIGHT: #006699 2px solid; PADDING-RIGHT: 0.5em; BORDER-TOP: #00CCFF 2px solid; PADDING-LEFT: 0.5em; FONT-WEIGHT: bold; PADDING-BOTTOM: 2px; BORDER-LEFT: #00CCFF 2px solid; COLOR: #FFFFFF; PADDING-TOP: 2px; BORDER-BOTTOM: #006699 2px solid; BACKGROUND-COLOR: #0099CC
+}
+.button:visited {
+	font-size: 7pt;
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none
+}
+.button:hover {
+	COLOR: #000000;
+	TEXT-DECORATION: none
+}
+
+
+.a_nothing {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none
+}
+
+.a_nothing:visited {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none
+}
+
+.a_nothing:hover {
+	COLOR: #000099;
+	TEXT-DECORATION: none
+}
+
+a {
+	TEXT-DECORATION: none
+}
+
+a:visited {
+	COLOR: #0000ff;
+	TEXT-DECORATION: none
+}
+
+a:hover {
+	COLOR: #0000ff;
+	TEXT-DECORATION: none
+}

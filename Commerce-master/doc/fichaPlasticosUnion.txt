@@ -1,0 +1,19 @@
+ok-	Cambiar la REFERENCIA CLIENTE -1.25 para que la pueda trae con IDFICHA			
+ok-	Permitir consultar la FICHA por numero, no es necesario tener pedido montado. 
+ok-	Ingresar Textos importados directamente
+ok-	Importar datos de Hernando para comparar
+ok-	Los textos deben ser completos y en textarea
+ok-	Proceso comparar liquidaciones y fichas
+ok-	Buscar ficha tecnica por #PEDIDO
+ok-	Informar #Pedido, Cantidad, Fecha Entrega
+ok-	En registro produccion aparecer operario para seleccionar
+
+Extrusion rollos + kilos, el resto cantidad + kilos
+Ingresar PRODUCCION/MATERIAL PRIMAS en operaciones
+Completar las FT de las operaciones
+Ingresar MP en varios registros
+Subir el resto de operaciones a la FichaTecnica
+Ordenes de Produccion x varias fechas de entrega la misma referencia
+Retirar pedidos del sistema con cantidades pendientes por producir (colitas pequeñas) y quedan cumplidos
+Facturas con unidadad de venta diferente
+ 

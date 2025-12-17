@@ -1,0 +1,195 @@
+package com.solucionesweb.tags;
+
+import java.util.*;
+import java.io.IOException;
+import javax.servlet.jsp.*;
+import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.tagext.TagSupport;
+
+// Importa el bean de ColaboraResurtidoOrden
+import com.solucionesweb.losbeans.colaboraciones.ColaboraReporteDctoBean;
+
+// Importa el bean de FachadaColaboraDctoOrdenBean
+import com.solucionesweb.losbeans.fachada.FachadaColaboraReporteDctoBean;
+
+public class ListaMargenTag extends TagSupport implements IterationTag {
+
+    // Variable que recibe del JSP
+    private String idLocalTag;
+    private String idTipoOrdenCadenaTag;
+    private String indicadorInicialTag;
+    private String indicadorFinalTag;
+    private String idVendedorTag;
+    private String fechaInicialTag;
+    private String fechaFinalTag;
+
+    // Metodos Tag
+    public void setIdLocalTag(String idLocalTag) {
+        this.idLocalTag = idLocalTag;
+    }
+
+    public String getIdLocalTag() {
+        return idLocalTag;
+    }
+
+    public void setIdTipoOrdenCadenaTag(String idTipoOrdenCadenaTag) {
+        this.idTipoOrdenCadenaTag = idTipoOrdenCadenaTag;
+    }
+
+    public String getIdTipoOrdenCadenaTag() {
+        return idTipoOrdenCadenaTag;
+    }
+
+    public void setIndicadorInicialTag(String indicadorInicialTag) {
+        this.indicadorInicialTag = indicadorInicialTag;
+    }
+
+    public String getIndicadorInicialTag() {
+        return indicadorInicialTag;
+    }
+
+    public void setIndicadorFinalTag(String indicadorFinalTag) {
+        this.indicadorFinalTag = indicadorFinalTag;
+    }
+
+    public String getIndicadorFinalTag() {
+        return indicadorFinalTag;
+    }
+
+    public void setIdVendedorTag(String idVendedorTag) {
+        this.idVendedorTag = idVendedorTag;
+    }
+
+    public String getIdVendedorTag() {
+        return idVendedorTag;
+    }
+
+    public double getIdVendedor() {
+        return new Double(getIdVendedorTag()).doubleValue();
+    }
+
+    public void setFechaInicialTag(String fechaInicialTag) {
+        this.fechaInicialTag = fechaInicialTag;
+    }
+
+    public String getFechaInicialTag() {
+        return fechaInicialTag;
+    }
+
+    public void setFechaFinalTag(String fechaFinalTag) {
+        this.fechaFinalTag = fechaFinalTag;
+    }
+
+    public String getFechaFinalTag() {
+        return fechaFinalTag;
+    }
+    //
+    ColaboraReporteDctoBean colaboraReporteDctoBean;
+    //
+    FachadaColaboraReporteDctoBean fachada;
+    // Iterador de objetos
+    Iterator iteratorBean;
+
+    private void inicializarVariablesDeRetorno() {
+
+        //
+        fachada = (FachadaColaboraReporteDctoBean) iteratorBean.next();
+
+        // Variable que retornan al JSP
+        pageContext.setAttribute("idDctoVar", fachada.getIdDctoStr());
+        pageContext.setAttribute("idClienteVar", fachada.getIdCliente());
+        pageContext.setAttribute("nombreTerceroVar",
+                                                    fachada.getNombreTercero());
+        pageContext.setAttribute("fechaDctoVar", fachada.getFechaDctoFormato());
+        pageContext.setAttribute("vrBaseVar", fachada.getVrBaseDf0());
+        pageContext.setAttribute("vrIvaVar", fachada.getVrIvaDf0());
+        pageContext.setAttribute("vrImpoconsumoVar",
+                                                 fachada.getVrImpoconsumoDf0());
+        pageContext.setAttribute("vrFacturaVentaVar",
+                fachada.getVrFacturaVentaDf0());
+        pageContext.setAttribute("vrDescuentoVar",
+                fachada.getVrDescuentoDf0());
+        pageContext.setAttribute("vrRteFuenteVar", fachada.getVrRteFuenteDf0());
+        pageContext.setAttribute("nombreTipoNegocioVar",
+                fachada.getNombreTipoNegocio());
+        pageContext.setAttribute("aliasUsuarioVar", fachada.getAliasUsuario());
+        pageContext.setAttribute("idDctoNitCCVar", fachada.getIdDctoNitCC());
+        pageContext.setAttribute("margenINDPorcentajeVar",
+                fachada.getMargenINDPorcentajeDf2());
+        pageContext.setAttribute("vrCostoINDDf0Var",
+                                                    fachada.getVrCostoINDDf0());
+        pageContext.setAttribute("vrCostoMVDf0Var", fachada.getVrCostoMVDf0());
+
+    }
+
+    public int doStartTag() throws JspTagException {
+
+        // Parametros llegados de JSP
+        colaboraReporteDctoBean = new ColaboraReporteDctoBean();
+
+        //
+        colaboraReporteDctoBean.setIdLocal(getIdLocalTag());
+        colaboraReporteDctoBean.setIndicadorInicial(getIndicadorInicialTag());
+        colaboraReporteDctoBean.setIndicadorFinal(getIndicadorFinalTag());
+
+        Vector vectorBean;
+
+        //
+        if (getIdVendedor() == 0) {
+
+            //
+            vectorBean = colaboraReporteDctoBean.listaMargenAll(
+                    getIdTipoOrdenCadenaTag(),
+                    getFechaInicialTag(),
+                    getFechaFinalTag());
+
+        } else {
+
+            //
+            vectorBean = colaboraReporteDctoBean.listaMargenAll(
+                    getIdTipoOrdenCadenaTag(),
+                    getFechaInicialTag(),
+                    getFechaFinalTag());
+
+        }
+
+
+        //
+        iteratorBean = vectorBean.iterator();
+
+        //
+        if (!iteratorBean.hasNext()) {
+            try {
+                pageContext.getOut().write("La consulta no devolvio ningun dato <br/>");
+                pageContext.getOut().write("<br/>");
+                pageContext.getOut().write("Por favor comunique al administrador<br/>");
+            } catch (IOException ex) {
+                throw new JspTagException("Error: la respuesta no se pudo escribir para los datos");
+            } finally {
+                return SKIP_BODY;
+            }
+        }
+
+        // Asigna los valores a las variables que se muestran en jsp
+        inicializarVariablesDeRetorno();
+
+        return EVAL_BODY_INCLUDE;
+    }
+
+    public int doAfterBody() throws JspTagException {
+
+        if (iteratorBean.hasNext()) {
+
+            //
+            inicializarVariablesDeRetorno();
+            return EVAL_BODY_AGAIN;
+        }
+
+        return SKIP_BODY;
+
+    }
+
+    public int doEndTag() throws JspTagException {
+        return EVAL_PAGE;
+    }
+}

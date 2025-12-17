@@ -1,0 +1,984 @@
+ok	910	maquina
+
+
+---
+910	1	NULL
+910	2	450
+910	3	CORREA
+910	4	DARMA
+910	5	EXTERNO
+910	6	MANUALES
+910	7	PLAS MEDELLIN
+910	8	REFILADO
+910	9	SELLOPLAS
+910	10	SERVO 1
+910	11	SERVO 2
+910	12	SIGMAPLAS
+910	13	TUBYPLAST
+910	14	YUMONDI
+910	15	ZENNER
+
+---
+SELECT fichaHernando.MaqS
+FROM [fichaHernando]
+GROUP BY [MaqS]
+ORDER BY 1
+
+
+---
+910	MAQUINA SELLADO	 
+
+---
+05	SELLADO
+
+---
+UPDATE [BDCommerce].[dbo].[fichaHernando]
+   SET [MaqS] = '-'
+ WHERE [MaqS] IS NULL
+
+=== INSERT -- 910 --- MAQS
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,910 AS idEscala
+      ,1 AS item
+      ,tmpESC.item AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia 
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+INNER JOIN (SELECT tblJobEscalaDetalle.iTem,
+                   tblJobEscalaDetalle.nombreItem
+            FROM tblJobEscalaDetalle
+            WHERE tblJobEscalaDetalle.idEscala=910) 
+                                         AS tmpESC
+ON tmpESC.nombreItem = 
+                  fichaHernando.maqS
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,tmpESC.item
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material
+      ,[MaqS]
+
+---
+SELECT Tabla_Productos.Ancho, 
+       Tabla_Productos.Largo, 
+       Tabla_Productos.tipo_Solapa, 
+       Tabla_Productos.Solapa, 
+       Tabla_Productos.Fuelle_L, 
+       Tabla_Productos.Fuelle_F, 
+       Tabla_Productos.Calibre
+FROM   fichaHernando
+INNER JOIN Tabla_Productos
+ON fichaHernando.Referencia = 
+        Tabla_Productos.Referencia
+        
+---
+SELECT fichaHernando.id,
+       Tabla_Productos.Ancho, 
+       Tabla_Productos.Largo, 
+       Tabla_Productos.tipo_Solapa, 
+       Tabla_Productos.Solapa, 
+       Tabla_Productos.Fuelle_L, 
+       Tabla_Productos.Fuelle_F, 
+       Tabla_Productos.Calibre
+FROM   fichaHernando
+INNER JOIN Tabla_Productos
+ON fichaHernando.Referencia = 
+        Tabla_Productos.Referencia
+GROUP BY fichaHernando.id,
+       Tabla_Productos.Ancho, 
+       Tabla_Productos.Largo, 
+       Tabla_Productos.tipo_Solapa, 
+       Tabla_Productos.Solapa, 
+       Tabla_Productos.Fuelle_L, 
+       Tabla_Productos.Fuelle_F, 
+       Tabla_Productos.Calibre
+       
+===
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,501 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material    
+      
+=== 502	LARGO      
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,502 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material    
+
+-- 507	SOLAPA
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,507 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material   
+      
+-- 506	TIPO SOLAPA
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,506 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material 
+      
+-- 505	TIPO FUELLE
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,505 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material           
+      
+-- 504	FUELLE-2
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,504 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material   
+      
+-- 508	FUELLE-1
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,508 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material   
+      
+      
+---
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,503 AS idEscala
+      ,1 AS item
+      ,0.0 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material  
+
+-- 501	ANCHO
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.ancho
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 501
+
+-- 502	LARGO
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.LARGO
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 502
+
+-- 503 	CALIBRE
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.CALIBRE
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 503
+
+-- 507	SOLAPA	
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.SOLAPA
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 507
+
+-- 505 TIPO FUELLE
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.[Fuelle_F]
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 505
+
+
+-- 508	FUELLE-1 - FONDO
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.[Fuelle_F]
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 508
+
+-- 504	FUELLE-2 - LATERAL
+UPDATE  tblPlusFicha
+SET     vrEscala = 
+            Tabla_Productos.Fuelle_L
+FROM         Tabla_Productos
+ INNER JOIN  tblPlusFicha
+ON Tabla_Productos.Referencia = 
+             tblPlusFicha.referencia
+WHERE tblPlusFicha.idOperacion = 5
+AND   tblPlusFicha.idEscala = 504
+
+---
+UPDATE    tblPlusFicha
+SET              vrEscala = tblJobEscalaDetalle.item
+FROM         Tabla_Productos
+INNER JOIN tblPlusFicha
+ON Tabla_Productos.Referencia  = 
+                  tblPlusFicha.referencia
+INNER JOIN tblJobEscalaDetalle
+ON Tabla_Productos.tipo_Solapa = 
+          tblJobEscalaDetalle.nombreItem
+WHERE     (tblPlusFicha.idOperacion = 5) 
+AND (tblPlusFicha.idEscala = 506)
+
+---
+SELECT tblJobEscalaOperacion.idEscala, 
+       tblJobEscala.nombreEscala,
+       tblJobEscalaOperacion.idOrdenSalida
+FROM   tblJobEscalaOperacion
+INNER JOIN tblJobEscala
+ON tblJobEscalaOperacion.idEscala = 
+                     tblJobEscala.idEscala
+WHERE (tblJobEscalaOperacion.idOperacion = 5)
+ORDER BY tblJobEscalaOperacion.idEscala
+
+---
+OK	-	501	ANCHO	 
+OK	-	502	LARGO 
+OK	-	503	CALIBRE	 
+OK	-	504	FUELLE-2 
+OK	-	505	TIPO FUELLE	6
+OK	-	506	TIPO SOLAPA	1
+OK	-	508	FUELLE-1	1
+OK	-	507	SOLAPA	1
+OK	-	514	TIPO SELLADO	1
+515	OBSERVACION	1
+900	TIPO TROQUEL	1
+901	ALTURA SELLADO	1
+902	GOLPES	1
+903	BULTO POR 	1
+904	PAQUETE POR	1
+910	MAQUINA SELLADO	1
+
+---
+505	1	FUELLE LATERAL 
+505	2	FUELLE FONDO	 
+505	3	NINGUNO	 
+
+-- 508	FUELLE-1 - FONDO	=	2
+-- 504	FUELLE-2 - LATERAL	=	1
+-- 505	FUELLE-2 - NINGUNO	=	3
+
+
+-- 505	FUELLE-2 - NINGUNO	=	3
+UPDATE tblPlusFicha
+SET    tblPlusFicha.vrEscala = 3
+FROM   tblPlusFicha
+INNER JOIN  tblPlusFicha AS tblPlusFicha_1
+ON tblPlusFicha.idFicha = tblPlusFicha_1.idFicha
+WHERE     (tblPlusFicha.idOperacion = 5)
+AND (tblPlusFicha.idEscala = 505) 
+
+-- 508	FUELLE-1 - FONDO	=	2
+UPDATE tblPlusFicha
+SET    tblPlusFicha.vrEscala = 2
+FROM   tblPlusFicha
+INNER JOIN  tblPlusFicha AS tblPlusFicha_1
+ON tblPlusFicha.idFicha = tblPlusFicha_1.idFicha
+WHERE     (tblPlusFicha.idOperacion = 5)
+AND (tblPlusFicha.idEscala = 505)
+AND (tblPlusFicha_1.idEscala = 508)
+AND tblPlusFicha_1.vrEscala  > 0
+
+-- 504	FUELLE-2 - LATERAL	=	1
+UPDATE tblPlusFicha
+SET    tblPlusFicha.vrEscala = 1
+FROM   tblPlusFicha
+INNER JOIN  tblPlusFicha AS tblPlusFicha_1
+ON tblPlusFicha.idFicha = tblPlusFicha_1.idFicha
+WHERE     (tblPlusFicha.idOperacion = 5)
+AND (tblPlusFicha.idEscala = 505)
+AND (tblPlusFicha_1.idEscala = 504)
+AND tblPlusFicha_1.vrEscala  > 0
+ 
+-- 506	TIPO SOLAPA 
+UPDATE    tblPlusFicha
+SET              vrEscala = tblJobEscalaDetalle.item
+FROM         Tabla_Productos
+INNER JOIN tblPlusFicha
+ON Tabla_Productos.Referencia  = 
+                  tblPlusFicha.referencia
+INNER JOIN tblJobEscalaDetalle
+ON Tabla_Productos.tipo_Solapa = 
+          tblJobEscalaDetalle.nombreItem
+WHERE     (tblPlusFicha.idOperacion = 1) 
+AND (tblPlusFicha.idEscala = 506) 
+
+-- 514	TIPO SELLADO
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,514 AS idEscala
+      ,1 AS item
+      ,tmpESC.item AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia 
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+INNER JOIN (SELECT tblJobEscalaDetalle.iTem,
+                   tblJobEscalaDetalle.nombreItem
+            FROM tblJobEscalaDetalle
+            WHERE tblJobEscalaDetalle.idEscala=514) 
+                                         AS tmpESC
+ON tmpESC.nombreItem = 
+                  fichaHernando.tipoSellado
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,tmpESC.item
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material 
+      
+=== INSERT 515	OBSERVACION ***
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,515 AS idEscala
+      ,1 AS item
+      ,0 AS vrEscala
+      ,Tabla_FichasT.[Observa_Sell] AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,Tabla_FichasT.[Referencia] AS referencia
+FROM Tabla_FichasT
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = Tabla_FichasT.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  Tabla_FichasT.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,Tabla_FichasT.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material  
+      ,Tabla_FichasT.[Observa_Sell]    
+      
+---
+=== INSERT 901	ALTURA SELLADO
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,901 AS idEscala
+      ,1 AS item
+      ,0 AS vrEscala
+      ,Tabla_FichasT.alt_sellado AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,Tabla_FichasT.[Referencia] AS referencia
+FROM Tabla_FichasT
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = Tabla_FichasT.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  Tabla_FichasT.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,Tabla_FichasT.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material  
+      ,Tabla_FichasT.alt_sellado
+      
+---
+=== INSERT 902 GOLPES
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,902 AS idEscala
+      ,1 AS item
+      ,Tabla_FichasT.golpes AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,Tabla_FichasT.[Referencia] AS referencia
+FROM Tabla_FichasT
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = Tabla_FichasT.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  Tabla_FichasT.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,Tabla_FichasT.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material  
+      ,Tabla_FichasT.golpes
+      
+---
+=== INSERT 903 BULTOS POR
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,903 AS idEscala
+      ,1 AS item
+      ,Tabla_FichasT.bpor AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,Tabla_FichasT.[Referencia] AS referencia
+FROM Tabla_FichasT
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = Tabla_FichasT.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  Tabla_FichasT.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,Tabla_FichasT.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material  
+      ,Tabla_FichasT.bpor     
+      
+---
+=== INSERT 904 PAQUETES POR
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,904 AS idEscala
+      ,1 AS item
+      ,Tabla_FichasT.ppor AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,Tabla_FichasT.[Referencia] AS referencia
+FROM Tabla_FichasT
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = Tabla_FichasT.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  Tabla_FichasT.material
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,Tabla_FichasT.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material  
+      ,Tabla_FichasT.ppor 
+      
+--- TIPO TROQUEL
+900	01	-
+900	02	BANDERINES
+900	03	CAMISETA
+900	04	CINTA ADHESIVA
+900	05	MEDIA LUNA
+900	06	PARAGANCHO
+900	07	PERFORACIONES
+900	08	PRECORTE
+900	09	RIÑON
+900	10	SELLE DE REFUERZO
+900	11	TIPO BANDERIN
+900	12	TIPO SOBRE
+900	13	WIECKET
+
+--- 900 TIPO TROQUEL
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT tmpTER.idCliente
+      ,[Rcliente] AS referenciaCliente
+      ,05 AS idOperacion
+      ,tmpPLU.idPlu
+      ,[Material] AS nombreReferencia
+      ,900 AS idEscala
+      ,1 AS item
+      ,tmpESC.item AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado
+      ,[Id] AS idFicha
+      ,fichaHernando.[Referencia] AS referencia 
+FROM fichaHernando
+INNER JOIN (SELECT tblTerceros.idCliente,
+                   tblTerceros.CC_Nit
+            FROM tblTerceros) AS tmpTER
+ON tmpTER.CC_Nit = fichaHernando.Cliente
+INNER JOIN (SELECT tblPlus.referencia,
+                   tblPlus.idPlu
+            FROM tblPlus) AS tmpPLU
+ON tmpPLU.referencia = 
+                  fichaHernando.material
+INNER JOIN (SELECT tblJobEscalaDetalle.iTem,
+                   tblJobEscalaDetalle.nombreItem
+            FROM tblJobEscalaDetalle
+            WHERE tblJobEscalaDetalle.idEscala=900) 
+                                         AS tmpESC
+ON tmpESC.nombreItem = 
+                  fichaHernando.troquel
+GROUP BY [Id]
+      ,tmpTER.idCliente
+      ,tmpESC.item
+      ,fichaHernando.[Referencia]
+      ,[Rcliente]
+      ,tmpPLU.idPlu
+      ,Material 

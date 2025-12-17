@@ -1,0 +1,39 @@
+# Etapa de compilación con Maven
+FROM maven:3.8-openjdk-11 AS builder
+
+WORKDIR /app
+
+# Copiar archivos de configuración de Maven primero (para cachear dependencias)
+COPY pom.xml .
+
+# Descargar dependencias (se cachea si pom.xml no cambia)
+RUN mvn dependency:go-offline -B
+
+# Copiar código fuente
+COPY src ./src
+COPY web ./web
+
+# Compilar y generar WAR
+RUN mvn clean package -DskipTests
+
+# Etapa final: Tomcat
+FROM tomcat:9-jdk11
+
+# Copiar driver JDBC a las librerías de Tomcat
+COPY lib/mssql-jdbc-9.4.1.jre11.jar /usr/local/tomcat/lib/
+
+# Limpiar aplicaciones por defecto
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Copiar WAR generado
+COPY --from=builder /app/target/Commerce.war /usr/local/tomcat/webapps/ROOT.war
+
+# Copiar configuración de contexto
+COPY web/META-INF/context-docker.xml /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
+
+# Variables de entorno para Tomcat
+ENV JAVA_OPTS="-Xmx512m -Xms256m -Dfile.encoding=UTF-8"
+
+EXPOSE 8080
+
+CMD ["catalina.sh", "run"]

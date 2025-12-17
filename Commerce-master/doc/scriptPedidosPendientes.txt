@@ -1,0 +1,319 @@
+---
+SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,SUM([cantidadPerdida]) 
+            AS cantidadPerdida
+      ,SUM([cantidadTerminada]) 
+          AS cantidadTerminada
+      ,SUM([pesoPerdido]) 
+                AS pesoPerdido
+      ,SUM([pesoTerminado]) 
+              AS pesoTerminado
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idLocal     =   1
+AND   tblDctosOrdenesProgreso.idTipoOrden =  59
+AND   tblDctosOrdenesProgreso.idorden     = 818
+AND   tblDctosOrdenesProgreso.idOperacion = 999
+AND   tblDctosOrdenesProgreso.itemPadre   = 1
+GROUP BY  tblDctosOrdenesProgreso.idLocal
+         ,tblDctosOrdenesProgreso.idTipoOrden
+         ,tblDctosOrdenesProgreso.idOrden
+         
+--- PRODUCCION TERMINADA %
+SELECT tblDctosOrdenesDetalle.idLocal,
+       tblDctosOrdenesDetalle.idTipoOrden,
+       tblDctosOrdenesDetalle.idOrden,
+       tblDctosOrdenesDetalle.cantidad,
+       tmpPRG.cantidadPerdida,
+       tmpPRG.cantidadTerminada,
+       tmpPRG.pesoPerdido,
+       tmpPRG.pesoTerminado,
+       ( tmpPRG.cantidadTerminada /
+         tblDctosOrdenesDetalle.cantidad ) * 100
+                    AS porcentajeTerminado
+FROM   tblDctosOrdenesDetalle
+INNER JOIN (
+SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.itemPadre
+      ,SUM([cantidadPerdida]) 
+            AS cantidadPerdida
+      ,SUM([cantidadTerminada]) 
+          AS cantidadTerminada
+      ,SUM([pesoPerdido]) 
+                AS pesoPerdido
+      ,SUM([pesoTerminado]) 
+              AS pesoTerminado
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idOperacion = 999
+GROUP BY  tblDctosOrdenesProgreso.idLocal
+         ,tblDctosOrdenesProgreso.idTipoOrden
+         ,tblDctosOrdenesProgreso.idOrden
+         ,tblDctosOrdenesProgreso.itemPadre) 
+                                   AS tmpPRG
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                              tmpPRG.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                          tmpPRG.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                              tmpPRG.idorden
+AND   tblDctosOrdenesDetalle.itemPadre   =   
+                            tmpPRG.itemPadre
+                            
+--- NUMEROORDEN + CLIENTE + OPERACION
+SELECT tblDctosOrdenesDetalle.idLocal,
+       tblDctosOrdenesDetalle.idTipoOrden,
+       tblDctosOrdenesDetalle.idOrden,
+       tmpPRG.itemPadre,
+       tmpPRG.cantidadPerdida,
+       tmpPRG.pesoPerdido,
+       tmpPRG.pesoTerminado,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenesDetalle.fechaEntrega,
+       tblDctosOrdenesDetalle.cantidad,
+       tmpPRG.cantidadTerminada,
+       ( tmpPRG.cantidadTerminada /
+         tblDctosOrdenesDetalle.cantidad ) * 100
+                    AS porcentajeTerminado,
+       tblTerceros.nombreTercero,
+       tblDctosOrdenesDetalle.referenciaCliente,
+       tblJobOperacion.nombreOperacion
+FROM   tblDctosOrdenesDetalle
+INNER JOIN (
+SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.itemPadre
+      ,tblDctosOrdenesProgreso.idOPeracion
+      ,SUM([cantidadPerdida]) 
+            AS cantidadPerdida
+      ,SUM([cantidadTerminada]) 
+          AS cantidadTerminada
+      ,SUM([pesoPerdido]) 
+                AS pesoPerdido
+      ,SUM([pesoTerminado]) 
+              AS pesoTerminado
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idOperacion = 999
+GROUP BY  tblDctosOrdenesProgreso.idLocal
+         ,tblDctosOrdenesProgreso.idTipoOrden
+         ,tblDctosOrdenesProgreso.idOrden
+         ,tblDctosOrdenesProgreso.idOPeracion
+         ,tblDctosOrdenesProgreso.itemPadre) 
+                                   AS tmpPRG
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                              tmpPRG.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                          tmpPRG.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                              tmpPRG.idorden
+AND   tblDctosOrdenesDetalle.itemPadre   =   
+                            tmpPRG.itemPadre
+INNER JOIN tblDctosOrdenes
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                     tblDctosOrdenes.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                tblDctosOrdenes.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                     tblDctosOrdenes.idorden
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion           =
+                           tmpPRG.idOperacion
+INNER JOIN tblTerceros
+ON tblTerceros.idCliente                 = 
+                   tblDctosOrdenes.idCliente
+WHERE tblTerceros.idTipoTercero          = 1
+ORDER BY tblDctosOrdenesDetalle.fechaEntrega
+
+--- FICHA + OPERACION + MAQUINA 
+SELECT tblPlusFicha.idFicha
+      ,tblPlusFicha.idOperacion
+      ,tblJobEscalaDetalle.nombreItem
+      ,tblJobOperacion.nombreOperacion
+FROM tblPlusFicha
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscalaDetalle.idEscala =
+              tblPlusFicha.idEscala
+AND tblPlusFicha.vrEscala = 
+           tblJobEscalaDetalle.item
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion = 
+           tblPlusFicha.idOperacion
+WHERE tblPlusFicha.idFicha=752
+AND tblPlusFicha.idEscala 
+          IN (600,710,910,1000)
+          
+---
+SELECT tblDctosOrdenesDetalle.idLocal,
+       tblDctosOrdenesDetalle.idTipoOrden,
+       tblDctosOrdenesDetalle.idOrden,
+       tmpPRG.itemPadre,
+       tmpPRG.cantidadPerdida,
+       tmpPRG.pesoPerdido,
+       tmpPRG.pesoTerminado,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenesDetalle.fechaEntrega,
+       tblDctosOrdenesDetalle.cantidad,
+       tmpPRG.cantidadTerminada,
+       ( tmpPRG.cantidadTerminada /
+         tblDctosOrdenesDetalle.cantidad ) * 100
+                    AS porcentajeTerminado,
+       tblTerceros.nombreTercero,
+       tblDctosOrdenesDetalle.referenciaCliente,
+       tblJobOperacion.nombreOperacion
+FROM   tblDctosOrdenesDetalle
+INNER JOIN (
+SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.itemPadre
+      ,tblDctosOrdenesProgreso.idOPeracion
+      ,SUM([cantidadPerdida]) 
+            AS cantidadPerdida
+      ,SUM([cantidadTerminada]) 
+          AS cantidadTerminada
+      ,SUM([pesoPerdido]) 
+                AS pesoPerdido
+      ,SUM([pesoTerminado]) 
+              AS pesoTerminado
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idOperacion = 999
+GROUP BY  tblDctosOrdenesProgreso.idLocal
+         ,tblDctosOrdenesProgreso.idTipoOrden
+         ,tblDctosOrdenesProgreso.idOrden
+         ,tblDctosOrdenesProgreso.idOPeracion
+         ,tblDctosOrdenesProgreso.itemPadre) 
+                                   AS tmpPRG
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                              tmpPRG.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                          tmpPRG.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                              tmpPRG.idorden
+AND   tblDctosOrdenesDetalle.itemPadre   =   
+                            tmpPRG.itemPadre
+INNER JOIN tblDctosOrdenes
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                     tblDctosOrdenes.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                tblDctosOrdenes.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                     tblDctosOrdenes.idorden
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion           =
+                           tmpPRG.idOperacion
+INNER JOIN tblTerceros
+ON tblTerceros.idCliente                 = 
+                   tblDctosOrdenes.idCliente
+INNER JOIN 
+(SELECT tblPlusFicha.idFicha
+      ,tblPlusFicha.idOperacion
+      ,tblJobEscalaDetalle.nombreItem
+      ,tblJobOperacion.nombreOperacion
+FROM tblPlusFicha
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscalaDetalle.idEscala =
+              tblPlusFicha.idEscala
+AND tblPlusFicha.vrEscala = 
+           tblJobEscalaDetalle.item
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion = 
+           tblPlusFicha.idOperacion
+AND tblPlusFicha.idEscala 
+          IN (600,710,910,1000)) 
+                         AS tmpMAQ
+ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha
+WHERE tblTerceros.idTipoTercero          = 1
+ORDER BY tblDctosOrdenesDetalle.fechaEntrega
+
+---
+SELECT tblDctosOrdenesDetalle.idLocal,
+       tblDctosOrdenesDetalle.idTipoOrden,
+       tblDctosOrdenesDetalle.idOrden,
+       tmpPRG.itemPadre,
+       tmpPRG.cantidadPerdida,
+       tmpPRG.pesoPerdido,
+       tmpPRG.pesoTerminado,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenesDetalle.fechaEntrega,
+       tblDctosOrdenesDetalle.cantidad,
+       tmpPRG.cantidadTerminada,
+       ( tmpPRG.cantidadTerminada /
+         tblDctosOrdenesDetalle.cantidad ) * 100
+                    AS porcentajeTerminado,
+       tblTerceros.nombreTercero,
+       tblDctosOrdenesDetalle.referenciaCliente,
+       tblJobOperacion.nombreOperacion,
+       tmpMAQ.nombreItem
+FROM   tblDctosOrdenesDetalle
+INNER JOIN (
+SELECT tblDctosOrdenesProgreso.idLocal
+      ,tblDctosOrdenesProgreso.idTipoOrden
+      ,tblDctosOrdenesProgreso.idOrden
+      ,tblDctosOrdenesProgreso.itemPadre
+      ,tblDctosOrdenesProgreso.idOPeracion
+      ,SUM([cantidadPerdida]) 
+            AS cantidadPerdida
+      ,SUM([cantidadTerminada]) 
+          AS cantidadTerminada
+      ,SUM([pesoPerdido]) 
+                AS pesoPerdido
+      ,SUM([pesoTerminado]) 
+              AS pesoTerminado
+FROM tblDctosOrdenesProgreso
+WHERE tblDctosOrdenesProgreso.idOperacion = 5
+GROUP BY  tblDctosOrdenesProgreso.idLocal
+         ,tblDctosOrdenesProgreso.idTipoOrden
+         ,tblDctosOrdenesProgreso.idOrden
+         ,tblDctosOrdenesProgreso.idOPeracion
+         ,tblDctosOrdenesProgreso.itemPadre) 
+                                   AS tmpPRG
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                              tmpPRG.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                          tmpPRG.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                              tmpPRG.idorden
+AND   tblDctosOrdenesDetalle.itemPadre   =   
+                            tmpPRG.itemPadre
+INNER JOIN tblDctosOrdenes
+ON    tblDctosOrdenesDetalle.idLocal     =   
+                     tblDctosOrdenes.idLocal
+AND   tblDctosOrdenesDetalle.idTipoOrden =
+                tblDctosOrdenes.idTipoOrden
+AND   tblDctosOrdenesDetalle.idorden     = 
+                     tblDctosOrdenes.idorden
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion           =
+                           tmpPRG.idOperacion
+INNER JOIN tblTerceros
+ON tblTerceros.idCliente                 = 
+                   tblDctosOrdenes.idCliente
+INNER JOIN 
+(SELECT tblPlusFicha.idFicha
+      ,tblPlusFicha.idOperacion
+      ,tblJobEscalaDetalle.nombreItem
+      ,tblJobOperacion.nombreOperacion
+FROM tblPlusFicha
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscalaDetalle.idEscala =
+              tblPlusFicha.idEscala
+AND tblPlusFicha.vrEscala = 
+           tblJobEscalaDetalle.item
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion = 
+           tblPlusFicha.idOperacion
+AND tblPlusFicha.idEscala 
+          IN (600,710,910,1000)) 
+                         AS tmpMAQ
+ON tmpMAQ.idFicha  = tblDctosOrdenes.idFicha
+WHERE tblTerceros.idTipoTercero          = 1
+AND   tmpMAQ.idOperacion                 = 
+                          tmpPRG.idOperacion
+ORDER BY tblDctosOrdenesDetalle.fechaEntrega
+

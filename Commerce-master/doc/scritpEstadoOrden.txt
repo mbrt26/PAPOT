@@ -1,0 +1,43 @@
+---
+USE [BDCommerce]
+GO
+/****** Objeto:  Table [dbo].[tblDctosOrdenesEstados]    Fecha de la secuencia de comandos: 12/04/2011 18:18:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblDctosOrdenesEstados](
+	[idEstado] [float] NOT NULL,
+	[nombreEstado] [nvarchar](50) COLLATE Modern_Spanish_CI_AS NULL,
+	[estado] [float] NULL,
+	[idSeq] [int] NULL,
+ CONSTRAINT [PK_tblDctosOrdenesEstados] PRIMARY KEY CLUSTERED 
+(
+	[idEstado] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+
+---
+INSERT INTO tblDctosOrdenesEstados
+           ([idEstado]
+           ,[nombreEstado]
+           ,[estado]
+           ,[idSeq])
+     VALUES
+           (0,'Corriente',1,0)
+---           
+INSERT INTO tblDctosOrdenesEstados
+           ([idEstado]
+           ,[nombreEstado]
+           ,[estado]
+           ,[idSeq])
+     VALUES
+           (1,'Nuevo',1,0)
+---           
+INSERT INTO tblDctosOrdenesEstados
+           ([idEstado]
+           ,[nombreEstado]
+           ,[estado]
+           ,[idSeq])
+     VALUES
+           (9,'Acabado',1,0)

@@ -1,0 +1,101 @@
+quitar Consultar Pedido en Produccion
+
+--
+SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden,
+       tblDctosOrdenes.idOrden,
+       tblPlusFicha.idFicha, 
+       tblPlusFicha.idOperacion
+FROM   tblPlusFicha
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenes.idFicha = 
+             tblPlusFicha.idFicha
+WHERE tblDctosOrdenes.idLocal      = 1
+AND   tblDctosOrdenes.idTipoOrden = 59
+GROUP BY tblDctosOrdenes.idLocal,
+         tblDctosOrdenes.idTipoOrden,
+         tblDctosOrdenes.idOrden,
+         tblPlusFicha.idFicha, 
+         tblPlusFicha.idOperacion
+         
+---
+                 SELECT tblDctosOrdenesProgreso.idLocal           
+                       ,tblDctosOrdenesProgreso.idTipoOrden       
+                       ,tblDctosOrdenesProgreso.idOrden           
+                       ,tblDctosOrdenesProgreso.idOperacion       
+                       ,tblDctosOrdenesProgreso.itemPadre         
+                       ,SUM(cantidadPerdida)                      
+                               AS cantidadPerdida                 
+                       ,SUM(cantidadTerminada)                    
+                             AS cantidadTerminada                 
+                       ,SUM(pesoPerdido)                          
+                                   AS pesoPerdido                 
+                       ,SUM(pesoTerminado)                        
+                                 AS pesoTerminado                 
+                 FROM tblDctosOrdenesProgreso
+                 GROUP BY tblDctosOrdenesProgreso.idLocal         
+                       ,tblDctosOrdenesProgreso.idTipoOrden       
+                       ,tblDctosOrdenesProgreso.idOrden           
+                       ,tblDctosOrdenesProgreso.idOperacion       
+                       ,tblDctosOrdenesProgreso.itemPadre
+                       
+---
+                 SELECT tmpDEF.idLocal,
+                        tmpDEF.idTipoOrden,
+                        tmpDEF.idOrden,
+                        tmpDEF.idOperacion,
+                        tmpDEF.itemPadre,
+                        SUM(tmpDEF.cantidadPerdida) 
+                                AS cantidadPerdida,
+                        SUM(tmpDEF.cantidadTerminada) 
+                                AS cantidadTerminada,
+                        SUM(tmpDEF.pesoPerdido) 
+                                      AS pesoPerdido,
+                        SUM(tmpDEF.pesoTerminado) 
+                                    AS pesoTerminado,
+                        tblJobOperacion.nombreOperacion
+                 FROM (
+                 SELECT 1 AS idLocal,
+                        59 AS idTipoOrden,
+                        6901 AS idOrden,
+                        tblJobOperacion.idOperacion,
+                        1 AS itemPadre,
+                        0.0 AS cantidadPerdida,
+                        0.0 AS cantidadTerminada,
+                        0.0 AS pesoPerdido,
+                        0.0 AS pesoTerminado
+                 FROM tblJobOperacion    
+                 UNION             
+                 SELECT tblDctosOrdenesProgreso.idLocal           
+                       ,tblDctosOrdenesProgreso.idTipoOrden       
+                       ,tblDctosOrdenesProgreso.idOrden           
+                       ,tblDctosOrdenesProgreso.idOperacion       
+                       ,tblDctosOrdenesProgreso.itemPadre         
+                       ,SUM(cantidadPerdida)                      
+                               AS cantidadPerdida                 
+                       ,SUM(cantidadTerminada)                    
+                             AS cantidadTerminada                 
+                       ,SUM(pesoPerdido)                          
+                                   AS pesoPerdido                 
+                       ,SUM(pesoTerminado)                        
+                                 AS pesoTerminado                 
+                 FROM tblDctosOrdenesProgreso
+                 WHERE tblDctosOrdenesProgreso.idLocal       = 1    
+                 AND   tblDctosOrdenesProgreso.idTipoOrden   = 59    
+                 AND   tblDctosOrdenesProgreso.idOrden       = 6901    
+                 AND   tblDctosOrdenesProgreso.itemPadre     = 1
+                 GROUP BY tblDctosOrdenesProgreso.idLocal         
+                       ,tblDctosOrdenesProgreso.idTipoOrden       
+                       ,tblDctosOrdenesProgreso.idOrden           
+                       ,tblDctosOrdenesProgreso.idOperacion       
+                       ,tblDctosOrdenesProgreso.itemPadre ) 
+                                                  AS tmpDEF
+                 INNER JOIN tblJobOperacion 
+                 ON tblJobOperacion.idOperacion   = 
+                                         tmpDEF.idOperacion
+                 GROUP BY tmpDEF.idLocal,
+                        tmpDEF.idTipoOrden,
+                        tmpDEF.idOrden,
+                        tmpDEF.idOperacion,
+                        tmpDEF.itemPadre,
+                        tblJobOperacion.nombreOperacion

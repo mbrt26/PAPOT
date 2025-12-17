@@ -1,0 +1,12 @@
+SELECT tblJobEscala.idEscala, 
+       tblJobEscala.nombreEscalar, 
+       tblJobEscalaDetalle.item,
+       tblJobEscalaDetalle.nombreItem
+FROM   tblJobEscala
+INNER JOIN tblJobEscalaDetalle
+ON tblJobEscala.idEscala = 
+         tblJobEscalaDetalle.idEscala
+WHERE tblJobEscala.idEscala = 1
+ORDER BY tblJobEscalaDetalle.nombreItem,
+         tblJobEscalaDetalle.item
+       

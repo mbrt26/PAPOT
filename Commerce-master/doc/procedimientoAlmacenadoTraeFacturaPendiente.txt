@@ -1,0 +1,31 @@
+USE [BDCommerce]
+GO
+/****** Object:  StoredProcedure [dbo].[traeXml]    Script Date: 07/10/2022 10:46:25 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER   procedure [dbo].[traeXml]
+as
+begin
+select	d.IDTIPOORDEN,
+		d.IDORDEN,
+		d.idCliente,
+		d.nombreTercero,
+		convert(varchar(10),d.fechaDcto,111) fechaDcto,
+		f.iddcto, 
+		f.idDctoDian,
+		f.prefijoDian,
+		f.status,
+		f.url
+from tblDctos d 
+inner join tblFacturaElectronica f
+on f.idOrden = d.idOrden
+and f.idtipoorden = d.IDTIPOORDEN
+where f.tipo_xml = 1
+and f.status = 'false'
+end
+return
+ 
+--exec traeXml

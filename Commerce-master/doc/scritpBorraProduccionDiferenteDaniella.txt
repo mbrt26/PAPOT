@@ -1,0 +1,16 @@
+-- borra diferente produccion a daniella
+DELETE FROM [tblDctosOrdenesProgreso]
+WHERE idOperario != 1128404106
+
+DELETE FROM tblDctosOrdenesDetalle
+WHERE EXISTS ( SELECT tblDctosOrdenes.* 
+              FROM tblDctosOrdenes
+              WHERE tblDctosOrdenes.idUsuario != 1128404106
+              AND tblDctosOrdenes.idTipoOrden  = 11
+              AND tblDctosOrdenes.idLocal      =  tblDctosOrdenesDetalle.idLocal
+              AND tblDctosOrdenes.idTipoOrden  =  tblDctosOrdenesDetalle.idTipoOrden
+              AND tblDctosOrdenes.idOrden      =  tblDctosOrdenesDetalle.idOrden )
+
+DELETE FROM tblDctosOrdenes
+WHERE tblDctosOrdenes.idUsuario != 1128404106
+AND tblDctosOrdenes.idTipoOrden  = 11

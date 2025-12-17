@@ -1,0 +1,49 @@
+# Dockerfile para compilar la aplicación
+FROM maven:3.8-openjdk-11 AS builder
+
+WORKDIR /app
+
+# Copiar archivos del proyecto
+COPY . /app/
+
+# Crear estructura de directorios
+RUN mkdir -p build/webapp/WEB-INF/classes && \
+    mkdir -p build/webapp/WEB-INF/lib
+
+# Compilar clases Java
+RUN find src/java -name "*.java" > sources.txt && \
+    javac -cp "lib/*:lib/metro/*:lib/metro-2/*" \
+          -d build/webapp/WEB-INF/classes \
+          -encoding UTF-8 \
+          @sources.txt || true
+
+# Copiar recursos web
+RUN cp -r web/* build/webapp/
+
+# Copiar librerías
+RUN cp lib/*.jar build/webapp/WEB-INF/lib/ && \
+    cp lib/metro/*.jar build/webapp/WEB-INF/lib/ 2>/dev/null || true && \
+    cp lib/metro-2/*.jar build/webapp/WEB-INF/lib/ 2>/dev/null || true
+
+# Crear WAR
+RUN cd build/webapp && \
+    jar -cvf ../Commerce.war *
+
+# Etapa final: Tomcat
+FROM tomcat:9-jdk11
+
+# Copiar driver JDBC a Tomcat
+COPY lib/mssql-jdbc-9.4.1.jre11.jar /usr/local/tomcat/lib/
+
+# Limpiar webapps por defecto
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Copiar WAR desde la etapa de compilación
+COPY --from=builder /app/build/Commerce.war /usr/local/tomcat/webapps/ROOT.war
+
+# Copiar configuración de contexto para Docker
+COPY web/META-INF/context-docker.xml /usr/local/tomcat/conf/context.xml
+
+EXPOSE 8080
+
+CMD ["catalina.sh", "run"]

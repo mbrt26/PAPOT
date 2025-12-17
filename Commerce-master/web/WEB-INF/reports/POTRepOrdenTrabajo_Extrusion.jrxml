@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="p_maquinaExtrusion" class="java.lang.String"/>
+	<parameter name="p_calibreExtrusion" class="java.lang.String"/>
+	<parameter name="p_anchoExtrusion" class="java.lang.String"/>
+	<parameter name="p_fuelle_1Extrusion" class="java.lang.String"/>
+	<parameter name="p_fuelle_2Extrusion" class="java.lang.String"/>
+	<parameter name="p_tipoRolloExtrusion" class="java.lang.String"/>
+	<parameter name="p_numeroRolloExtrusion" class="java.lang.String"/>
+	<parameter name="p_tratadoCaraExtrusion" class="java.lang.String"/>
+	<parameter name="p_tratadoDinaExtrusion" class="java.lang.String"/>
+	<parameter name="p_excedenteExtrusion" class="java.lang.String"/>
+	<parameter name="p_tipoSelladoExtrusion" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40">
+			<staticText>
+				<reportElement x="16" y="0" width="555" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EXTRUSION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="140" width="555" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Maquina  Calibre  PesoMillar  Ancho  Fuelle  Fuelle  Tipo    PM   PesoB   Metro   Rollos  Caras  Dinas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="16" y="0" width="47" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_maquinaExtrusion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="0" width="20" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_calibreExtrusion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="157" y="0" width="20" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_anchoExtrusion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="0" width="20" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_fuelle_1Extrusion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="226" y="0" width="20" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_fuelle_2Extrusion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="256" y="0" width="30" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tipoRolloExtrusion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="401" y="0" width="20" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_numeroRolloExtrusion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="467" y="0" width="20" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tratadoDinaExtrusion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="434" y="0" width="20" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_tratadoCaraExtrusion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20"/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

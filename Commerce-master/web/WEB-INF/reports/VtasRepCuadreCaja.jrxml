@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="396" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_tercero" class="java.lang.String"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\WEB-INF\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<parameter name="p_saldoInicial" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[SELECT           tblPagos.idLocal,
+                 COUNT(*) AS idRecibo,
+                 '0' AS idCliente,
+                 'VENTAS CONTADO/ABONOS' AS nombreTercero,
+                 SUM(tblPagos.vrPago) AS vrBase,
+                 'VENTAS' AS nombreTipoOrden,
+                 1 AS idAlcance,
+                 SUM(tblPagos.vrPago) AS vrDcto,
+                 $P{p_saldoInicial}  AS saldoInicial,
+                 SUM(tblPagos.vrPago) + $P{p_saldoInicial}
+                                     AS saldoFinal,
+                'INGRESO' AS tipoOrden
+ FROM   tblPagos
+ WHERE EXISTS (
+    SELECT tblPagosMedios.*
+    FROM tblPagosMedios
+    WHERE tblPagos.idLocal              =
+                     tblPagosMedios.idLocal
+    AND tblPagos.idTipoOrden            =
+                 tblPagosMedios.idTipoOrden
+    AND tblPagos.idRecibo               =
+                    tblPagosMedios.idRecibo
+    AND tblPagos.idLog                  =
+                       tblPagosMedios.idLog
+    AND tblPagos.indicador              =
+                   tblPagosMedios.indicador)
+
+AND   tblPagos.idLocal             =
+                         $P{p_idLocal}
+AND tblPagos.idTipoOrden IN (9,29)
+AND tblPagos.indicador BETWEEN $P{p_indicadorINI}
+                            AND $P{p_indicadorFIN}
+                AND tblPagos.fechaPago
+                 BETWEEN $P{p_fechaInicialSqlServer}
+                 AND $P{p_fechaFinalSqlServer}
+GROUP BY tblPagos.idLocal
+UNION
+SELECT           tblPagos.idLocal,
+                 tblPagos.idRecibo,
+                 tblPagos.nitCC AS idCliente,
+                 ( SELECT TOP 1 tblTerceros.nombreTercero
+                   FROM tblTerceros
+                   WHERE tblTerceros.idCliente =
+                    tblPagos.nitCC ) AS nombreTercero,
+                 tblPagos.vrPago AS vrBase,
+                 'PAGO PROVEEDOR' AS nombreTipoOrden,
+                 5 AS idAlcance,
+                 tblPagos.vrPago * (-1) AS vrDcto,
+                 0 AS saldoInicial,
+                 tblPagos.vrPago * (-1) AS saldoFinal,
+                'EGRESO' AS tipoOrden
+ FROM   tblPagos
+ WHERE EXISTS (
+    SELECT tblPagosMedios.*
+    FROM tblPagosMedios
+    WHERE tblPagos.idLocal              =
+                     tblPagosMedios.idLocal
+    AND tblPagos.idTipoOrden            =
+                 tblPagosMedios.idTipoOrden
+    AND tblPagos.idRecibo               =
+                    tblPagosMedios.idRecibo
+    AND tblPagos.idLog                  =
+                       tblPagosMedios.idLog
+    AND tblPagos.indicador              =
+                   tblPagosMedios.indicador)
+
+AND   tblPagos.idLocal             =
+                         $P{p_idLocal}
+AND tblPagos.idTipoOrden IN (1,21)
+AND tblPagos.indicador BETWEEN $P{p_indicadorINI}
+                            AND $P{p_indicadorFIN}
+                AND tblPagos.fechaPago
+                 BETWEEN $P{p_fechaInicialSqlServer}
+                 AND $P{p_fechaFinalSqlServer}
+UNION
+SELECT     tblDctos.idLocal,
+           tblDctos.idDcto AS idRecibo,
+           tblDctos.idCliente,
+           tblDctos.nombreTercero,
+           tblDctos.vrBase,
+           tblTipoOrden.nombreTipoOrden,
+           tblTipoOrden.idAlcance,
+          (CASE WHEN
+                 tblTipoOrden.idAlcance < 5
+           THEN  tblDctos.vrBase
+           ELSE  tblDctos.vrBase * (-1)
+         END) AS vrDcto,
+          0 AS saldoInicial,
+          (CASE WHEN
+                 tblTipoOrden.idAlcance < 5
+           THEN  tblDctos.vrBase
+           ELSE  tblDctos.vrBase * (-1)
+         END) AS saldoFinal,
+          (CASE WHEN
+                 tblTipoOrden.idAlcance < 5
+           THEN  'INGRESO'
+           ELSE  'EGRESO'
+         END) AS tipoOrden
+FROM       tblDctos
+INNER JOIN tblTipoOrden
+ON tblDctos.IDTIPOORDEN                    =
+                      tblTipoOrden.idTipoOrden
+WHERE     EXISTS
+ (SELECT  *
+  FROM    tblDctosOrdenesDetalle
+  WHERE tblDctosOrdenesDetalle.idLocal     =
+                              tblDctos.IDLOCAL
+  AND   tblDctosOrdenesDetalle.idTipoOrden =
+                          tblDctos.idTipoOrden
+  AND   tblDctosOrdenesDetalle.idOrden     =
+                             tblDctos.idOrden)
+AND tblTipoOrden.idAlcance             IN (4,5)
+AND   tblDctos.IDLOCAL             =
+                         $P{p_idLocal}
+AND tblDctos.indicador BETWEEN $P{p_indicadorINI}
+                            AND $P{p_indicadorFIN}
+                AND tblDctos.fechaDcto
+                 BETWEEN $P{p_fechaInicialSqlServer}
+                 AND $P{p_fechaFinalSqlServer}
+ORDER BY 1,7]]>
+	</queryString>
+	<field name="idLocal" class="java.lang.Integer"/>
+	<field name="idRecibo" class="java.lang.Integer"/>
+	<field name="idCliente" class="java.lang.String"/>
+	<field name="nombreTercero" class="java.lang.String"/>
+	<field name="vrBase" class="java.lang.Double"/>
+	<field name="nombreTipoOrden" class="java.lang.String"/>
+	<field name="idAlcance" class="java.lang.Integer"/>
+	<field name="vrDcto" class="java.lang.Double"/>
+	<field name="saldoInicial" class="java.lang.Integer"/>
+	<field name="saldoFinal" class="java.lang.Double"/>
+	<field name="tipoOrden" class="java.lang.String"/>
+	<variable name="v_vrAlcance" class="java.lang.Double" resetType="Group" resetGroup="idAlcance" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrBase}]]></variableExpression>
+	</variable>
+	<variable name="v_vrDcto" class="java.lang.Double" resetType="Group" resetGroup="idLocal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrDcto}]]></variableExpression>
+	</variable>
+	<variable name="v_saldoFinal" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldoFinal}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<group name="idLocal">
+		<groupExpression><![CDATA[$F{idLocal}]]></groupExpression>
+		<groupFooter>
+			<band height="36">
+				<textField pattern="#,##0">
+					<reportElement x="313" y="12" width="60" height="12"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrDcto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="128" y="12" width="180" height="12"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL FECHA]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="313" y="0" width="60" height="12"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$P{p_saldoInicial}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="128" y="0" width="180" height="12"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SALDO INICIAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="128" y="24" width="180" height="12"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SALDO FINAL]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="313" y="24" width="60" height="12"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_saldoFinal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="idAlcance">
+		<groupExpression><![CDATA[$F{idAlcance}]]></groupExpression>
+		<groupFooter>
+			<band height="30">
+				<textField pattern="#,##0">
+					<reportElement x="313" y="0" width="60" height="12"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrAlcance}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="128" y="0" width="180" height="12"/>
+					<textElement>
+						<font fontName="Verdana" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="60">
+			<textField>
+				<reportElement x="0" y="0" width="572" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="572" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="35" width="572" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="13">
+			<staticText>
+				<reportElement x="76" y="1" width="50" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT/CC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="0" width="30" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[#DCTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="1" width="180" height="12"/>
+				<textElement>
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE TERCERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="313" y="1" width="60" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VALOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="382" y="1" width="190" height="12"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="45" height="12"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<elementGroup/>
+			<textField>
+				<reportElement x="45" y="0" width="30" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{idRecibo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="313" y="0" width="60" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrBase}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="76" y="0" width="50" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="382" y="0" width="190" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTipoOrden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="0" width="180" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="45" height="12"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoOrden}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="40">
+			<rectangle>
+				<reportElement x="0" y="0" width="572" height="40"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="287" y="28" width="281" height="12"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA REVISO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="28" width="281" height="12"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA ELABORO]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,157 @@
+--
+DELETE FROM [BDCommerce].[dbo].[tblDctosOrdenesProgreso]
+      WHERE idOrden = 27950
+      AND idTipoOrden = 59
+
+
+DELETE FROM [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+      WHERE idOrdenOrigen = 27950
+      AND idTipoOrden = 11
+      
+      
+UPDATE [BDCommerce].[dbo].[tblDctosOrdenesDetalle]
+   SET [pesoTerminado] = 0
+      ,[cantidadTerminada] = 0
+      WHERE idOrden = 27950
+      AND idTipoOrden = 59      
+
+
+
+--
+SELECT [idLocalOrigen] AS idLocal
+      ,[idTipoOrdenOrigen] AS idTipoOrden
+      ,[idOrdenOrigen] AS idOrden
+      ,0 AS item                                --
+      ,idBodega AS idOperacion      
+      ,0.0 AS idOperario                        --
+      ,0.0 AS cantidadPerdida
+      ,cantidadTerminada
+      ,0.0 AS pesoPerdido
+      ,pesoTerminado
+      ,GETDATE() AS fechaInicio
+      ,GETDATE() AS fechaFin
+      ,0 AS idCausa
+      ,1 AS estado
+      ,item AS itemPadre      
+      ,0.0 AS cantidadPedida
+      ,0.0 AS pesoPedido
+      ,0 AS idControl                           --
+      ,0 AS idPlu
+      ,0 AS idControlTipo                       --
+      ,'' AS observacion
+      ,0 AS idUsuario                           --
+      ,0.0 AS cantidadPendiente
+      ,0.0 AS vrCostoBaseMAT
+      ,0.0 AS vrCostoBaseCIF
+      ,0.0 AS vrCostoBaseMOD
+      ,0.0 AS pesoTara
+      ,0 AS idTipoCausa
+      ,'' AS idDctoNitCC
+      ,idOrden AS idOrdenCruce
+  FROM [tblDctosOrdenesDetalle]
+  WHERE idOrden = 27975
+  
+  ---
+  SELECT [idLocal]
+      ,[idTipoOrden]
+      ,[idOrden]
+      ,[item]
+      ,[idOperacion]
+      ,[idOperario]
+      ,[cantidadPerdida]
+      ,[cantidadTerminada]
+      ,[pesoPerdido]
+      ,[pesoTerminado]
+      ,[fechaInicio]
+      ,[fechaFin]
+      ,[idCausa]
+      ,[estado]
+      ,[itemPadre]
+      ,[cantidadPedida]
+      ,[pesoPedido]
+      ,[idControl]
+      ,[idPlu]
+      ,[idControlTipo]
+      ,[observacion]
+      ,[idUsuario]
+      ,[cantidadPendiente]
+      ,[vrCostoBaseMAT]
+      ,[vrCostoBaseCIF]
+      ,[vrCostoBaseMOD]
+      ,[pesoTara]
+      ,[idTipoCausa]
+      ,[idDctoNitCC]
+      ,[idOrdenCruce]
+  FROM [tblDctosOrdenesProgreso]
+  WHERE idOrden=27950
+  
+  
+---
+INSERT INTO tblDctosOrdenesProgreso
+           ([idLocal]
+           ,[idTipoOrden]
+           ,[idOrden]
+           ,[item]
+           ,[idOperacion]
+           ,[idOperario]
+           ,[cantidadPerdida]
+           ,[cantidadTerminada]
+           ,[pesoPerdido]
+           ,[pesoTerminado]
+           ,[fechaInicio]
+           ,[fechaFin]
+           ,[idCausa]
+           ,[estado]
+           ,[itemPadre]
+           ,[cantidadPedida]
+           ,[pesoPedido]
+           ,[idControl]
+           ,[idPlu]
+           ,[idControlTipo]
+           ,[observacion]
+           ,[idUsuario]
+           ,[cantidadPendiente]
+           ,[vrCostoBaseMAT]
+           ,[vrCostoBaseCIF]
+           ,[vrCostoBaseMOD]
+           ,[pesoTara]
+           ,[idTipoCausa]
+           ,[idDctoNitCC]
+           ,[idOrdenCruce])
+SELECT [idLocalOrigen] 
+                     AS idLocal
+      ,[idTipoOrdenOrigen] 
+                AS idTipoOrden
+      ,[idOrdenOrigen] 
+                    AS idOrden
+      ,0 AS item                                
+      ,idBodega AS idOperacion      
+      ,0.0 AS idOperario                        
+      ,0.0 AS cantidadPerdida
+      ,cantidadTerminada
+      ,0.0 AS pesoPerdido
+      ,pesoTerminado
+      ,GETDATE() AS fechaInicio
+      ,GETDATE() AS fechaFin
+      ,0 AS idCausa
+      ,1 AS estado
+      ,item AS itemPadre      
+      ,0.0 AS cantidadPedida
+      ,0.0 AS pesoPedido
+      ,0 AS idControl                          
+      ,0 AS idPlu
+      ,0 AS idControlTipo                       
+      ,'' AS observacion
+      ,0 AS idUsuario                          
+      ,0.0 AS cantidadPendiente
+      ,0.0 AS vrCostoBaseMAT
+      ,0.0 AS vrCostoBaseCIF
+      ,0.0 AS vrCostoBaseMOD
+      ,0.0 AS pesoTara
+      ,0 AS idTipoCausa
+      ,'' AS idDctoNitCC
+      ,idOrden AS idOrdenCruce
+FROM [tblDctosOrdenesDetalle]
+WHERE idLocal     = 1
+AND   idTipoOrden = 16      
+AND   idOrden     = 27975             

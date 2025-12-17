@@ -1,0 +1,192 @@
+@charset "iso-8859-1";
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt
+}
+.body01 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #ffffff;
+	background-color: #f4eed2
+}
+
+
+.cabecera1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #5f71ab
+}
+
+.avisoParametroEntrada {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #000000;
+	background-color: #D9D4D4
+}
+
+.cabecera4 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #182c6d;
+	background-color: #FFFFFF
+}
+
+.cabecera5 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #FFFFFF;
+	background-color: #182c6d
+}
+
+.cabecera6 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #ffffff;
+	background-color: #f4eed2
+}
+
+
+.cajaComponentes01 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #182c6d
+}
+
+.tcol0 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #605F5F;
+	background-color: #FFFFFF;
+	font-weight: bold
+}
+
+.tcol1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #605F5F;
+	background-color: #E6E3E3;
+	font-weight: bold
+}
+
+.tcol2 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #000099;
+	background-color: #EEEEEC
+}
+
+.tcol3 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #99ccff;
+	font-weight: normal
+}
+
+.tcol4 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #ffffff;
+	font-weight: normal
+}
+
+.cajaTextoEntrada {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #FFFFFF
+}
+
+.tcol6 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 7pt;
+	color: #000000;
+	font-weight: normal;
+	background-color: #FBF0D0
+}
+
+.tcol7 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #000000;
+	font-weight: normal
+}
+
+.tcol8 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	color: #000099;
+	background-color: #EEEEEC;
+	font-weight: bold
+}
+
+.tcol9 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #E6E3E3;
+	background-color: #999999;
+	font-weight: bold
+}
+
+
+.input {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 7pt
+}
+
+.button {
+	font-size: 7pt; TEXT-DECORATION: none; FONT-WEIGHT: bold; BORDER-RIGHT: #006699 2px solid; PADDING-RIGHT: 0.5em; BORDER-TOP: #00CCFF 2px solid; PADDING-LEFT: 0.5em; FONT-WEIGHT: bold; PADDING-BOTTOM: 2px; BORDER-LEFT: #00CCFF 2px solid; COLOR: #FFFFFF; PADDING-TOP: 2px; BORDER-BOTTOM: #006699 2px solid; BACKGROUND-COLOR: #0099CC
+}
+.button:visited {
+	font-size: 7pt;
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none
+}
+.button:hover {
+	COLOR: #000000;
+	TEXT-DECORATION: none
+}
+
+
+.a_nothing {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none
+}
+
+.a_nothing:visited {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none
+}
+
+.a_nothing:hover {
+	COLOR: #000099;
+	TEXT-DECORATION: none
+}
+
+a {
+	TEXT-DECORATION: none
+}
+
+a:visited {
+	COLOR: #0000ff;
+	TEXT-DECORATION: none
+}
+
+a:hover {
+	COLOR: #0000ff;
+	TEXT-DECORATION: none
+}
+
+.actividad {
+	BACKGROUND-COLOR: #FFCC33; font-size: 8pt
+}
+
+.noLaboral {
+	BACKGROUND-COLOR: #EEEEEE; font-size: 8pt
+}

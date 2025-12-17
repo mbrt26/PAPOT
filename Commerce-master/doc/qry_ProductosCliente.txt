@@ -1,0 +1,111 @@
+--- UN CLIENTE
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idPlu]
+           ,[referenciaCliente]           
+           ,[idCliente]
+           ,[idEstadoOrden]
+           ,[nombreReferencia]
+           ,[vrAncho]
+           ,[vrLargo]
+           ,[vrCalibre]
+           ,[vrFuelle_1]
+           ,[vrFuelle_2]
+           ,[vrSolapa]
+           ,[idTipoSolapa]
+           ,[idTipoMedida]
+           ,[porcentajeExceso]
+           ,[idSellado]
+           ,[estado])
+SELECT tmpPLU.idPlu
+      ,tmpPRO.[RefeClie] AS referenciaCliente
+      ,890907163 AS idCliente      
+      ,1 AS idEstadoOrden
+      ,[Tabla_Productos].referencia
+      ,[Ancho] AS vrAncho
+      ,[Largo] AS vrLargo
+      ,[Calibre] AS vrCalibre
+      ,[Fuelle_L] AS vrFuelle_1
+      ,[Fuelle_F] AS vrFuelle_2
+      ,[Solapa] AS vrSolapa
+      ,0 AS idTipoSolapa
+      ,1 AS [idTipoMedida]
+      ,0 AS [porcentajeExceso]
+      ,0 AS [idSellado]
+      ,1 AS estado
+  FROM [BDPlasticos].[dbo].[Tabla_Productos]
+INNER JOIN ( SELECT [idPlu]
+      ,[referencia]
+  FROM [BDCommerce].[dbo].[tblPlus]) AS tmpPLU
+ON tmpPLU.referencia = [Tabla_Productos].[Material]
+INNER JOIN ( SELECT [Tabla_Produccion].[Referencia]
+                    ,[Tabla_Produccion].[RefeClie]
+  FROM   [Tabla_Produccion]
+  WHERE cliente='890.907.163-5') AS tmpPRO
+ON [Tabla_Productos].referencia = tmpPRO.referencia 
+GROUP BY tmpPLU.idPlu
+       ,tmpPRO.[RefeClie]
+      ,[Tabla_Productos].referencia
+      ,[Ancho]
+      ,[Largo]
+      ,[tipo_Solapa]
+      ,[Solapa]
+      ,[Fuelle_L]
+      ,[Fuelle_F]
+      ,[Calibre]
+      ,[Medida]
+      ,[Activa]
+      
+--- FICHAS DE TODOS CLIENTE
+INSERT INTO [BDCommerce].[dbo].[tblPlusFicha]
+           ([idPlu]
+           ,[referenciaCliente]           
+           ,[idCliente]
+           ,[idEstadoOrden]
+           ,[nombreReferencia]
+           ,[vrAncho]
+           ,[vrLargo]
+           ,[vrCalibre]
+           ,[vrFuelleLateral]
+           ,[vrFuelleFondo]
+           ,[vrSolapa]
+           ,[idTipoSolapa]
+           ,[idTipoMedida]
+           ,[porcentajeExceso]
+           ,[idSellado]
+           ,[estado])
+SELECT MAX(tmpPLU.idPlu) AS idPlu
+      ,tmpPRO.[RefeClie] AS referenciaCliente
+      ,tmpPRO.cliente AS idCliente
+      ,1 AS idEstadoOrden
+      ,MAX([Tabla_Productos].referencia) AS referencia
+      ,MAX([Ancho]) AS vrAncho
+      ,MAX([Largo]) AS vrLargo
+      ,MAX([Calibre]) AS vrCalibre
+      ,MAX([Fuelle_L]) AS vrFuelleLateral
+      ,MAX([Fuelle_F]) AS vrFuelleFondo
+      ,MAX([Solapa]) AS vrSolapa
+      ,0 AS idTipoSolapa
+      ,1 AS [idTipoMedida]
+      ,0 AS [porcentajeExceso]
+      ,0 AS [idSellado]
+      ,1 AS estado
+  FROM [BDPlasticos].[dbo].[Tabla_Produccion]
+INNER JOIN ( SELECT [idPlu]
+      ,[referencia]
+  FROM [BDCommerce].[dbo].[tblPlus]) AS tmpPLU
+ON tmpPLU.referencia = [Tabla_Productos].[Material]
+INNER JOIN ( SELECT [Tabla_Produccion].[Referencia]
+                    ,[Tabla_Produccion].[RefeClie]
+                    ,[Tabla_Produccion].cliente					
+  FROM   [Tabla_Produccion]) AS tmpPRO
+ON [Tabla_Productos].referencia = tmpPRO.referencia 
+GROUP BY tmpPRO.[RefeClie]
+       ,tmpPRO.cliente
+       
+--- ACTUALIZAR IDCLIENTE FICHATECNICA
+UPDATE tblPlusFicha
+SET    tblPlusFicha.idCliente = 
+           tblTerceros.idCliente         
+FROM   tblPlusFicha
+INNER JOIN tblTerceros
+ON tblPlusFicha.idCliente = tblTerceros.CC_Nit

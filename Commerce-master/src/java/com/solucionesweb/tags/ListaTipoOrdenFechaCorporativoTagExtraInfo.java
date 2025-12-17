@@ -1,0 +1,20 @@
+package com.solucionesweb.tags;
+
+import javax.servlet.jsp.tagext.*;
+
+public class ListaTipoOrdenFechaCorporativoTagExtraInfo extends TagExtraInfo {
+  public VariableInfo[] getVariableInfo(TagData data) {
+    return new VariableInfo[] {
+      new VariableInfo("idUsuarioVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("totalOrdenesVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("totalPesoTeoricoVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("totalVrVentaConIvaVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+      new VariableInfo("nombreUsuarioVar", "java.lang.String", true,
+                       VariableInfo.NESTED),
+    };
+  }
+}

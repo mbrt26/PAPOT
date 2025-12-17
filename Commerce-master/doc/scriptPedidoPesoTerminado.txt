@@ -1,0 +1,53 @@
+--
+SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden, 
+       tblDctosOrdenes.idOrden,
+       tblDctosOrdenesDetalle.item 
+FROM tblDctosOrdenes
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenes.IDLOCAL      = 
+        tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN = 
+    tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN     = 
+        tblDctosOrdenesDetalle.IDORDEN
+WHERE tblDctosOrdenes.IDLOCAL   = 1
+AND tblDctosOrdenes.IDTIPOORDEN = 59
+--AND tblDctosOrdenes.numeroOrden = 9012
+--AND tblDctosOrdenesDetalle.item = 1
+
+--
+UPDATE tblDctosOrdenesDetalle
+SET    tblDctosOrdenesDetalle.pesoTerminado = 1
+FROM   tblDctosOrdenes
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenes.IDLOCAL      = 
+                 tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN = 
+             tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN     = 
+                 tblDctosOrdenesDetalle.IDORDEN
+WHERE (tblDctosOrdenes.IDLOCAL = 1)
+AND (tblDctosOrdenes.IDTIPOORDEN = 59)
+AND (tblDctosOrdenes.numeroOrden = 9012)
+AND (tblDctosOrdenesDetalle.item = 1)
+
+--
+SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden, 
+       tblDctosOrdenes.idOrden,
+       tblDctosOrdenesDetalle.item,
+       tblDctosOrdenes.idCliente,
+       tblDctosOrdenes.numeroOrden
+FROM tblDctosOrdenes
+INNER JOIN tblDctosOrdenesDetalle
+ON tblDctosOrdenes.IDLOCAL      = 
+        tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN = 
+    tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN     = 
+        tblDctosOrdenesDetalle.IDORDEN
+WHERE tblDctosOrdenes.IDLOCAL   = 1
+AND tblDctosOrdenes.IDTIPOORDEN = 59
+--AND tblDctosOrdenes.numeroOrden = 9012
+AND tblDctosOrdenesDetalle.item = 1

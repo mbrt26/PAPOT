@@ -1,0 +1,66 @@
+
+--
+SELECT tblDctos.idLocal,  
+       tblDctos.idTipoOrden,  
+       tblDctos.idOrden,  
+       tblDctos.idDcto,  
+       tblDctos.idCliente,  
+       tblDctos.fechaDcto,  
+       tblDctosOrdenesDetalle.idLocalOrigen,
+       tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+       tblDctosOrdenesDetalle.idOrdenOrigen,
+       tmpORD.numeroOrden,
+       tmpORD.idFicha,
+       tmpFIC.referenciaCliente,
+       tblTerceros.nombreTercero,
+       tblDctosOrdenesDetalle.cantidad,
+       ( tblDctos.vrBase   + 
+         tblDctos.vrIva   + 
+         tblDctos.vrImpoconsumo - 
+         tblDctos.vrRteFuente -
+         tblDctos.vrDsctoFcro - 
+         tblDctos.vrRteIva    ) AS vrFactura
+FROM   tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenesDetalle.IDLOCAL      = 
+                   tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN = 
+               tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     = 
+                   tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenes.IDLOCAL             = 
+                          tblDctos.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN        = 
+                      tblDctos.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN            = 
+                          tblDctos.IDORDEN
+INNER JOIN 
+  ( SELECT tblDctosOrdenes.idLocal,
+           tblDctosOrdenes.idTipoOrden,
+           tblDctosOrdenes.idOrden,
+           tblDctosOrdenes.numeroOrden,
+           tblDctosOrdenes.idFicha
+    FROM tblDctosOrdenes) AS tmpORD
+ON tmpORD.idLocal        = 
+     tblDctosOrdenesDetalle.idLocalOrigen
+AND tmpORD.idTipoOrden   = 
+  tblDctosOrdenesDetalle.idTipoOrdenOrigen
+AND tmpORD.idOrden       = 
+      tblDctosOrdenesDetalle.idOrdenOrigen
+INNER JOIN
+   (SELECT tblPlusFicha.idFicha,
+            MAX(tblPlusFicha.referenciaCliente) 
+                          AS referenciaCliente
+    FROM tblPlusFicha
+   GROUP BY tblPlusFicha.idFicha) AS tmpFIC
+ON tmpFIC.idFicha = tmpORD.idFicha
+INNER JOIN tblTerceros
+ON tblTerceros.idCliente = tblDctos.idCliente
+WHERE tblDctos.idLocal                 = 1
+AND   tblDctos.idTipoOrden             = 9
+AND   tblTerceros.idTipoTercero        = 1
+ORDER BY tblDctos.idLocal,  
+         tblDctos.idTipoOrden,  
+         tblDctos.idDcto
+

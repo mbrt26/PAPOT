@@ -1,0 +1,57 @@
+--- tblJobEscala
+1200	MAQUINA RETALES		2	1
+
+--- tblJobEscalaOperacion
+1100	4	1	11
+
+--- tblJobEscalaDetalle
+1200	1	-		1
+
+
+--- RETALES
+DELETE FROM [BDCommerce_PU_Lab].[dbo].[tblPlusFicha]
+      WHERE idEscala  = 1200
+
+INSERT INTO [BDCommerce_PU_Lab].[dbo].[tblPlusFicha]
+           ([idCliente]
+           ,[referenciaCliente]
+           ,[idOperacion]
+           ,[idPlu]
+           ,[nombreReferencia]
+           ,[idEscala]
+           ,[item]
+           ,[vrEscala]
+           ,[textoEscala]
+           ,[estado]
+           ,[idFicha]
+           ,[referencia])
+SELECT [idCliente]
+      ,[referenciaCliente]
+      ,tmpFIC.idOperacion
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,tmpFIC.idEscala
+      ,1 AS [item]
+      ,1 AS vrEscala
+      ,'' AS textoEscala
+      ,1 AS estado 
+      ,[idFicha]
+      ,[referencia]
+ FROM [BDCommerce_PU_Lab].[dbo].[tblPlusFicha],
+(SELECT [idEscala]
+      ,[idOperacion]
+      ,[estado]
+      ,[idOrdenSalida]
+  FROM [BDCommerce_PU_Lab].[dbo].[tblJobEscalaOperacion]
+WHERE idOperacion = 666
+AND idEscala IN (1200)) 
+                                     AS tmpFIC
+GROUP BY [idCliente]
+      ,[referenciaCliente]
+      ,[idPlu]
+      ,[nombreReferencia]
+      ,[idFicha]
+      ,[referencia]
+      ,tmpFIC.idEscala
+      ,tmpFIC.idOperacion
+ORDER BY [idFicha]

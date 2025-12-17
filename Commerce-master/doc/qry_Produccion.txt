@@ -1,0 +1,32 @@
+---
+-- ACTUALIZAR A NINGUNA VRESCALA = 0
+UPDATE    tblPlusFicha
+SET              vrEscala = 888
+WHERE     (idEscala = 610) AND (vrEscala = 0)
+
+
+---
+SELECT tblDctosOrdenesProgreso.idLocal,
+       tblDctosOrdenesProgreso.idTipoOrden,
+       tblDctosOrdenesProgreso.idOrden,
+       tblDctosOrdenesProgreso.idOperacion,
+       SUM(tblDctosOrdenesProgreso.pesoTerminado) 
+                                AS pesoTerminado,
+       SUM(tblDctosOrdenesProgreso.pesoPerdido) 
+                                  AS pesoPerdido,
+       SUM(tblDctosOrdenesProgreso.cantidadTerminada) 
+                                AS cantidadTerminada,
+       SUM(tblDctosOrdenesProgreso.cantidadPerdida) 
+                                  AS cantidadPerdida
+FROM   tblDctosOrdenes
+INNER JOIN tblDctosOrdenesProgreso
+ON  tblDctosOrdenes.IDLOCAL     = 
+        tblDctosOrdenesProgreso.idLocal
+AND tblDctosOrdenes.IDTIPOORDEN = 
+    tblDctosOrdenesProgreso.idTipoOrden
+AND tblDctosOrdenes.IDORDEN     = 
+        tblDctosOrdenesProgreso.idOrden 
+GROUP BY tblDctosOrdenesProgreso.idLocal,
+         tblDctosOrdenesProgreso.idTipoOrden,
+         tblDctosOrdenesProgreso.idOrden,
+         tblDctosOrdenesProgreso.idOperacion

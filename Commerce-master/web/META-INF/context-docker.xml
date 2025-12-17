@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/Commerce">
+    <!-- Configuración para Docker -->
+    <Resource 
+        auth="Container" 
+        driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+        maxActive="100" 
+        maxIdle="30" 
+        maxWait="10000" 
+        name="jdbc/CommerceAccess" 
+        password="Tecnnova2018*" 
+        type="javax.sql.DataSource" 
+        url="jdbc:sqlserver://sqlserver:1433;DatabaseName=BDCommerce;encrypt=false;trustServerCertificate=true" 
+        username="sa"/>
+</Context>

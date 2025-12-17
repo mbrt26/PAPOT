@@ -1,0 +1,118 @@
+                 SELECT tmpORD.numeroOrden,                               
+                        tmpORD.idFicha,                                 
+                        tmpORD.referenciaCliente,                       
+                        tmpORD.nombreTercero,                           
+                        tmpRES.idLocal,                                 
+                        tmpRES.idTipoOrden,                             
+                        tmpRES.idOrden,                                 
+                        tmpTER.nombreTercero AS nombreOperario,    
+                        SUM(tmpRES.cantidadSalida -                     
+                            tmpRES.cantidadEntrada)                     
+                              AS cantidadTerminada ,                    
+                        SUM(tmpRES.pesoSalida     -                     
+                                tmpRES.pesoEntrada)                     
+                                   AS pesoTerminado                     
+                 FROM (                                                 
+                 SELECT [tblDctosOrdenesProgreso].idLocal,              
+                        [tblDctosOrdenesProgreso].idTipoOrden,          
+                        [tblDctosOrdenesProgreso].idOrden,              
+                        [tblDctosOrdenesProgreso].idControlTipo,        
+                        [tblDctosOrdenesProgreso].idOperario,           
+                        CASE                                            
+                         WHEN                                           
+                         [tblDctosOrdenesProgreso].idControlTipo = 1    
+                          THEN                                          
+                          SUM(                                          
+                          [tblDctosOrdenesProgreso].cantidadTerminada)  
+                        ELSE 0.0                                        
+                        END AS cantidadEntrada,                         
+                        CASE                                            
+                         WHEN                                           
+                          [tblDctosOrdenesProgreso].idControlTipo = 1   
+                          THEN                                          
+                          SUM([tblDctosOrdenesProgreso].pesoTerminado)  
+                        ELSE 0.0                                        
+                        END AS pesoEntrada,                             
+                        CASE                                            
+                         WHEN                                           
+                          [tblDctosOrdenesProgreso].idControlTipo = 2   
+                          THEN                                          
+                           SUM(                                         
+                           [tblDctosOrdenesProgreso].cantidadTerminada) 
+                        ELSE 0.0                                        
+                        END AS cantidadSalida,                          
+                        CASE                                            
+                         WHEN                                           
+                         [tblDctosOrdenesProgreso].idControlTipo = 2    
+                          THEN                                          
+                           SUM([tblDctosOrdenesProgreso].pesoTerminado) 
+                        ELSE 0.0                                        
+                        END AS pesoSalida                               
+                 FROM   [tblDctosOrdenesProgreso]                       
+                 WHERE [tblDctosOrdenesProgreso].idLocal       =  1      
+                 AND [tblDctosOrdenesProgreso].idTipoOrden  IN (59)     
+                 AND   [tblDctosOrdenesProgreso].idOperacion   = 6       
+                 AND   [tblDctosOrdenesProgreso].idControlTipo IN (1,2) 
+                 GROUP BY [tblDctosOrdenesProgreso].idLocal,            
+                          [tblDctosOrdenesProgreso].idTipoOrden,        
+                          [tblDctosOrdenesProgreso].idOrden,            
+                          [tblDctosOrdenesProgreso].idControlTipo,      
+                          [tblDctosOrdenesProgreso].idOperario )        
+                                                          AS tmpRES     
+                 INNER JOIN (                                           
+                 SELECT tblDctosOrdenes.IDLOCAL,                        
+                        tblDctosOrdenes.idTipoOrden,                    
+                        tblDctosOrdenes.idOrden,                        
+                        tblDctosOrdenes.numeroOrden,                    
+                        tblDctosOrdenes.idFicha,                        
+                        tmpFIC.referenciaCliente,                       
+                        tblTerceros.nombreTercero                       
+                 FROM tblDctosOrdenes                                   
+                 INNER JOIN (                                           
+                 SELECT [idFicha]                                       
+                       ,referenciaCliente                               
+                 FROM tblPlusFicha                                      
+                 GROUP BY [idFicha]                                     
+                       ,referenciaCliente) AS tmpFIC                    
+                 ON tblDctosOrdenes.idFicha =                           
+                                tmpFIC.idFicha                          
+                 INNER JOIN tblTerceros                                 
+                 ON  tblTerceros.idCliente =                            
+                            tblDctosOrdenes.idCliente                   
+                 WHERE tblDctosOrdenes.IDLOCAL = 1                       
+                 AND tblDctosOrdenes.IDTIPOORDEN IN (59)                
+                 AND tblTerceros.idTipoTercero   = 1)                   
+                                            AS tmpORD                   
+                 ON tmpORD.IDLOCAL               =                      
+                                      tmpRES.idLocal                    
+                 AND tmpORD.IDTIPOORDEN          =                      
+                                  tmpRES.idTipoOrden                    
+                 AND tmpORD.IDORDEN              =                      
+                                      tmpRES.idOrden                    
+                 INNER JOIN 
+                 (
+        SELECT ctrlUsuarios.idUsuario
+                            AS idCliente 
+             ,ctrlUsuarios.nombreUsuario 
+                       AS nombreTercero, 
+              1 AS orden                 
+        FROM ctrlUsuarios                 
+        UNION                             
+        SELECT tblTerceros.idCliente,     
+              tblTerceros.nombreTercero, 
+              1 AS orden                 
+        FROM tblTerceros                  
+        WHERE tblTerceros.idTipoTercero = 2             
+                 
+                 ) AS tmpTER
+                 
+                 ON  tmpTER.idCliente       =                      
+                                   tmpRES.idOperario                    
+                 GROUP BY tmpORD.numeroOrden,                           
+                        tmpORD.idFicha,                                 
+                        tmpORD.referenciaCliente,                       
+                        tmpORD.nombreTercero,                           
+                        tmpRES.idLocal,                                 
+                        tmpRES.idTipoOrden,                             
+                        tmpRES.idOrden,                                 
+                        tmpTER.nombreTercero                       ;

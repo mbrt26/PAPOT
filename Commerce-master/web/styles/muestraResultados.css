@@ -1,0 +1,73 @@
+@charset "iso-8859-1";
+
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt
+}
+
+.body01 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #ffffff;
+	background-color: #f4eed2
+}
+
+.avisoParametroEntrada {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #000000;
+	background-color: #D9D4D4
+}
+
+.avisoColumnaTabla {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	color: #000000;
+	background-color: #D9D4D4
+}
+
+.avisoBloque {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13pt;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #5f71ab
+}
+
+.valorParametros{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #182c6d;
+	background-color: #FFFFFF
+}
+
+.valorCampoResultados{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9pt;
+	font-weight: bold;
+	color: #182c6d;
+	background-color: #FFFFFF
+}
+
+
+.fondoBody {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	color: #ffffff;
+	background-color: #f4eed2
+}
+
+.tituloInforme {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 15pt;
+	font-weight: bold;
+	color: #2f0921;
+	background-color: #f4eed2
+}
+
+.botonSubmit {
+	font-size: 7pt; TEXT-DECORATION: none; FONT-WEIGHT: bold; BORDER-RIGHT: #006699 2px solid; PADDING-RIGHT: 0.5em; BORDER-TOP: #00CCFF 2px solid; PADDING-LEFT: 0.5em; FONT-WEIGHT: bold; PADDING-BOTTOM: 2px; BORDER-LEFT: #00CCFF 2px solid; COLOR: #FFFFFF; PADDING-TOP: 2px; BORDER-BOTTOM: #006699 2px solid; BACKGROUND-COLOR: #0099CC
+}

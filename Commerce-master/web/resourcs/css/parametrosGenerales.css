@@ -1,0 +1,79 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 09-jul-2019, 10:51:23
+    Author     : Desarrollador
+*/
+
+body{      
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    background: #E0E4CC;
+}
+.titulo{
+    height: 30px;
+    background: #0d8216;
+    color:#fff;
+    text-align: center;
+    font-weight: bold;
+    text-align-last: auto;
+    /*font-size: 13px;*/
+}
+.tituloTabla{
+    height: 30px;
+    background:  #0d8216;
+    color:#fff;
+    font-weight: bold;
+    text-align-last: auto;
+}
+.tituloModal{
+    height: 45px;
+    background: #0d8216;
+    color:#fff;
+    text-align: center;
+    font-weight: bold;
+    text-align-last: auto;
+}
+hr{
+    border-color: gray;
+}
+.vrfactura{
+    background: #F38630;
+    color:#fff;
+}
+
+/*Flecha para hacer la pagina hacia arriba*/
+.ir-arriba{
+    display:none;
+    background-repeat:no-repeat;
+    font-size:20px;
+    color:#0d8216;
+    cursor:pointer;
+    position:fixed;
+    bottom:10px;
+    right:10px;
+    z-index:2;
+}
+.ir-abajo{
+
+    background-repeat:no-repeat;
+    font-size:20px;
+    color:#0d8216;
+    cursor:pointer;
+    position:fixed;
+    bottom:10px;
+    right:10px;
+    z-index:2;
+}
+
+
+.purpura {
+    
+    color: #ffffff;
+    background-color: #572364;
+  
+}
+

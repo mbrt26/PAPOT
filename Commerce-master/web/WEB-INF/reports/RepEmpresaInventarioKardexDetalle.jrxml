@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_idPlu" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicial" class="java.lang.String"/>
+	<parameter name="p_fechaFinal" class="java.lang.String"/>
+	<parameter name="p_saldoInicial" class="java.lang.Double"/>
+	<parameter name="p_idBodega" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT 'SALDO INICIAL' AS nombreTipoOrden,
+       '  ' AS aliasUsuario,
+       $P{p_idLocal} AS  IDLOCAL,
+       00 AS  idDcto,
+       '00' AS  idCliente,
+       $P{p_fechaInicial} AS fechaDcto,
+       '  ' AS nombreTercero,
+       00 AS idLog,
+       00 AS numeroOrden,
+       00 AS item,
+       (-1.0) *
+      (SELECT ISNULL(SUM(tmpSDO.cantidadSalida),0.0)  +
+              ISNULL(SUM(tmpSDO.cantidadEntrada),0.0) -
+             ( SELECT tblPlusInventario.existencia
+        FROM tblPlusInventario
+        WHERE tblPlusInventario.idLocal = $P{p_idLocal}
+        AND   tblPlusInventario.idPlu   = $P{p_idPlu}
+        AND   tblPlusInventario.idBodega= $P{p_idBodega})
+        FROM
+       ( SELECT (CASE WHEN
+       (tblDctosOrdenesDetalle.CANTIDAD *
+                tblTipoOrden.signo) >=0.0
+       THEN (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+        (CASE WHEN
+        (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+        ELSE (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida
+FROM   tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                  tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+              tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                  tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                         tblDctos.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                     tblDctos.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                         tblDctos.IDORDEN
+INNER JOIN tblTipoOrden
+ON tblDctosOrdenesDetalle.IDTIPOORDEN  =
+                 tblTipoOrden.idTipoOrden
+WHERE tblDctos.fechaDcto BETWEEN $P{p_fechaInicial}
+                             AND $P{p_fechaFinal}
+AND tblDctosOrdenesDetalle.idPlu = $P{p_idPlu}
+AND tblDctosOrdenesDetalle.idBodega = $P{p_idBodega})
+                               AS tmpSDO )
+                             AS cantidad,
+       0.0 AS cantidadEntrada,
+       0.0 AS cantidadSalida,
+       '  ' AS nombreCategoria,
+       '  ' AS nombreMarca,
+       '  ' AS nombreLinea,
+       tblPlus.idPlu,
+       tblPlus.nombrePlu,
+       0.0 AS saldoInicial
+FROM tblPlus
+WHERE tblPlus.idPlu = $P{p_idPlu}
+UNION
+SELECT tblTipoOrden.nombreTipoOrden,
+       ctrlUsuarios.aliasUsuario,
+       tmpDET.IDLOCAL,
+       tmpDET.idDcto,
+       tmpDET.idCliente,
+       tmpDET.fechaDcto,
+       tmpDET.nombreTercero,
+       tmpDET.idLog,
+       tmpDET.numeroOrden,
+       tmpDET.item,
+       (tmpDET.CANTIDAD    *
+        tblTipoOrden.signo) AS cantidad,
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+           ELSE (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida,
+       tmpPLU.nombreCategoria,
+       tmpPLU.nombreMarca,
+       tmpPLU.nombreLinea,
+       tmpPLU.idPlu,
+       tmpPLU.nombrePlu,
+       $P{p_saldoInicial} AS saldoInicial
+FROM tblTipoOrden
+INNER JOIN (SELECT ALL tblDctos.IDLOCAL,
+       tblDctos.IDTIPOORDEN,
+       tblDctos.IDORDEN,
+       tblDctos.idDcto,
+       tblDctos.indicador,
+       tblDctos.idCliente,
+       tblDctos.fechaDcto,
+       tblDctos.idVendedor,
+       tblDctos.IDUSUARIO,
+       tblDctos.nombreTercero,
+       tblDctosOrdenes.idLog,
+       tblDctosOrdenes.numeroOrden,
+	   tblDctosOrdenesDetalle.item,
+       tblDctosOrdenesDetalle.IDPLU,
+       tblDctosOrdenesDetalle.CANTIDAD,
+       tblDctosOrdenesDetalle.VRVENTAUNITARIO,
+       tblDctosOrdenesDetalle.idBodega
+FROM  tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON  tblDctosOrdenesDetalle.IDLOCAL     =
+                      tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                  tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                      tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenes.IDLOCAL             =
+                             tblDctos.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN        =
+                         tblDctos.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN =
+                             tblDctos.IDORDEN)
+                                    AS tmpDET
+ON  tmpDET.idTipoOrden     =
+                      tblTipoOrden.idTipoOrden
+INNER JOIN ctrlUsuarios
+ON  tmpDET.idVendedor     =
+                      ctrlUsuarios.idUsuario
+INNER JOIN ( SELECT tblCategorias.nombreCategoria,
+                    tblMarcas.nombreMarca,
+                    tblLineas.nombreLinea,
+                    tblPlus.idPlu,
+                    tblPlus.nombrePlu
+FROM   tblPlus
+INNER JOIN tblMarcas
+ON tblPlus.idMarca =
+                  tblMarcas.idMarca
+INNER JOIN tblCategorias
+INNER JOIN tblLineas
+ON tblCategorias.idLinea =
+                  tblLineas.idLinea
+ON tblPlus.idLinea       =
+              tblCategorias.idLinea
+AND tblPlus.idCategoria  =
+          tblCategorias.idCategoria ) AS tmpPLU
+ON  tmpDET.idPlu         = tmpPLU.idPlu
+WHERE tmpDET.idPlu       = $P{p_idPlu}
+AND   tmpDET.idLocal     = $P{p_idLocal}
+AND   tmpDET.fechaDcto BETWEEN $P{p_fechaInicial}
+                             AND $P{p_fechaFinal}
+AND   tmpDET.idBodega    = $P{p_idBodega}
+UNION
+SELECT 'SALDO INICIAL' AS nombreTipoOrden,
+       '  ' AS aliasUsuario,
+       $P{p_idLocal} AS  IDLOCAL,
+       00 AS  idDcto,
+       '00' AS  idCliente,
+       $P{p_fechaInicial} AS fechaDcto,
+       '  ' AS nombreTercero,
+       00 AS idLog,
+       00 AS numeroOrden,
+       00 AS item,
+       (-1.0) *
+      (SELECT ISNULL(SUM(tmpSDO.cantidadSalida),0.0)  +
+              ISNULL(SUM(tmpSDO.cantidadEntrada),0.0) -
+             ( SELECT tblPlusInventario.existencia
+        FROM tblPlusInventario
+        WHERE tblPlusInventario.idLocal = $P{p_idLocal}
+        AND   tblPlusInventario.idPlu   = $P{p_idPlu}
+        AND   tblPlusInventario.idBodega= $P{p_idBodega})
+        FROM
+       ( SELECT (CASE WHEN
+       (tblDctosOrdenesDetalle.CANTIDAD *
+                tblTipoOrden.signo) >=0.0
+       THEN (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+        (CASE WHEN
+        (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+        ELSE (tblDctosOrdenesDetalle.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida
+FROM   tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                  tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+              tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                  tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenesDetalle.IDLOCAL      =
+                         tblDctos.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                     tblDctos.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                         tblDctos.IDORDEN
+INNER JOIN tblTipoOrden
+ON tblDctosOrdenesDetalle.IDTIPOORDEN  =
+                 tblTipoOrden.idTipoOrden
+WHERE tblDctos.fechaDcto BETWEEN $P{p_fechaInicial}
+                             AND $P{p_fechaFinal}
+AND tblDctosOrdenesDetalle.idPlu = $P{p_idPlu}
+AND tblDctosOrdenesDetalle.idBodega = $P{p_idBodega})
+                               AS tmpSDO )
+                             AS cantidad,
+       0.0 AS cantidadEntrada,
+       0.0 AS cantidadSalida,
+       '  ' AS nombreCategoria,
+       '  ' AS nombreMarca,
+       '  ' AS nombreLinea,
+       tblPlus.idPlu,
+       tblPlus.nombrePlu,
+       0.0 AS saldoInicial
+FROM tblPlus
+WHERE tblPlus.idPlu = $P{p_idPlu}
+UNION
+SELECT tblTipoOrden.nombreTipoOrden,
+       ctrlUsuarios.aliasUsuario,
+       tmpDET.IDLOCAL,
+       tmpDET.idDcto,
+       tmpDET.idCliente,
+       tmpDET.fechaDcto,
+       tmpDET.nombreTercero,
+       tmpDET.idLog,
+       tmpDET.numeroOrden,
+       tmpDET.item,
+       (tmpDET.CANTIDAD    *
+        tblTipoOrden.signo) AS cantidad,
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+           ELSE 0.0
+         END) AS cantidadEntrada,
+
+        (CASE WHEN
+                 (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo) >=0.0
+         THEN   0.0
+           ELSE (tmpDET.CANTIDAD *
+                  tblTipoOrden.signo)
+         END) AS cantidadSalida,
+       tmpPLU.nombreCategoria,
+       tmpPLU.nombreMarca,
+       tmpPLU.nombreLinea,
+       tmpPLU.idPlu,
+       tmpPLU.nombrePlu,
+       $P{p_saldoInicial} AS saldoInicial
+FROM tblTipoOrden
+INNER JOIN (SELECT ALL tblDctos.IDLOCAL,
+       tblDctos.IDTIPOORDEN,
+       tblDctos.IDORDEN,
+       tblDctos.idDcto,
+       tblDctos.indicador,
+       tblDctos.idCliente,
+       tblDctos.fechaDcto,
+       tblDctos.idVendedor,
+       tblDctos.IDUSUARIO,
+       tblDctos.nombreTercero,
+       tblDctosOrdenes.idLog,
+       tblDctosOrdenes.numeroOrden,
+       tblDctosOrdenesDetalle.item,
+       tblDctosOrdenesDetalle.IDPLU,
+       tblDctosOrdenesDetalle.CANTIDAD,
+       tblDctosOrdenesDetalle.VRVENTAUNITARIO,
+       tblDctosOrdenesDetalle.idBodega
+FROM  tblDctosOrdenesDetalle
+INNER JOIN tblDctosOrdenes
+ON  tblDctosOrdenesDetalle.IDLOCAL     =
+                      tblDctosOrdenes.IDLOCAL
+AND tblDctosOrdenesDetalle.IDTIPOORDEN =
+                  tblDctosOrdenes.IDTIPOORDEN
+AND tblDctosOrdenesDetalle.IDORDEN     =
+                      tblDctosOrdenes.IDORDEN
+INNER JOIN tblDctos
+ON tblDctosOrdenes.IDLOCAL             =
+                             tblDctos.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN        =
+                         tblDctos.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN =
+                             tblDctos.IDORDEN)
+                                    AS tmpDET
+ON  tmpDET.idTipoOrden     =
+                      tblTipoOrden.idTipoOrden
+INNER JOIN ctrlUsuarios
+ON  tmpDET.idVendedor     =
+                      ctrlUsuarios.idUsuario
+INNER JOIN ( SELECT tblCategorias.nombreCategoria,
+                    tblMarcas.nombreMarca,
+                    tblLineas.nombreLinea,
+                    tblPlus.idPlu,
+                    tblPlus.nombrePlu
+FROM   tblPlus
+INNER JOIN tblMarcas
+ON tblPlus.idMarca =
+                  tblMarcas.idMarca
+INNER JOIN tblCategorias
+INNER JOIN tblLineas
+ON tblCategorias.idLinea =
+                  tblLineas.idLinea
+ON tblPlus.idLinea       =
+              tblCategorias.idLinea
+AND tblPlus.idCategoria  =
+          tblCategorias.idCategoria ) AS tmpPLU
+ON  tmpDET.idPlu         = tmpPLU.idPlu
+WHERE tmpDET.idPlu       = $P{p_idPlu}
+AND   tmpDET.idLocal     = $P{p_idLocal}
+AND   tmpDET.fechaDcto BETWEEN $P{p_fechaInicial}
+                             AND $P{p_fechaFinal}
+AND   tmpDET.idBodega    = $P{p_idBodega}
+ORDER BY 3, 6, 4]]>
+	</queryString>
+	<field name="nombreTipoOrden" class="java.lang.String"/>
+	<field name="aliasUsuario" class="java.lang.String"/>
+	<field name="IDLOCAL" class="java.lang.Integer"/>
+	<field name="idDcto" class="java.lang.Integer"/>
+	<field name="idCliente" class="java.lang.String"/>
+	<field name="fechaDcto" class="java.lang.String"/>
+	<field name="nombreTercero" class="java.lang.String"/>
+	<field name="idLog" class="java.math.BigDecimal"/>
+	<field name="item" class="java.lang.Integer"/>
+	<field name="cantidad" class="java.lang.Double"/>
+	<field name="cantidadEntrada" class="java.lang.Double"/>
+	<field name="cantidadSalida" class="java.lang.Double"/>
+	<field name="nombreCategoria" class="java.lang.String"/>
+	<field name="nombreMarca" class="java.lang.String"/>
+	<field name="nombreLinea" class="java.lang.String"/>
+	<field name="idPlu" class="java.lang.Integer"/>
+	<field name="nombrePlu" class="java.lang.String"/>
+	<field name="saldoInicial" class="java.math.BigDecimal"/>
+	<field name="numeroOrden" class="java.lang.Integer"/>
+	<variable name="v_totalEntrada" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidadEntrada}]]></variableExpression>
+	</variable>
+	<variable name="v_totalSalida" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidadSalida}]]></variableExpression>
+	</variable>
+	<variable name="v_saldoActual" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidad}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="v_saldoInicial" class="java.lang.Double">
+		<variableExpression><![CDATA[$P{p_saldoInicial}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<group name="LOCAL" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{IDLOCAL}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<staticText>
+					<reportElement x="0" y="0" width="50" height="15"/>
+					<textElement>
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[FEC.MOV.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="57" y="0" width="35" height="15"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[#O.T.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="98" y="0" width="100" height="15"/>
+					<textElement>
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MOVIMIENTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="209" y="0" width="160" height="15"/>
+					<textElement>
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CLIENTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="375" y="0" width="40" height="15"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ENTRA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="423" y="0" width="40" height="15"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SALE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="476" y="0" width="40" height="15"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SALDO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="530" y="0" width="35" height="15"/>
+					<textElement textAlignment="Left">
+						<font fontName="Verdana" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[USR]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="23">
+				<textField pattern="#,##0.0">
+					<reportElement x="375" y="8" width="40" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_totalEntrada}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.0">
+					<reportElement x="423" y="8" width="40" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_totalSalida}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="279" y="8" width="48" height="15"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTALES]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="4" width="565" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="10">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fechaDcto}.substring( 0, 10 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="57" y="0" width="35" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{numeroOrden}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="0" width="100" height="10"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTipoOrden}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0">
+				<reportElement x="375" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{cantidadEntrada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="530" y="0" width="35" height="10"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{aliasUsuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="0" width="160" height="10"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0">
+				<reportElement x="423" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{cantidadSalida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0">
+				<reportElement x="476" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_saldoActual}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="2.3579476910000023"/>
+	<property name="ireport.x" value="152"/>
+	<property name="ireport.y" value="0"/>
+<parameter name="p_sk_tercero" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[begin tran
+if ($P{p_sk_tercero}=0)
+begin
+SELECT
+ [dbo].[tblCotClienteRef].[idCliente],
+ [nombreCliente],
+ [dbo].[tblCotClienteRef].idPlu,
+ [dbo].[tblCotClienteRef].ficha,
+ [dbo].[tblCotClienteRef].ancho,
+ [dbo].[tblCotClienteRef].largo,
+ [dbo].[tblCotClienteRef].calibre,
+ [dbo].[tblCotClienteRef].referencia,
+ [nombreReferencia], 
+ precioUnitario as PrecioVenta,
+ ROUND( 100*((bache*1000/pesoMillar*precioUnitario)-(CostosProcesos+CostosMateria+flete*bache))/(bache*1000/pesoMillar*precioUnitario),2) AS MARGEN  
+ FROM [BDCommerce].[dbo].[tblCotClienteRef] 	
+ INNER JOIN [dbo].[vistaCostoProceso] ON [dbo].[tblCotClienteRef].idPlu=[dbo].[vistaCostoProceso].idplu
+ INNER JOIN [dbo].[vistaCostoMateria] ON [dbo].[tblCotClienteRef].idPlu=[dbo].[vistaCostoMateria].idplu
+ INNER JOIN [dbo].[tblClienteCotizacion] ON [dbo].[tblClienteCotizacion].idCliente=[dbo].[tblCotClienteRef].idCliente
+ WHERE  [dbo].[tblCotClienteRef].idCliente <> 0
+ ORDER BY [dbo].[tblClienteCotizacion].nombreCliente,MARGEN;
+end 
+else
+begin
+SELECT
+ [dbo].[tblCotClienteRef].[idCliente],
+ [nombreCliente],
+ [dbo].[tblCotClienteRef].idPlu,
+ [dbo].[tblCotClienteRef].ficha,
+ [dbo].[tblCotClienteRef].ancho,
+ [dbo].[tblCotClienteRef].largo,
+ [dbo].[tblCotClienteRef].calibre,
+ [dbo].[tblCotClienteRef].referencia,
+ [nombreReferencia], 
+ precioUnitario as PrecioVenta,
+ ROUND( 100*((bache*1000/pesoMillar*precioUnitario)-(CostosProcesos+CostosMateria+flete*bache))/(bache*1000/pesoMillar*precioUnitario),2) AS MARGEN  
+ FROM [BDCommerce].[dbo].[tblCotClienteRef] 	
+ INNER JOIN [dbo].[vistaCostoProceso] ON [dbo].[tblCotClienteRef].idPlu=[dbo].[vistaCostoProceso].idplu
+ INNER JOIN [dbo].[vistaCostoMateria] ON [dbo].[tblCotClienteRef].idPlu=[dbo].[vistaCostoMateria].idplu
+ INNER JOIN [dbo].[tblClienteCotizacion] ON [dbo].[tblClienteCotizacion].idCliente=[dbo].[tblCotClienteRef].idCliente
+ WHERE  [dbo].[tblCotClienteRef].idCliente = $P{p_sk_tercero}
+ ORDER BY [dbo].[tblClienteCotizacion].nombreCliente,MARGEN;
+end    
+commit tran]]>
+	</queryString>
+	<field name="idCliente" class="java.lang.Integer"/>
+	<field name="nombreCliente" class="java.lang.String"/>
+	<field name="idPlu" class="java.lang.Integer"/>
+	<field name="ficha" class="java.lang.Integer"/>
+	<field name="ancho" class="java.lang.Double"/>
+	<field name="largo" class="java.lang.Double"/>
+	<field name="calibre" class="java.lang.Double"/>
+	<field name="referencia" class="java.lang.String"/>
+	<field name="nombreReferencia" class="java.lang.String"/>
+	<field name="PrecioVenta" class="java.lang.Double"/>
+	<field name="MARGEN" class="java.lang.Double"/>
+	<variable name="totalPago" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="totalDescuento" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="totalSaldo" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="84">
+			<staticText>
+				<reportElement x="410" y="72" width="54" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CALIBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="464" y="72" width="36" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="0.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="72" width="38" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FICHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="72" width="30" height="12" />
+				<box>
+					<pen lineStyle="Double"/>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<leftPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLU]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="0" y="-1" width="555" height="68" />
+			</rectangle>
+			<image>
+				<reportElement x="10" y="2" width="126" height="64" />
+				<imageExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\imagenes\\Logo-verde-P.PNG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Transparent" x="1" y="22" width="553" height="26" />
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[REPORTE MARGENES REFERENCIAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="72" width="62" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LARGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="72" width="55" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MARGEN ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="294" y="72" width="54" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ANCHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="72" width="105" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE REFERENCIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="69" y="72" width="120" height="12" />
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<textField>
+				<reportElement x="69" y="0" width="120" height="12" />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="31" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression  class="java.lang.Integer"><![CDATA[$F{idPlu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="0" width="38" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression  class="java.lang.Integer"><![CDATA[$F{ficha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="0" width="105" height="12" />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreReferencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="0" width="54" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression  class="java.lang.Double"><![CDATA[$F{ancho}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="0" width="62" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression  class="java.lang.Double"><![CDATA[$F{largo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="0" width="54" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{calibre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="464" y="0" width="36" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{referencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="34" height="12" />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{MARGEN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="534" y="0" width="21" height="12" />
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Double"/>
+					<bottomPen lineWidth="0.0" lineStyle="Double"/>
+					<rightPen lineWidth="0.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="152">
+			<elementGroup/>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="-1" y="127" width="137" height="12" />
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="127" width="70" height="12" />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="533" y="127" width="21" height="12" />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" isLazy="true">
+				<reportElement x="1" y="12" width="554" height="115" />
+				<imageExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\imagenes\\piePagina.PNG"]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="3"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,225 @@
+SELECT [FT]
+      ,[FEntrega]
+      ,[Pedido]
+      ,[Cliente]
+      ,[Tabla_Produccion].[Referencia]
+      ,[RefeClie]
+      ,[Medidas]
+      ,[Tabla_Produccion].[Material]
+      ,[ObseGen]
+      ,[Cantidad]
+      ,[Maquina_E]
+      ,[Tabla_Produccion].[Ancho]
+      ,[Calibre_E]
+      ,[PesMet]
+      ,[K_Pedidos]
+      ,[K_Aproducir]
+      ,[Roll]
+      ,[Peso_Millar]
+      ,[Tipo]
+      ,[Tratado]
+      ,[NivTrat]
+      ,[Caras]
+      ,[Radio_Bobina]
+      ,[Fuelle_1]
+      ,[Fuelle_2]
+      ,[CalMin]
+      ,[CalMax]
+      ,[PesoBobina]
+      ,[NumBob]
+      ,[Lineal]
+      ,[Baja]
+      ,[Alta]
+      ,[PP]
+      ,[RefPig]
+      ,[Pigmento]
+      ,[RefOtr]
+      ,[Otros]
+      ,[RefOt2]
+      ,[Otros2]
+      ,[ObservaE]
+      ,[Maquina_I]
+      ,[Num_Colores]
+      ,[Caras_Imp]
+      ,[Repeticion]
+      ,[Rodillo]
+      ,[CodBarra]
+      ,[GuiaS]
+      ,[AltImpC1]
+      ,[AltImpC2]
+      ,[Cyreles_AL]
+      ,[Cyreles_AA]
+      ,[Tintas]
+      ,[Color_1]
+      ,[Refe_1]
+      ,[Linea_Tinta_1]
+      ,[Vico1_1]
+      ,[Color_2]
+      ,[Refe_2]
+      ,[Linea_Tinta_2]
+      ,[Vico1_2]
+      ,[Color_3]
+      ,[Refe_3]
+      ,[Linea_Tinta_3]
+      ,[Vico1_3]
+      ,[Color_4]
+      ,[Refe_4]
+      ,[Linea_Tinta_4]
+      ,[Vico1_4]
+      ,[Color_5]
+      ,[Refe_5]
+      ,[Linea_Tinta_5]
+      ,[Vico1_5]
+      ,[Color_6]
+      ,[Refe_6]
+      ,[Linea_Tinta_6]
+      ,[Vico1_6]
+      ,[Color2_1]
+      ,[Refe2_1]
+      ,[Linea_Tinta2_1]
+      ,[Vico2_1]
+      ,[Color2_2]
+      ,[Refe2_2]
+      ,[Linea_Tinta2_2]
+      ,[Vico2_2]
+      ,[Color2_3]
+      ,[Refe2_3]
+      ,[Linea_Tinta2_3]
+      ,[Vico2_3]
+      ,[Color2_4]
+      ,[Refe2_4]
+      ,[Linea_Tinta2_4]
+      ,[Vico2_4]
+      ,[Color2_5]
+      ,[Refe2_5]
+      ,[Linea_Tinta2_5]
+      ,[Vico2_5]
+      ,[Color2_6]
+      ,[Refe2_6]
+      ,[Linea_Tinta2_6]
+      ,[Vico2_6]
+      ,[ObserI]
+      ,[Maquina_S]
+      ,[Golpes_Minuto]
+      ,[Paquete_Por]
+      ,[Bulto_Por]
+      ,[Tipo_Sell]
+      ,[Alt_Sellado]
+      ,[Perforada]
+      ,[ObserS]
+      ,[AnchRefile]
+      ,[AlturaR]
+      ,[TipoEmb]
+      ,[TRadio]
+      ,[KRolloR]
+      ,[TipoR]
+      ,[ObserR]
+      ,[Maquina_M]
+      ,[DetalleM]
+      ,[P]
+      ,[NP]
+      ,[C]
+  FROM [BDPlasticos].[dbo].[Tabla_Produccion]
+INNER JOIN (
+SELECT [Referencia]
+      ,[Material]
+      ,[Ancho]
+      ,[Largo]
+      ,[tipo_Solapa]
+      ,[Solapa]
+      ,[Fuelle_L]
+      ,[Fuelle_F]
+      ,[Calibre]
+      ,[Medida]
+      ,[Activa]
+  FROM [BDPlasticos].[dbo].[Tabla_Productos]) AS tmpPRO
+ON tmpPRO.referencia = [Tabla_Produccion].[Referencia]
+WHERE cliente='890.907.163-5'
+
+---
+SELECT tblDctosOrdenesProgreso.idLocal,
+       tblDctosOrdenesProgreso.idTipoOrden,
+       tblDctosOrdenesProgreso.idOrden,
+       tblDctosOrdenesProgreso.idOperacion,
+       SUM(tblDctosOrdenesProgreso.cantidadPerdida) 
+                                AS cantidadPerdida,
+       SUM(tblDctosOrdenesProgreso.cantidadTerminada) 
+                              AS cantidadTerminada,
+       SUM(tblDctosOrdenesProgreso.pesoPerdido) 
+                                    AS pesoPerdido,
+       SUM(tblDctosOrdenesProgreso.pesoTerminado) 
+                                  AS pesoTerminado
+FROM   tblDctosOrdenes
+INNER JOIN tblDctosOrdenesProgreso
+ON  tblDctosOrdenes.IDLOCAL     = 
+                    tblDctosOrdenesProgreso.idLocal
+AND tblDctosOrdenes.IDTIPOORDEN = 
+                tblDctosOrdenesProgreso.idTipoOrden
+AND tblDctosOrdenes.IDORDEN     = 
+                    tblDctosOrdenesProgreso.idOrden
+WHERE  tblDctosOrdenes.IDLOCAL     = 1
+AND    tblDctosOrdenes.IDTIPOORDEN = 59
+AND    tblDctosOrdenes.IDLOG       = 210
+GROUP BY tblDctosOrdenesProgreso.idLocal,
+         tblDctosOrdenesProgreso.idTipoOrden,
+         tblDctosOrdenesProgreso.idOrden,
+         tblDctosOrdenesProgreso.idOperacion
+
+-- PROGRESO X OPERACION X ITEM
+SELECT tblDctosOrdenesProgreso.idLocal, 
+       tblDctosOrdenesProgreso.idTipoOrden, 
+       tblDctosOrdenesProgreso.idOrden, 
+       tblDctosOrdenesProgreso.idOperacion, 
+       tblTerceros.idCliente, 
+       tblJobOperacion.nombreOperacion,
+       tblDctosOrdenesDetalle.item,
+       tblDctosOrdenes.fechaOrden,
+       tblDctosOrdenesDetalle.fechaEntrega,
+       tblDctosOrdenesProgreso.itemPadre, 
+       MAX(tblDctosOrdenesDetalle.cantidad) 
+                                        AS cantidad,
+       SUM(tblDctosOrdenesProgreso.cantidadPerdida)
+                                AS cantidadPerdida,
+       SUM(tblDctosOrdenesProgreso.cantidadTerminada)
+                                AS cantidadTerminada, 
+       SUM(tblDctosOrdenesProgreso.pesoPerdido)
+                                     AS pesoPerdido,
+       SUM(tblDctosOrdenesProgreso.pesoTerminado)
+                                   AS pesoTerminado, 
+       MAX(tblTerceros.nombreTercero) 
+                                    AS nombreTercero
+FROM   tblDctosOrdenes
+INNER JOIN tblDctosOrdenesProgreso
+ON tblDctosOrdenes.IDLOCAL      = 
+                     tblDctosOrdenesProgreso.idLocal
+AND tblDctosOrdenes.IDTIPOORDEN = 
+                 tblDctosOrdenesProgreso.idTipoOrden
+AND tblDctosOrdenes.IDORDEN     = 
+                     tblDctosOrdenesProgreso.idOrden
+INNER JOIN tblTerceros
+ON tblDctosOrdenes.idCliente = tblTerceros.idCliente
+INNER JOIN tblJobOperacion
+ON tblJobOperacion.idOperacion    =   
+                 tblDctosOrdenesProgreso.idOperacion
+INNER JOIN tblDctosOrdenesDetalle
+ON  tblDctosOrdenes.IDLOCAL     = 
+                      tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctosOrdenes.IDTIPOORDEN = 
+                  tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctosOrdenes.IDORDEN     = 
+                      tblDctosOrdenesDetalle.IDORDEN
+AND tblDctosOrdenesProgreso.itemPadre = 
+                         tblDctosOrdenesDetalle.item
+WHERE tblDctosOrdenes.IDLOCAL     = 1 
+AND   tblDctosOrdenes.IDTIPOORDEN = 59 
+AND   tblDctosOrdenes.IDLOG       = 210
+GROUP BY tblDctosOrdenesProgreso.idLocal, 
+         tblDctosOrdenesProgreso.idTipoOrden, 
+         tblDctosOrdenesProgreso.idOrden, 
+         tblDctosOrdenesProgreso.idOperacion, 
+         tblTerceros.idCliente, 
+         tblJobOperacion.nombreOperacion,
+         tblDctosOrdenesDetalle.item,
+         tblDctosOrdenes.fechaOrden,
+         tblDctosOrdenesDetalle.fechaEntrega,
+         tblDctosOrdenesProgreso.itemPadre

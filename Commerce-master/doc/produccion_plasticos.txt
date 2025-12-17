@@ -1,0 +1,23 @@
+PLASTICOS UNION
+
+Permitir borrar/modificar ficha tecnica el nombre referencia del cliente cuando es nueva
+
+Registrar produccion debe descargar proceso anterior y cargar operacion actual
+
+Generar reporte para programacion es decir la operacion actual que tiene la produccion
+debe informar en que maquina continua para el proximo proceso, incluyendo el saldo
+
+Modificar la cantidad en la Remision/Factura
+
+Explicar los KGs al cargar la cantidad en la remision
+
+Las Fichas Tecnicas con Largo = 0 con area = 0 se colocan los CANTIDAD PEDIDA -> KILOS PEDIDO
+ejemplo FICHA#2104 con 120kg con PEDIDO#15
+
+La grabacion de produccion tiene TABLA DE CAUSALES TIEMPOS PERDIDOS - 13
+
+
+--
+Plasticos UNION
+
+idTipoOrden = 7 REMISION

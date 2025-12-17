@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT 		tblDctosOrdenesDetalle.idLocal,
+       		tblDctosOrdenesDetalle.cantidad,
+		tblDctosOrdenesDetalle.idPlu,
+	   	((tblDctosOrdenesDetalle.VrVentaUnitario)-
+	   	(tblDctosOrdenesDetalle.VrVentaUnitario*
+		(tblDctosOrdenesDetalle.PorcentajeDscto)/100))
+		 			AS VrVentaUnitario,
+	   	tblDctosOrdenesDetalle.NombrePlu,
+       		tblDctosOrdenesDetalle.VrVentaOriginal,
+       		tblDctosOrdenesDetalle.PorcentajeDscto,
+	   	ctrlUsuarios.aliasUsuario,
+	   	tblDctos.fechaDcto,
+       		tblDctos.idDcto
+FROM   		tblDctos
+INNER JOIN 	tblDctosOrdenesDetalle
+ON tblDctos.IDLOCAL      =
+                tblDctosOrdenesDetalle.IDLOCAL
+AND tblDctos.IDTIPOORDEN =
+             	tblDctosOrdenesDetalle.IDTIPOORDEN
+AND tblDctos.IDORDEN     =
+                tblDctosOrdenesDetalle.IDORDEN
+INNER JOIN ctrlUsuarios
+ON tblDctos.IDUSUARIO    =
+                ctrlUsuarios.idUsuario
+WHERE tblDctosOrdenesDetalle.PorcentajeDscto != 0
+AND	  	tblDctos.fechaDcto
+BETWEEN 	$P{p_fechaInicialSqlServer}
+AND		$P{p_fechaFinalSqlServer}
+AND	  	tblDctos.idLocal = $P{p_idLocal}
+AND	  	tblDctos.idTipoOrden = $P{p_idTipoOrdenINI}
+AND   		tblDctos.indicador
+BETWEEN 	$P{p_indicadorINI} AND $P{p_indicadorFIN}
+ORDER BY 	tblDctosOrdenesDetalle.PorcentajeDscto DESC]]>
+	</queryString>
+	<field name="idLocal" class="java.lang.Integer"/>
+	<field name="cantidad" class="java.lang.Double"/>
+	<field name="idPlu" class="java.lang.Integer"/>
+	<field name="VrVentaUnitario" class="java.lang.Double"/>
+	<field name="NombrePlu" class="java.lang.String"/>
+	<field name="VrVentaOriginal" class="java.lang.Double"/>
+	<field name="PorcentajeDscto" class="java.lang.Double"/>
+	<field name="aliasUsuario" class="java.lang.String"/>
+	<field name="fechaDcto" class="java.lang.String"/>
+	<field name="idDcto" class="java.lang.Integer"/>
+	<variable name="v_vrVenta" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{VrVentaUnitario}]]></variableExpression>
+	</variable>
+	<variable name="v_vrVentaOriginal" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{VrVentaOriginal}]]></variableExpression>
+	</variable>
+	<variable name="v_porcentajeDescto" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{PorcentajeDscto}]]></variableExpression>
+	</variable>
+	<variable name="v_cantidad" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{cantidad}]]></variableExpression>
+	</variable>
+	<variable name="v_idplu" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{idPlu}]]></variableExpression>
+	</variable>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="60">
+			<textField>
+				<reportElement x="0" y="20" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="39" width="555" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="30" y="0" width="111" height="11"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NOMBRE PLU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="50" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CAN.VEND]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="165" y="0" width="50" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[V. VENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="0" width="61" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[DESCUENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="20" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PLU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="0" width="50" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ALIAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="232" y="0" width="50" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[V. ORIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="-1" width="40" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FACT]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="14">
+			<textField pattern="#,##0">
+				<reportElement x="296" y="0" width="61" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{PorcentajeDscto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="0" y="0" width="20" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{idPlu}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="380" y="0" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="165" y="0" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{VrVentaUnitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="495" y="0" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{aliasUsuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="34" y="0" width="107" height="10"/>
+				<textElement textAlignment="Left">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NombrePlu}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="232" y="0" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{VrVentaOriginal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="440" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{idDcto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="42">
+			<staticText>
+				<reportElement x="5" y="24" width="57" height="10"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[TOTAL PLU ]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="77" y="24" width="37" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{v_idplu}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="4" width="57" height="10"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="165" y="4" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrVenta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="232" y="4" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrVentaOriginal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="296" y="4" width="61" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_porcentajeDescto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="380" y="4" width="50" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_cantidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

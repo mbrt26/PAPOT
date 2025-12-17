@@ -1,0 +1,98 @@
+--
+SELECT tblDctosOrdenesDetalle.*
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idLocal     = 1
+AND   tblDctosOrdenesDetalle.idTipoOrden = 29
+AND   tblDctosOrdenesDetalle.idOrden     = 25844
+--
+SELECT tblDctosOrdenesDetalle.*
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idLocal     = 1
+AND   tblDctosOrdenesDetalle.idTipoOrden = 9
+AND   tblDctosOrdenesDetalle.idOrden     = 22320
+--
+SELECT tblDctosOrdenesDetalle.*
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.idLocal     = 1
+AND   tblDctosOrdenesDetalle.idTipoOrden = 59
+AND   tblDctosOrdenesDetalle.idOrden     = 19658
+
+SELECT tblDctosOrdenes.*
+FROM tblDctosOrdenes
+WHERE tblDctosOrdenes.idLocal     = 1
+AND   tblDctosOrdenes.idTipoOrden = 59
+AND   tblDctosOrdenes.idOrden     = 19658
+
+
+=== OFICIAL NOTA CREDITO
+SELECT tmpDET.referenciaCliente,
+        tmpNOT.item,
+       tmpDET.numeroOrden,
+       (tmpNOT.cantidad) 
+                       AS cantidad,
+       (tmpNOT.porcentajeIva) 
+                  AS porcentajeIva,
+       (tmpNOT.vrVentaUnitario /       
+       ( 1 + ( tmpNOT.porcentajeIva / 100)))       
+                  AS vrVentaUnitario,
+       ( tmpNOT.vrVentaOriginal)          
+                AS vrVentaOriginal,      
+          ((tmpNOT.cantidad         /        
+            tmpNOT.unidadVenta      *        
+            tmpNOT.vrVentaUnitario) /       
+       ( 1 + ( tmpNOT.porcentajeIva / 100)))       
+                        AS vrVentaSinIva     
+FROM tblDctosOrdenesDetalle tmpNOT
+INNER JOIN tblDctosOrdenesDetalle 
+                         AS tmpORT 
+ON  tmpORT.idLocal     = 
+              tmpNOT.idLocalOrigen 
+AND tmpORT.idTipoOrden = 
+          tmpNOT.idTipoOrdenOrigen
+AND tmpORT.idOrden     = 
+              tmpNOT.idOrdenOrigen
+AND tmpORT.item        = 
+              tmpNOT.item
+INNER JOIN
+( SELECT tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden,
+       tblDctosOrdenes.idOrden,
+       MAX(tmpFIC.referenciaCliente) 
+                    AS referenciaCliente,
+      MAX(tblDctosOrdenes.numeroOrden) 
+                           AS numeroOrden
+FROM   tblDctosOrdenes
+INNER JOIN 
+(SELECT tblPlusFicha.idFicha
+    ,MAX(tblPlusFicha.referenciaCliente) 
+                  AS referenciaCliente
+FROM tblPlusFicha
+GROUP BY tblPlusFicha.idFicha
+       ,tblPlusFicha.referenciaCliente) 
+                              AS tmpFIC
+ON tmpFIC.idFicha   = 
+               tblDctosOrdenes.idFicha
+WHERE tblDctosOrdenes.idTipoOrden = 59 
+AND   tblDctosOrdenes.numeroOrden != 0
+GROUP BY tblDctosOrdenes.idLocal,
+       tblDctosOrdenes.idTipoOrden,
+       tblDctosOrdenes.idOrden) 
+                              AS tmpDET
+ON  tmpDET.idLocal     = 
+              tmpORT.idLocalOrigen 
+AND tmpDET.idTipoOrden = 
+          tmpORT.idTipoOrdenOrigen
+AND tmpDET.idOrden     = 
+              tmpORT.idOrdenOrigen
+WHERE tmpNOT.idLocal     = 1
+AND   tmpNOT.idTipoOrden = 29
+AND   tmpNOT.idOrden     = 27597  
+GROUP BY tmpDET.referenciaCliente,
+      tmpNOT.item,
+       tmpDET.numeroOrden,
+       (tmpNOT.cantidad) ,
+        tmpNOT.porcentajeIva, 
+       tmpNOT.vrVentaUnitario,       
+       tmpNOT.vrVentaOriginal,
+       tmpNOT.unidadVenta 
+

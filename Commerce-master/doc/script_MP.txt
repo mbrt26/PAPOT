@@ -1,0 +1,554 @@
+ SELECT tmpINV.idPlu,                                  
+        tmpINV.existenciaPeso,                       
+        tmpINV.existenciaCantidad,                   
+        tmpINV.idLocalOrigen,                        
+        tmpINV.idTipoOrdenOrigen,                    
+        --tmpINV.idOrdenOrigen,                        
+        --tmpINV.idOperacion,   
+        tmpORD.numeroOrden,                          
+        --tmpORD.idFicha,                              
+        tmpPLU.nombrePlu,
+        tmpOPE.nombreItem                             
+ FROM                                                
+  (SELECT  tblDctosOrdenesDetalle.idPlu,             
+           tblDctosOrdenesDetalle.idBodega 
+                                  AS idOperacion,          
+     SUM( tblDctosOrdenesDetalle.cantidad *          
+                             tblTipoOrden.signo )    
+                           AS existenciaCantidad,    
+     SUM( tblDctosOrdenesDetalle.pesoTerminado *     
+                             tblTipoOrden.signo )    
+                               AS existenciaPeso,    
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen     
+   FROM  tblDctos                                    
+   INNER JOIN tblDctosOrdenesDetalle                 
+   ON tblDctos.IDLOCAL      =                        
+                  tblDctosOrdenesDetalle.IDLOCAL     
+   AND tblDctos.IDTIPOORDEN =                        
+              tblDctosOrdenesDetalle.IDTIPOORDEN     
+   AND tblDctos.IDORDEN     =                        
+                  tblDctosOrdenesDetalle.IDORDEN     
+   INNER JOIN tblTipoOrden                           
+   ON tblDctosOrdenesDetalle.IDTIPOORDEN             
+                            =                        
+                        tblTipoOrden.idTipoOrden     
+   INNER JOIN tblPlusInventario                      
+   ON tblDctosOrdenesDetalle.IDLOCAL                 
+                     = tblPlusInventario.idLocal     
+   AND tblDctosOrdenesDetalle.IDPLU                  
+                       = tblPlusInventario.idPlu     
+   AND tblDctosOrdenesDetalle.idBodega               
+                    = tblPlusInventario.idBodega     
+   WHERE  tblDctosOrdenesDetalle.idLocal  = 1         
+   AND    tblDctosOrdenesDetalle.idBodega = 2         
+   AND    tblDctosOrdenesDetalle.idPlu   != 209      
+   AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 59 
+   GROUP BY tblDctosOrdenesDetalle.idPlu,            
+            tblDctosOrdenesDetalle.idBodega,         
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen)    
+                                       AS tmpINV     
+ INNER JOIN (                                        
+ SELECT tblDctosOrdenes.idLocal,                     
+        tblDctosOrdenes.idTipoOrden,                 
+        tblDctosOrdenes.idOrden,                     
+        tblDctosOrdenes.numeroOrden,                 
+        tblDctosOrdenes.idFicha                      
+ FROM  tblDctosOrdenes                               
+ WHERE EXISTS                                        
+  ( SELECT tblDctosOrdenesDetalle.*                  
+    FROM tblDctosOrdenesDetalle                      
+    WHERE tblDctosOrdenes.IDLOCAL =                  
+      tblDctosOrdenesDetalle.idLocalOrigen           
+    AND tblDctosOrdenes.IDTIPOORDEN =                
+      tblDctosOrdenesDetalle.idTipoOrdenOrigen       
+    AND tblDctosOrdenes.IDORDEN =                    
+      tblDctosOrdenesDetalle.idOrdenOrigen )         
+ AND tblDctosOrdenes.idTipoOrden = 59                
+ ) AS tmpORD                                         
+ ON tmpORD.idLocal                                   
+                 = tmpINV.idLocalOrigen              
+ AND tmpORD.idTipoOrden                              
+                 = tmpINV.idTipoOrdenOrigen          
+ AND tmpORD.idOrden                                  
+                 = tmpINV.idOrdenOrigen              
+ INNER JOIN                                          
+   ( SELECT tblPlus.idPlu,                           
+            tblCategorias.nombreCategoria +          
+                                      ' ' +          
+            tblPlus.nombrePlu AS nombrePlu,          
+            tblMarcas.nombreMarca                    
+     FROM   tblMarcas                                
+     INNER JOIN tblPlus                              
+     ON tblMarcas.idMarca    =                       
+                           tblPlus.idMarca           
+     INNER JOIN tblCategorias                        
+     ON tblPlus.idLinea      =                       
+                    tblCategorias.idLinea            
+     AND tblPlus.idCategoria =                       
+                tblCategorias.idCategoria)           
+                                AS tmpPLU            
+ ON tmpINV.idPlu = tmpPLU.idPlu           
+--
+INNER JOIN
+( SELECT tblPlusFicha.idFicha                           
+       ,tblJobEscalaDetalle.nombreItem                 
+       ,tblPlusFicha.idOperacion                       
+ FROM tblPlusFicha                                     
+ INNER JOIN tblJobEscalaDetalle                        
+ ON tblJobEscalaDetalle.idEscala                       
+               = tblPlusFicha.idEscala                 
+ AND tblJobEscalaDetalle.item                          
+               = tblPlusFicha.vrEscala                 
+ WHERE tblPlusFicha.idEscala                           
+  IN ( 600, 710, 910, 1000, 1100, 1200 )
+GROUP BY tblPlusFicha.idFicha                           
+       ,tblJobEscalaDetalle.nombreItem                 
+       ,tblPlusFicha.idOperacion  ) AS tmpOPE
+--
+ON  tmpOPE.idOperacion = tmpINV.idOperacion 
+AND tmpOPE.idFicha = tmpORD.idFicha
+               ORDER BY tmpPLU.nombrePlu              ;
+               
+               
+--- DETALLA MATERIAS PRIMAS MAQUINA
+SELECT tmpINV.idPlu,                                  
+        SUM(tmpINV.existenciaPeso) AS existenciaPeso,                       
+        SUM(tmpINV.existenciaCantidad) AS existenciaCantidad,                   
+        --tmpINV.idLocalOrigen,                        
+        --tmpINV.idTipoOrdenOrigen,                    
+        --tmpINV.idOrdenOrigen,                        
+        --tmpINV.idOperacion,   
+        --tmpORD.numeroOrden,                          
+        --tmpORD.idFicha,                              
+        tmpPLU.nombrePlu,
+        tmpOPE.nombreItem                             
+ FROM                                                
+  (SELECT  tblDctosOrdenesDetalle.idPlu,             
+           tblDctosOrdenesDetalle.idBodega 
+                                  AS idOperacion,          
+     SUM( tblDctosOrdenesDetalle.cantidad *          
+                             tblTipoOrden.signo )    
+                           AS existenciaCantidad,    
+     SUM( tblDctosOrdenesDetalle.pesoTerminado *     
+                             tblTipoOrden.signo )    
+                               AS existenciaPeso,    
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen     
+   FROM  tblDctos                                    
+   INNER JOIN tblDctosOrdenesDetalle                 
+   ON tblDctos.IDLOCAL      =                        
+                  tblDctosOrdenesDetalle.IDLOCAL     
+   AND tblDctos.IDTIPOORDEN =                        
+              tblDctosOrdenesDetalle.IDTIPOORDEN     
+   AND tblDctos.IDORDEN     =                        
+                  tblDctosOrdenesDetalle.IDORDEN     
+   INNER JOIN tblTipoOrden                           
+   ON tblDctosOrdenesDetalle.IDTIPOORDEN             
+                            =                        
+                        tblTipoOrden.idTipoOrden     
+   INNER JOIN tblPlusInventario                      
+   ON tblDctosOrdenesDetalle.IDLOCAL                 
+                     = tblPlusInventario.idLocal     
+   AND tblDctosOrdenesDetalle.IDPLU                  
+                       = tblPlusInventario.idPlu     
+   AND tblDctosOrdenesDetalle.idBodega               
+                    = tblPlusInventario.idBodega     
+   WHERE  tblDctosOrdenesDetalle.idLocal  = 1         
+   AND    tblDctosOrdenesDetalle.idBodega = 2         
+   AND    tblDctosOrdenesDetalle.idPlu   != 209      
+   AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 59 
+   GROUP BY tblDctosOrdenesDetalle.idPlu,            
+            tblDctosOrdenesDetalle.idBodega,         
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen)    
+                                       AS tmpINV     
+ INNER JOIN (                                        
+ SELECT tblDctosOrdenes.idLocal,                     
+        tblDctosOrdenes.idTipoOrden,                 
+        tblDctosOrdenes.idOrden,                     
+        tblDctosOrdenes.numeroOrden,                 
+        tblDctosOrdenes.idFicha                      
+ FROM  tblDctosOrdenes                               
+ WHERE EXISTS                                        
+  ( SELECT tblDctosOrdenesDetalle.*                  
+    FROM tblDctosOrdenesDetalle                      
+    WHERE tblDctosOrdenes.IDLOCAL =                  
+      tblDctosOrdenesDetalle.idLocalOrigen           
+    AND tblDctosOrdenes.IDTIPOORDEN =                
+      tblDctosOrdenesDetalle.idTipoOrdenOrigen       
+    AND tblDctosOrdenes.IDORDEN =                    
+      tblDctosOrdenesDetalle.idOrdenOrigen )         
+ AND tblDctosOrdenes.idTipoOrden = 59                
+ ) AS tmpORD                                         
+ ON tmpORD.idLocal                                   
+                 = tmpINV.idLocalOrigen              
+ AND tmpORD.idTipoOrden                              
+                 = tmpINV.idTipoOrdenOrigen          
+ AND tmpORD.idOrden                                  
+                 = tmpINV.idOrdenOrigen              
+ INNER JOIN                                          
+   ( SELECT tblPlus.idPlu,                           
+            tblCategorias.nombreCategoria +          
+                                      ' ' +          
+            tblPlus.nombrePlu AS nombrePlu,          
+            tblMarcas.nombreMarca                    
+     FROM   tblMarcas                                
+     INNER JOIN tblPlus                              
+     ON tblMarcas.idMarca    =                       
+                           tblPlus.idMarca           
+     INNER JOIN tblCategorias                        
+     ON tblPlus.idLinea      =                       
+                    tblCategorias.idLinea            
+     AND tblPlus.idCategoria =                       
+                tblCategorias.idCategoria)           
+                                AS tmpPLU            
+ ON tmpINV.idPlu = tmpPLU.idPlu           
+--
+INNER JOIN
+( SELECT tblPlusFicha.idFicha                           
+       ,tblJobEscalaDetalle.nombreItem                 
+       ,tblPlusFicha.idOperacion                       
+ FROM tblPlusFicha                                     
+ INNER JOIN tblJobEscalaDetalle                        
+ ON tblJobEscalaDetalle.idEscala                       
+               = tblPlusFicha.idEscala                 
+ AND tblJobEscalaDetalle.item                          
+               = tblPlusFicha.vrEscala                 
+ WHERE tblPlusFicha.idEscala                           
+  IN ( 600, 710, 910, 1000, 1100, 1200 )
+GROUP BY tblPlusFicha.idFicha                           
+       ,tblJobEscalaDetalle.nombreItem                 
+       ,tblPlusFicha.idOperacion  ) AS tmpOPE
+--
+ON  tmpOPE.idOperacion = tmpINV.idOperacion 
+AND tmpOPE.idFicha = tmpORD.idFicha
+GROUP BY  tmpINV.idPlu,                                  
+        tmpPLU.nombrePlu,
+        tmpOPE.nombreItem 
+ORDER BY tmpOPE.nombreItem ,
+         tmpPLU.nombrePlu
+         
+--- MATERIAS PRIMAS 
+SELECT tmpINV.idPlu,                                  
+        SUM(tmpINV.existenciaPeso) AS existenciaPeso,                       
+        SUM(tmpINV.existenciaCantidad) AS existenciaCantidad,                   
+        --tmpINV.idLocalOrigen,                        
+        --tmpINV.idTipoOrdenOrigen,                    
+        --tmpINV.idOrdenOrigen,                        
+        --tmpINV.idOperacion,   
+        --tmpORD.numeroOrden,                          
+        --tmpORD.idFicha,                              
+        tmpPLU.nombrePlu,
+       'MP' AS nombreItem       
+ FROM                                                
+  (SELECT  tblDctosOrdenesDetalle.idPlu,             
+           tblDctosOrdenesDetalle.idBodega 
+                                  AS idOperacion,          
+     SUM( tblDctosOrdenesDetalle.cantidad *          
+                             tblTipoOrden.signo )    
+                           AS existenciaCantidad,    
+     SUM( tblDctosOrdenesDetalle.pesoTerminado *     
+                             tblTipoOrden.signo )    
+                               AS existenciaPeso,    
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen     
+   FROM  tblDctos                                    
+   INNER JOIN tblDctosOrdenesDetalle                 
+   ON tblDctos.IDLOCAL      =                        
+                  tblDctosOrdenesDetalle.IDLOCAL     
+   AND tblDctos.IDTIPOORDEN =                        
+              tblDctosOrdenesDetalle.IDTIPOORDEN     
+   AND tblDctos.IDORDEN     =                        
+                  tblDctosOrdenesDetalle.IDORDEN     
+   INNER JOIN tblTipoOrden                           
+   ON tblDctosOrdenesDetalle.IDTIPOORDEN             
+                            =                        
+                        tblTipoOrden.idTipoOrden     
+   INNER JOIN tblPlusInventario                      
+   ON tblDctosOrdenesDetalle.IDLOCAL                 
+                     = tblPlusInventario.idLocal     
+   AND tblDctosOrdenesDetalle.IDPLU                  
+                       = tblPlusInventario.idPlu     
+   AND tblDctosOrdenesDetalle.idBodega               
+                    = tblPlusInventario.idBodega     
+   WHERE  tblDctosOrdenesDetalle.idLocal  = 1         
+   AND    tblDctosOrdenesDetalle.idBodega = 2         
+   AND    tblDctosOrdenesDetalle.idPlu   != 209      
+   AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 59 
+   GROUP BY tblDctosOrdenesDetalle.idPlu,            
+            tblDctosOrdenesDetalle.idBodega,         
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen)    
+                                       AS tmpINV     
+ INNER JOIN (                                        
+ SELECT tblDctosOrdenes.idLocal,                     
+        tblDctosOrdenes.idTipoOrden,                 
+        tblDctosOrdenes.idOrden,                     
+        tblDctosOrdenes.numeroOrden,                 
+        tblDctosOrdenes.idFicha                      
+ FROM  tblDctosOrdenes                               
+ WHERE EXISTS                                        
+  ( SELECT tblDctosOrdenesDetalle.*                  
+    FROM tblDctosOrdenesDetalle                      
+    WHERE tblDctosOrdenes.IDLOCAL =                  
+      tblDctosOrdenesDetalle.idLocalOrigen           
+    AND tblDctosOrdenes.IDTIPOORDEN =                
+      tblDctosOrdenesDetalle.idTipoOrdenOrigen       
+    AND tblDctosOrdenes.IDORDEN =                    
+      tblDctosOrdenesDetalle.idOrdenOrigen )         
+ AND tblDctosOrdenes.idTipoOrden = 59                
+ ) AS tmpORD                                         
+ ON tmpORD.idLocal                                   
+                 = tmpINV.idLocalOrigen              
+ AND tmpORD.idTipoOrden                              
+                 = tmpINV.idTipoOrdenOrigen          
+ AND tmpORD.idOrden                                  
+                 = tmpINV.idOrdenOrigen              
+ INNER JOIN                                          
+   ( SELECT tblPlus.idPlu,                           
+            tblCategorias.nombreCategoria +          
+                                      ' ' +          
+            tblPlus.nombrePlu AS nombrePlu,          
+            tblMarcas.nombreMarca                    
+     FROM   tblMarcas                                
+     INNER JOIN tblPlus                              
+     ON tblMarcas.idMarca    =                       
+                           tblPlus.idMarca           
+     INNER JOIN tblCategorias                        
+     ON tblPlus.idLinea      =                       
+                    tblCategorias.idLinea            
+     AND tblPlus.idCategoria =                       
+                tblCategorias.idCategoria)           
+                                AS tmpPLU     
+ ON tmpINV.idPlu = tmpPLU.idPlu   
+WHERE tmpORD.numeroOrden = 0       
+GROUP BY tmpINV.idPlu,                                  
+        tmpPLU.nombrePlu
+
+
+--- OFICIAL DE MATERIAS PRIMAS
+SELECT tmpINV.idPlu,                                  
+        SUM(tmpINV.existenciaPeso) AS existenciaPeso,                       
+        SUM(tmpINV.existenciaCantidad) AS existenciaCantidad,                   
+        --tmpINV.idLocalOrigen,                        
+        --tmpINV.idTipoOrdenOrigen,                    
+        --tmpINV.idOrdenOrigen,                        
+        --tmpINV.idOperacion,   
+        --tmpORD.numeroOrden,                          
+        --tmpORD.idFicha,                              
+        tmpPLU.nombrePlu,
+        tmpOPE.nombreItem                             
+ FROM                                                
+  (SELECT  tblDctosOrdenesDetalle.idPlu,             
+           tblDctosOrdenesDetalle.idBodega 
+                                  AS idOperacion,          
+     SUM( tblDctosOrdenesDetalle.cantidad *          
+                             tblTipoOrden.signo )    
+                           AS existenciaCantidad,    
+     SUM( tblDctosOrdenesDetalle.pesoTerminado *     
+                             tblTipoOrden.signo )    
+                               AS existenciaPeso,    
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen     
+   FROM  tblDctos                                    
+   INNER JOIN tblDctosOrdenesDetalle                 
+   ON tblDctos.IDLOCAL      =                        
+                  tblDctosOrdenesDetalle.IDLOCAL     
+   AND tblDctos.IDTIPOORDEN =                        
+              tblDctosOrdenesDetalle.IDTIPOORDEN     
+   AND tblDctos.IDORDEN     =                        
+                  tblDctosOrdenesDetalle.IDORDEN     
+   INNER JOIN tblTipoOrden                           
+   ON tblDctosOrdenesDetalle.IDTIPOORDEN             
+                            =                        
+                        tblTipoOrden.idTipoOrden     
+   INNER JOIN tblPlusInventario                      
+   ON tblDctosOrdenesDetalle.IDLOCAL                 
+                     = tblPlusInventario.idLocal     
+   AND tblDctosOrdenesDetalle.IDPLU                  
+                       = tblPlusInventario.idPlu     
+   AND tblDctosOrdenesDetalle.idBodega               
+                    = tblPlusInventario.idBodega     
+   WHERE  tblDctosOrdenesDetalle.idLocal  = 1         
+   AND    tblDctosOrdenesDetalle.idBodega = 2         
+   AND    tblDctosOrdenesDetalle.idPlu   != 209      
+   AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 59 
+   GROUP BY tblDctosOrdenesDetalle.idPlu,            
+            tblDctosOrdenesDetalle.idBodega,         
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen)    
+                                       AS tmpINV     
+ INNER JOIN (                                        
+ SELECT tblDctosOrdenes.idLocal,                     
+        tblDctosOrdenes.idTipoOrden,                 
+        tblDctosOrdenes.idOrden,                     
+        tblDctosOrdenes.numeroOrden,                 
+        tblDctosOrdenes.idFicha                      
+ FROM  tblDctosOrdenes                               
+ WHERE EXISTS                                        
+  ( SELECT tblDctosOrdenesDetalle.*                  
+    FROM tblDctosOrdenesDetalle                      
+    WHERE tblDctosOrdenes.IDLOCAL =                  
+      tblDctosOrdenesDetalle.idLocalOrigen           
+    AND tblDctosOrdenes.IDTIPOORDEN =                
+      tblDctosOrdenesDetalle.idTipoOrdenOrigen       
+    AND tblDctosOrdenes.IDORDEN =                    
+      tblDctosOrdenesDetalle.idOrdenOrigen )         
+ AND tblDctosOrdenes.idTipoOrden = 59                
+ ) AS tmpORD                                         
+ ON tmpORD.idLocal                                   
+                 = tmpINV.idLocalOrigen              
+ AND tmpORD.idTipoOrden                              
+                 = tmpINV.idTipoOrdenOrigen          
+ AND tmpORD.idOrden                                  
+                 = tmpINV.idOrdenOrigen              
+ INNER JOIN                                          
+   ( SELECT tblPlus.idPlu,                           
+            tblCategorias.nombreCategoria +          
+                                      ' ' +          
+            tblPlus.nombrePlu AS nombrePlu,          
+            tblMarcas.nombreMarca                    
+     FROM   tblMarcas                                
+     INNER JOIN tblPlus                              
+     ON tblMarcas.idMarca    =                       
+                           tblPlus.idMarca           
+     INNER JOIN tblCategorias                        
+     ON tblPlus.idLinea      =                       
+                    tblCategorias.idLinea            
+     AND tblPlus.idCategoria =                       
+                tblCategorias.idCategoria)           
+                                AS tmpPLU            
+ ON tmpINV.idPlu = tmpPLU.idPlu           
+--
+INNER JOIN
+( SELECT tblPlusFicha.idFicha                           
+       ,tblJobEscalaDetalle.nombreItem                 
+       ,tblPlusFicha.idOperacion                       
+ FROM tblPlusFicha                                     
+ INNER JOIN tblJobEscalaDetalle                        
+ ON tblJobEscalaDetalle.idEscala                       
+               = tblPlusFicha.idEscala                 
+ AND tblJobEscalaDetalle.item                          
+               = tblPlusFicha.vrEscala                 
+ WHERE tblPlusFicha.idEscala                           
+  IN ( 600, 710, 910, 1000, 1100, 1200 )
+GROUP BY tblPlusFicha.idFicha                           
+       ,tblJobEscalaDetalle.nombreItem                 
+       ,tblPlusFicha.idOperacion  ) AS tmpOPE
+--
+ON  tmpOPE.idOperacion = tmpINV.idOperacion 
+AND tmpOPE.idFicha = tmpORD.idFicha
+GROUP BY  tmpINV.idPlu,                                  
+        tmpPLU.nombrePlu,
+        tmpOPE.nombreItem 
+/*ORDER BY tmpOPE.nombreItem ,
+         tmpPLU.nombrePlu*/
+UNION         
+SELECT tmpINV.idPlu,                                  
+        SUM(tmpINV.existenciaPeso) AS existenciaPeso,                       
+        SUM(tmpINV.existenciaCantidad) AS existenciaCantidad,                   
+        --tmpINV.idLocalOrigen,                        
+        --tmpINV.idTipoOrdenOrigen,                    
+        --tmpINV.idOrdenOrigen,                        
+        --tmpINV.idOperacion,   
+        --tmpORD.numeroOrden,                          
+        --tmpORD.idFicha,                              
+        tmpPLU.nombrePlu,
+       'MP' AS nombreItem       
+ FROM                                                
+  (SELECT  tblDctosOrdenesDetalle.idPlu,             
+           tblDctosOrdenesDetalle.idBodega 
+                                  AS idOperacion,          
+     SUM( tblDctosOrdenesDetalle.cantidad *          
+                             tblTipoOrden.signo )    
+                           AS existenciaCantidad,    
+     SUM( tblDctosOrdenesDetalle.pesoTerminado *     
+                             tblTipoOrden.signo )    
+                               AS existenciaPeso,    
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen     
+   FROM  tblDctos                                    
+   INNER JOIN tblDctosOrdenesDetalle                 
+   ON tblDctos.IDLOCAL      =                        
+                  tblDctosOrdenesDetalle.IDLOCAL     
+   AND tblDctos.IDTIPOORDEN =                        
+              tblDctosOrdenesDetalle.IDTIPOORDEN     
+   AND tblDctos.IDORDEN     =                        
+                  tblDctosOrdenesDetalle.IDORDEN     
+   INNER JOIN tblTipoOrden                           
+   ON tblDctosOrdenesDetalle.IDTIPOORDEN             
+                            =                        
+                        tblTipoOrden.idTipoOrden     
+   INNER JOIN tblPlusInventario                      
+   ON tblDctosOrdenesDetalle.IDLOCAL                 
+                     = tblPlusInventario.idLocal     
+   AND tblDctosOrdenesDetalle.IDPLU                  
+                       = tblPlusInventario.idPlu     
+   AND tblDctosOrdenesDetalle.idBodega               
+                    = tblPlusInventario.idBodega     
+   WHERE  tblDctosOrdenesDetalle.idLocal  = 1         
+   AND    tblDctosOrdenesDetalle.idBodega = 2         
+   AND    tblDctosOrdenesDetalle.idPlu   != 209      
+   AND tblDctosOrdenesDetalle.idTipoOrdenOrigen = 59 
+   GROUP BY tblDctosOrdenesDetalle.idPlu,            
+            tblDctosOrdenesDetalle.idBodega,         
+            tblDctosOrdenesDetalle.idLocalOrigen,    
+        tblDctosOrdenesDetalle.idTipoOrdenOrigen,    
+            tblDctosOrdenesDetalle.idOrdenOrigen)    
+                                       AS tmpINV     
+ INNER JOIN (                                        
+ SELECT tblDctosOrdenes.idLocal,                     
+        tblDctosOrdenes.idTipoOrden,                 
+        tblDctosOrdenes.idOrden,                     
+        tblDctosOrdenes.numeroOrden,                 
+        tblDctosOrdenes.idFicha                      
+ FROM  tblDctosOrdenes                               
+ WHERE EXISTS                                        
+  ( SELECT tblDctosOrdenesDetalle.*                  
+    FROM tblDctosOrdenesDetalle                      
+    WHERE tblDctosOrdenes.IDLOCAL =                  
+      tblDctosOrdenesDetalle.idLocalOrigen           
+    AND tblDctosOrdenes.IDTIPOORDEN =                
+      tblDctosOrdenesDetalle.idTipoOrdenOrigen       
+    AND tblDctosOrdenes.IDORDEN =                    
+      tblDctosOrdenesDetalle.idOrdenOrigen )         
+ AND tblDctosOrdenes.idTipoOrden = 59                
+ ) AS tmpORD                                         
+ ON tmpORD.idLocal                                   
+                 = tmpINV.idLocalOrigen              
+ AND tmpORD.idTipoOrden                              
+                 = tmpINV.idTipoOrdenOrigen          
+ AND tmpORD.idOrden                                  
+                 = tmpINV.idOrdenOrigen              
+ INNER JOIN                                          
+   ( SELECT tblPlus.idPlu,                           
+            tblCategorias.nombreCategoria +          
+                                      ' ' +          
+            tblPlus.nombrePlu AS nombrePlu,          
+            tblMarcas.nombreMarca                    
+     FROM   tblMarcas                                
+     INNER JOIN tblPlus                              
+     ON tblMarcas.idMarca    =                       
+                           tblPlus.idMarca           
+     INNER JOIN tblCategorias                        
+     ON tblPlus.idLinea      =                       
+                    tblCategorias.idLinea            
+     AND tblPlus.idCategoria =                       
+                tblCategorias.idCategoria)           
+                                AS tmpPLU     
+ ON tmpINV.idPlu = tmpPLU.idPlu   
+WHERE tmpORD.numeroOrden = 0       
+GROUP BY tmpINV.idPlu,                                  
+        tmpPLU.nombrePlu
+ORDER BY tmpOPE.nombreItem 

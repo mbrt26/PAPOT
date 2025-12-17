@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty">
+	<parameter name="p_nombreLocal" class="java.lang.String"/>
+	<parameter name="p_nit" class="java.lang.String"/>
+	<parameter name="p_titulo" class="java.lang.String"/>
+	<parameter name="p_tercero" class="java.lang.String"/>
+	<parameter name="p_idLocal" class="java.lang.Integer"/>
+	<parameter name="p_fechaInicialSqlServer" class="java.lang.String"/>
+	<parameter name="p_fechaFinalSqlServer" class="java.lang.String"/>
+	<parameter name="p_indicadorINI" class="java.lang.Integer"/>
+	<parameter name="p_indicadorFIN" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenINI" class="java.lang.Integer"/>
+	<parameter name="p_idTipoOrdenFIN" class="java.lang.Integer"/>
+	<parameter name="p_idVendedor" class="java.lang.Double"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\proyectoWeb\\Commerce\\web\\WEB-INF\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT tblPagos.nitCC AS idCliente,
+                  ( SELECT TOP 1 tblTerceros.nombreTercero
+                    FROM tblTerceros
+                    WHERE tblTerceros.idCliente  =
+                                      tblPagos.nitCC)
+                                    AS nombreTercero,
+                       tblPagos.idLocal,
+                       tblPagos.idTipoOrden,
+                       tblPagos.idRecibo,
+                       tblPagos.indicador,
+                       tblPagos.fechaPago,
+                       tblPagos.vrPago,
+                       tblPagos.vrRteFuente,
+                       tblPagos.vrDescuento,
+                       tblPagos.vrRteIva,
+                       tblPagos.idDcto,
+                       tblPagos.idDctoNitCC,
+                       tblPagos.idPlanilla,
+                       tblPagos.vrRteIca,
+                  ( SELECT ctrlUsuarios.aliasUsuario
+                    FROM ctrlUsuarios
+                    WHERE ctrlUsuarios.idUsuario =
+                                tblPagos.idVendedor )
+                                      AS aliasUsuario
+                FROM   tblPagos
+                WHERE EXISTS (
+                SELECT tblPagosMedios.*
+                FROM tblPagosMedios
+                WHERE tblPagos.idLocal              =
+                        tblPagosMedios.idLocal
+                AND tblPagos.idTipoOrden            =
+                    tblPagosMedios.idTipoOrden
+                AND tblPagos.idRecibo               =
+                              tblPagosMedios.idRecibo
+                AND tblPagos.idLog                  =
+                                 tblPagosMedios.idLog
+                AND tblPagos.indicador              =
+                            tblPagosMedios.indicador)
+                AND   tblPagos.idLocal = $P{p_idLocal}
+                AND ( tblPagos.idTipoOrden = $P{p_idTipoOrdenINI}
+                               OR tblPagos.idTipoOrden = $P{p_idTipoOrdenFIN})
+                AND tblPagos.indicador BETWEEN $P{p_indicadorINI}
+                                           AND $P{p_indicadorFIN}
+                AND tblPagos.fechaPago
+                 BETWEEN $P{p_fechaInicialSqlServer}
+                 AND $P{p_fechaFinalSqlServer}
+                ORDER BY tblPagos.idLocal,
+                         tblPagos.idRecibo;]]>
+	</queryString>
+	<field name="idCliente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreTercero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idLocal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idTipoOrden" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idRecibo" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="indicador" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fechaPago" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrPago" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrRteFuente" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrDescuento" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrRteIva" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idDcto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idDctoNitCC" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idPlanilla" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vrRteIca" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="aliasUsuario" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="v_vrPago" class="java.lang.Double" resetType="Group" resetGroup="idLocal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrPago}]]></variableExpression>
+	</variable>
+	<variable name="v_vrRteFuente" class="java.lang.Double" resetType="Group" resetGroup="idLocal" incrementType="Group" incrementGroup="idLocal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrRteFuente}]]></variableExpression>
+	</variable>
+	<variable name="v_vrDescuento" class="java.lang.Double" resetType="Group" resetGroup="idLocal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrDescuento}]]></variableExpression>
+	</variable>
+	<variable name="v_vrRteIca" class="java.lang.Double" resetType="Group" resetGroup="idLocal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrRteIca}]]></variableExpression>
+	</variable>
+	<variable name="v_vrRteIva" class="java.lang.Double" resetType="Group" resetGroup="idLocal" calculation="Sum">
+		<variableExpression><![CDATA[$F{vrRteIva}]]></variableExpression>
+	</variable>
+	<group name="idLocal">
+		<groupExpression><![CDATA[$F{idLocal}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0">
+					<reportElement x="330" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font fontName="sansserif" size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrPago}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement x="370" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font fontName="sansserif" size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrRteFuente}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement x="412" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font fontName="sansserif" size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrDescuento}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement x="452" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font fontName="sansserif" size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrRteIca}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement x="494" y="0" width="40" height="10"/>
+					<textElement textAlignment="Right">
+						<font fontName="sansserif" size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$V{v_vrRteIva}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="195" y="0" width="117" height="10"/>
+					<textElement textAlignment="Right">
+						<font fontName="Verdana" size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTALES ]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="61">
+			<textField>
+				<reportElement x="12" y="1" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nombreLocal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="21" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="41" width="554" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{p_titulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="11">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT/CC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="45" y="0" width="180" height="10"/>
+				<textElement>
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE TERCERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="0" width="30" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[#FRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="0" width="40" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[F.PAG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[V.PAG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="493" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.RIV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="0" width="30" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.RFT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.DST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VR.RIC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="542" y="0" width="20" height="10"/>
+				<textElement textAlignment="Left">
+					<font fontName="Verdana" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VEN]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10">
+			<elementGroup/>
+			<textField>
+				<reportElement x="0" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="0" width="180" height="10"/>
+				<textElement>
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombreTercero}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="330" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrPago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="0" width="40" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fechaPago}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="226" y="0" width="30" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{idDctoNitCC}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="257" y="0" width="30" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{idPlanilla}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="370" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrRteFuente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="412" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrDescuento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="452" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font fontName="sansserif" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrRteIca}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="494" y="0" width="40" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{vrRteIva}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="542" y="0" width="20" height="10"/>
+				<textElement textAlignment="Left">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{aliasUsuario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26"/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

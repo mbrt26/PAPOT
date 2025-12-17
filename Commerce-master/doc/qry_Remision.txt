@@ -1,0 +1,23 @@
+-- referencia cliente x remision
+SELECT tblPlusFicha.referenciaCliente,
+       tblPlusFicha.idPlu
+FROM   tblDctosOrdenes
+INNER JOIN tblPlusFicha
+ON tblDctosOrdenes.idCliente = 
+                  tblPlusFicha.idCliente
+AND tblDctosOrdenes.idFicha = 
+                  tblPlusFicha.idFicha
+INNER JOIN 
+( SELECT tblDctosOrdenesDetalle.idLocalOrigen,
+       tblDctosOrdenesDetalle.idTipoOrdenOrigen,
+       tblDctosOrdenesDetalle.idOrdenOrigen
+FROM tblDctosOrdenesDetalle
+WHERE tblDctosOrdenesDetalle.IDTIPOORDEN = 7                       
+AND   tblDctosOrdenesDetalle.idOrden     = 39 ) 
+                                       AS tmpDET
+ON  tmpDET.idLocalOrigen     = 
+                          tblDctosOrdenes.idLocal
+AND tmpDET.idTipoOrdenOrigen = 
+                     tblDctosOrdenes.idTipoOrden 
+AND tmpDET.idOrdenOrigen     = 
+                         tblDctosOrdenes.idOrden 
