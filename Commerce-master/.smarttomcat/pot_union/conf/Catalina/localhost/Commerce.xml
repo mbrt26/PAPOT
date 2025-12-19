@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" docBase="C:\proyectoWeb\Commerce\build\web" path="/Commerce">
-  <!--Sistema Plasticos Union-->
-  <Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" maxActive="100" maxIdle="30" maxWait="10000" name="jdbc/CommerceAccess" password="Tecnnova2018*" type="javax.sql.DataSource" url="jdbc:sqlserver://localhost;DatabaseName=BDCommerce" username="sa"/>
-  <!--Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" maxActive="100" maxIdle="30" maxWait="10000" name="jdbc/CommerceAccess" password="PotUnion2019*" type="javax.sql.DataSource" url="jdbc:sqlserver://192.168.1.55;DatabaseName=BDCommerce" username="sa"/-->
-  <!--Resource auth="Container" driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
-              maxActive="100" maxIdle="30" maxWait="10000" name="jdbc/CommerceAccess" password="PotUnion2019*" 
-              type="javax.sql.DataSource" url="jdbc:sqlserver://192.168.1.55;DatabaseName=BDCommerce" username="sa"/-->
-</Context>
