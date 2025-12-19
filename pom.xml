@@ -126,15 +126,6 @@
             <version>2.1</version>
         </dependency>
 
-        <!-- kXML for XML parsing (legacy) - using local version in web/WEB-INF/lib -->
-        <dependency>
-            <groupId>org.kxml</groupId>
-            <artifactId>kxml-local</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/web/WEB-INF/lib/kxml.jar</systemPath>
-        </dependency>
-
         <!-- Apache Axis for SOAP web services -->
         <dependency>
             <groupId>org.apache.axis</groupId>

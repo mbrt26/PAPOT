@@ -17,8 +17,8 @@
 
 <head>
     <title>Selecciona Proveedor</title>
-    <link href="/Commerce/styles/estiloTabla.css" rel="stylesheet" type="text/css">
-    <link href="/Commerce/styles/estiloLetra.css" rel="stylesheet" type="text/css">
+    <link href="/styles/estiloTabla.css" rel="stylesheet" type="text/css">
+    <link href="/styles/estiloLetra.css" rel="stylesheet" type="text/css">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">

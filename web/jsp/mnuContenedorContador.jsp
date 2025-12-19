@@ -150,7 +150,7 @@ function paintMenu() {
 </head>
 <frameset frameborder="no" cols="200,*">
   <frame name="treearea" src="./jsp/treemenu.htm" leftmargin="5" topmargin="5" marginheight="5" marginwidth="0"/>
-  <frame name="workarea" src="/Commerce/jsp/empty.htm" marginheight="0" marginwidth="0"/>
+  <frame name="workarea" src="/jsp/empty.htm" marginheight="0" marginwidth="0"/>
 </frameset>
 <noframes>
   <body bgcolor="#FFFFFF">

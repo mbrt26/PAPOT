@@ -182,7 +182,7 @@ public class GralLogicaLoginManejadorRequest implements GralManejadorRequest {
             int idNivelEmpresa = 5;    // gerente
             int idNivelCordinador = 6;    // coordinador
             int idNivelTesorero = 7;    // tesorero
-            int idNivelVendedorMovil = 10;   // vend movil
+            // idNivelVendedorMovil ya definido arriba
             int idNivelAdministradorConsulta = 12;  // Consulta General
             int idNivelContador = 13;   // contador
             int idNivelAdministradorAlmacenConsulta = 14;   //Consulta administrador

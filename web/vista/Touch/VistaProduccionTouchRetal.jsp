@@ -127,7 +127,7 @@
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col" > 
-                                    <img class="col p-1" src="/Commerce/imagenes/operator.png" alt="Card image">
+                                    <img class="col p-1" src="/imagenes/operator.png" alt="Card image">
                                 </div>
                                 <div class="col"></div>
 
@@ -141,7 +141,7 @@
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col" > 
-                                    <img class="col p-1" src="/Commerce/imagenes/trash.png" alt="Card image">
+                                    <img class="col p-1" src="/imagenes/trash.png" alt="Card image">
                                 </div>
                                 <div class="col"></div>
 

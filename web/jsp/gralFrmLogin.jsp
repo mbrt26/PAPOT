@@ -29,12 +29,12 @@
         <div>&nbsp;</div>
         <div>&nbsp;</div>
         <div class="container">
-            <img  class="rounded mx-auto d-block img-responsive" alt="Responsive image" src="/Commerce/imagenes/logoPlasticosUnion2.PNG" >
+            <img  class="rounded mx-auto d-block img-responsive" alt="Responsive image" src="/imagenes/logoPlasticosUnion2.PNG" >
             <div class="card card-login mx-auto mt-5">
                 <H5 hidden="true" class="text-success" class="card-header" align="center"      ><jsp:include page="./comboLocalLogo.jsp"/></H5>
                 <div class="card-header">Inicio de Sesi�n</div>
                 <div class="card-body">
-                    <form method="POST" action="/Commerce/GralControladorServlet">
+                    <form method="POST" action="/GralControladorServlet">
                         <input type="hidden" name="nombrePaginaRequest" value="/jsp/gralFrmLogin.jsp">
                         <div class="form-group">
                             <div class="form-label-group">

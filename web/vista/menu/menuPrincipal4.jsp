@@ -59,7 +59,7 @@
             <div class="menu col-xs-2" style="overflow:auto"> 
                 <nav>
                     <div class="nav-side-menu"  data-role="collapsible" data-collapsed="false"  data-mini="true">                            
-                        <div class="brand"><img src="/Commerce/imagenes/logoPlasticosUnion2.PNG" alt="..." width="180" height="50"></div>
+                        <div class="brand"><img src="/imagenes/logoPlasticosUnion2.PNG" alt="..." width="180" height="50"></div>
                         <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
                         <div class="menu-list">
                             <lst:listaOpcion idTipoOpcionTag="<%=ldto.getIdNivel()%>">
@@ -82,7 +82,7 @@
                 </nav>                   
             </div>
             <div class="col-xs-10 embed-container">
-                <iframe src="/Commerce/vista/menu/empty.html" width="560" height="315" frameborder="0" allowfullscreen name="workarea"></iframe>
+                <iframe src="/vista/menu/empty.html" width="560" height="315" frameborder="0" allowfullscreen name="workarea"></iframe>
             </div>
         </div>
     </div>
