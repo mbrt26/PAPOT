@@ -1,0 +1,4 @@
+
+# Logs de Tomcat
+logs/*.log
+logs/*.txt
