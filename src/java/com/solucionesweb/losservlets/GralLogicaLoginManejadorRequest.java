@@ -108,8 +108,22 @@ public class GralLogicaLoginManejadorRequest implements GralManejadorRequest {
         //
         boolean okRutaVendedor = usuarioRutaBean.validaUsuarioRuta();
 
-        // Usuario vigente + Ruta definida
-        if (usuarioBean.isVigente() && (okRutaVendedor)) {
+        // Perfiles que requieren ruta (vendedores)
+        int idNivelVendedorAlmacen = 1;
+        int idNivelVendedorMovil = 10;
+
+        // Obtener el nivel del usuario para determinar si requiere ruta
+        FachadaUsuarioBean fachadaTemp = usuarioBean.listaUsuario();
+        int nivelUsuario = fachadaTemp.getIdNivel();
+
+        // La ruta solo es requerida para vendedores (niveles 1 y 10)
+        boolean requiereRuta = (nivelUsuario == idNivelVendedorAlmacen) ||
+                               (nivelUsuario == idNivelVendedorMovil) ||
+                               (nivelUsuario == idNivelVendedorAlmacen + 50) ||
+                               (nivelUsuario == idNivelVendedorMovil + 50);
+
+        // Usuario vigente + (Ruta definida si es vendedor, o no requiere ruta)
+        if (usuarioBean.isVigente() && (!requiereRuta || okRutaVendedor)) {
 
             //
             fachadaUsuarioBean = usuarioRutaBean.listaFCH();
